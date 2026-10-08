@@ -75,6 +75,9 @@ cloud machine. The project secret must not be misrepresented as migration access
    Set `PUBLIC_INTERACTIONS_ENABLED=false` initially. Set `SUPABASE_URL` to the
    development project and `APP_ORIGIN` to the exact stable staging URL, without
    a trailing slash. Set `EMAIL_FROM` to an actually verified Resend sender.
+   Cloudflare shortened this branch alias to
+   `https://feat-public-interactions-bac.haven-77v.pages.dev`; use this actual
+   hostname for the origin and Turnstile restriction.
 4. Add secret bindings `SUPABASE_SECRET_KEY`, `RESEND_API_KEY`,
    `TURNSTILE_SECRET_KEY`, and `ACTOR_HASH_SECRET` in Cloudflare's secure settings.
    Generate a high-entropy random HMAC secret (at least 32 bytes); do not reuse
