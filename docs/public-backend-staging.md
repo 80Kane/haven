@@ -26,6 +26,10 @@ project `jveofsddjgoqknpquxpx` is new development with no live member data.
   removes only the new pending request so retry is possible. A late email after
   a network timeout can contain an invalidated token; request a new link. Do not
   describe transport acknowledgement as proof of inbox delivery.
+  New/existing addresses receive the same neutral response even during a mail
+  outage. The response acknowledges an attempt, not successful delivery. Generic
+  failure metrics contain no addresses/tokens; cleanup failures need operator
+  reconciliation and may delay retry until expiry.
 - No anonymous/authenticated table or RPC access. The server role can call the
   narrowly scoped RPCs, but cannot directly enumerate subscribers through this
   schema. All exposed tables have RLS and no client policies. Privileged provider

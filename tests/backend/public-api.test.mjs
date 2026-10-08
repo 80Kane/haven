@@ -331,7 +331,7 @@ test("database rate limits survive repeated requests and do not create extra row
 });
 test("provider failure rolls back pending interest so a retry can succeed", async () => {
   mailFailure = true;
-  assert.equal((await run(req("interest", interest()))).status, 503);
+  assert.equal((await run(req("interest", interest()))).status, 202);
   assert.equal(
     (await pool.query("SELECT * FROM haven_public.interests")).rowCount,
     0,
@@ -377,6 +377,15 @@ test("unsubscribe stays available when new interactions are disabled", async () 
     (await pool.query("SELECT * FROM haven_public.interests")).rowCount,
     0,
   );
+});
+test("delivery outage gives identical responses for existing and new addresses", async () => {
+  await run(req("interest", interest()));
+  mailFailure = true;
+  const existing = await run(req("interest", interest()));
+  const fresh = await run(req("interest", interest("new@example.test")));
+  assert.equal(existing.status, 202);
+  assert.equal(fresh.status, 202);
+  assert.deepEqual(await existing.json(), await fresh.json());
 });
 test("streamed oversized body is cancelled without database writes", async () => {
   let cancelled = false;

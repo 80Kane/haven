@@ -280,20 +280,24 @@ export async function handlePublicApi(request, env, dependencies = {}) {
           signal: AbortSignal.timeout(10000),
         });
         sent = mail.ok;
-      } finally {
-        if (!sent)
+      } catch {
+        sent = false;
+      }
+      if (!sent) {
+        try {
           await rpc("haven_cancel_pending_interest", {
             p_token_hash: confirmationHash,
           });
+        } catch {
+          // Do not turn delivery errors into an email-existence signal.
+          dependencies.reportFailure?.("pending_cleanup");
+        }
+        dependencies.reportFailure?.("email_delivery");
       }
-      if (!sent)
-        return json(503, {
-          error: "Email confirmation is temporarily unavailable.",
-        });
     }
     return json(202, {
       message:
-        "If this address is eligible, a confirmation email will arrive. This does not grant community membership.",
+        "If eligible, we will attempt to send a confirmation email. If none arrives, try again later. This does not grant community membership.",
     });
   } catch {
     return json(503, { error: "Service temporarily unavailable." });
