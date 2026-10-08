@@ -1,764 +1,374 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Haven – You Are Not Alone</title>
-<style>
-  :root {
-    --purple-deep: #1E1B2E;
-    --purple-dark: #2D2B3D;
-    --purple-mid: #7C3AED;
-    --purple-light: #A78BFA;
-    --purple-pale: #EDE9FE;
-    --teal: #14B8A6;
-    --teal-light: #5EEAD4;
-    --rose: #F43F5E;
-    --amber: #F59E0B;
-    --white: #FFFFFF;
-    --gray-100: #F3F4F6;
-    --gray-400: #9CA3AF;
-    --gray-600: #4B5563;
-    --text: #1F2937;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--white); color: var(--text); }
-
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(30, 27, 46, 0.95); backdrop-filter: blur(12px);
-    padding: 0 2rem; height: 64px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-  .nav-logo-icon {
-    width: 36px; height: 36px; border-radius: 10px;
-    background: linear-gradient(135deg, var(--purple-mid), var(--teal));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-  }
-  .nav-logo-text { font-size: 1.25rem; font-weight: 700; color: var(--white); letter-spacing: -0.3px; }
-  .nav-links { display: flex; gap: 1.5rem; align-items: center; }
-  .nav-links a { color: var(--gray-400); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--white); }
-  .nav-cta {
-    background: linear-gradient(135deg, var(--purple-mid), var(--teal));
-    color: var(--white); border: none; padding: 0.5rem 1.25rem;
-    border-radius: 50px; font-size: 0.9rem; font-weight: 600;
-    cursor: pointer; text-decoration: none; transition: opacity 0.2s;
-  }
-  .nav-cta:hover { opacity: 0.9; }
-
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    background: linear-gradient(135deg, var(--purple-deep) 0%, #2D1B4E 50%, #1A2744 100%);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 6rem 2rem 4rem; text-align: center; position: relative; overflow: hidden;
-  }
-  .hero::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 30% 50%, rgba(124,58,237,0.2) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 30%, rgba(20,184,166,0.15) 0%, transparent 50%);
-  }
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(167,139,250,0.15); border: 1px solid rgba(167,139,250,0.3);
-    color: var(--purple-light); padding: 0.4rem 1rem; border-radius: 50px;
-    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px;
-    margin-bottom: 2rem; position: relative; z-index: 1;
-  }
-  .hero h1 {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    font-weight: 800; color: var(--white);
-    line-height: 1.1; letter-spacing: -1px;
-    margin-bottom: 1.5rem; position: relative; z-index: 1;
-  }
-  .hero h1 span { color: var(--purple-light); }
-  .hero p {
-    font-size: clamp(1rem, 2.5vw, 1.25rem);
-    color: rgba(255,255,255,0.7); max-width: 540px;
-    line-height: 1.7; margin-bottom: 2.5rem; position: relative; z-index: 1;
-  }
-  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; }
-  .btn-primary {
-    background: linear-gradient(135deg, var(--purple-mid), var(--teal));
-    color: var(--white); padding: 0.9rem 2rem; border-radius: 50px;
-    font-size: 1rem; font-weight: 700; border: none; cursor: pointer;
-    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
-    box-shadow: 0 4px 24px rgba(124,58,237,0.4); transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(124,58,237,0.5); }
-  .btn-secondary {
-    background: rgba(255,255,255,0.08); color: var(--white);
-    padding: 0.9rem 2rem; border-radius: 50px; font-size: 1rem;
-    font-weight: 600; border: 1px solid rgba(255,255,255,0.2);
-    cursor: pointer; text-decoration: none; display: inline-flex;
-    align-items: center; gap: 8px; transition: background 0.2s;
-  }
-  .btn-secondary:hover { background: rgba(255,255,255,0.15); }
-  .hero-stats {
-    display: flex; gap: 3rem; margin-top: 4rem; position: relative; z-index: 1;
-    flex-wrap: wrap; justify-content: center;
-  }
-  .hero-stat { text-align: center; }
-  .hero-stat-num { font-size: 1.75rem; font-weight: 800; color: var(--white); }
-  .hero-stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 4px; }
-
-  /* ── SECTION BASE ── */
-  section { padding: 5rem 2rem; }
-  .section-label {
-    display: inline-block; color: var(--purple-mid); font-size: 0.8rem;
-    font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-    margin-bottom: 0.75rem;
-  }
-  .section-title {
-    font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 800;
-    color: var(--text); line-height: 1.15; letter-spacing: -0.5px;
-    margin-bottom: 1rem;
-  }
-  .section-sub { font-size: 1.05rem; color: var(--gray-600); max-width: 560px; line-height: 1.7; }
-  .container { max-width: 1100px; margin: 0 auto; }
-  .text-center { text-align: center; }
-  .text-center .section-sub { margin: 0 auto; }
-
-  /* ── TRUST BAR ── */
-  .trust-bar {
-    background: var(--purple-pale); padding: 2rem;
-    text-align: center;
-  }
-  .trust-bar p { font-size: 0.85rem; color: var(--gray-600); margin-bottom: 1.5rem; font-weight: 500; }
-  .trust-logos { display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap; align-items: center; }
-  .trust-logo { font-size: 0.9rem; font-weight: 700; color: var(--gray-400); letter-spacing: 1px; }
-
-  /* ── HOW IT WORKS ── */
-  .how-bg { background: var(--gray-100); }
-  .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-top: 3rem; }
-  .step-card {
-    background: var(--white); border-radius: 20px; padding: 2rem;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.06); text-align: center;
-    transition: transform 0.2s;
-  }
-  .step-card:hover { transform: translateY(-4px); }
-  .step-num {
-    width: 48px; height: 48px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--purple-mid), var(--teal));
-    color: var(--white); font-size: 1.2rem; font-weight: 800;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 1rem;
-  }
-  .step-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
-  .step-card p { font-size: 0.9rem; color: var(--gray-600); line-height: 1.6; }
-
-  /* ── FEATURES ── */
-  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
-  .feature-card {
-    border-radius: 20px; padding: 2rem;
-    border: 1px solid #E5E7EB; background: var(--white);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
-  .feature-icon {
-    width: 52px; height: 52px; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem; margin-bottom: 1rem;
-  }
-  .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
-  .feature-card p { font-size: 0.9rem; color: var(--gray-600); line-height: 1.65; }
-  .tag {
-    display: inline-block; font-size: 0.7rem; font-weight: 700;
-    padding: 0.2rem 0.6rem; border-radius: 50px; margin-top: 1rem;
-    letter-spacing: 0.5px;
-  }
-
-  /* ── HUG DEMO ── */
-  .hug-section { background: linear-gradient(135deg, var(--purple-deep), #1A2744); }
-  .hug-inner {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
-    align-items: center; max-width: 1000px; margin: 0 auto;
-  }
-  .hug-text .section-title { color: var(--white); }
-  .hug-text .section-sub { color: rgba(255,255,255,0.65); }
-  .hug-text .section-label { color: var(--teal-light); }
-  .hug-demo {
-    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 24px; padding: 2.5rem; text-align: center;
-  }
-  .hug-btn {
-    width: 120px; height: 120px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--rose), #FF6B6B);
-    border: none; cursor: pointer; font-size: 3rem;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 1.5rem;
-    box-shadow: 0 8px 32px rgba(244,63,94,0.4);
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-  .hug-btn:hover { transform: scale(1.08); box-shadow: 0 12px 40px rgba(244,63,94,0.5); }
-  .hug-btn:active { transform: scale(0.95); }
-  .hug-count { font-size: 2.5rem; font-weight: 800; color: var(--white); }
-  .hug-label { font-size: 0.9rem; color: rgba(255,255,255,0.5); margin-top: 0.25rem; }
-  .hug-names { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 1.5rem; }
-  .hug-name {
-    background: rgba(167,139,250,0.15); border: 1px solid rgba(167,139,250,0.25);
-    color: var(--purple-light); font-size: 0.8rem; padding: 0.25rem 0.75rem;
-    border-radius: 50px;
-  }
-
-  /* ── CIRCLES ── */
-  .circles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
-  .circle-card {
-    border-radius: 20px; padding: 1.75rem; position: relative; overflow: hidden;
-    cursor: pointer; transition: transform 0.2s;
-  }
-  .circle-card:hover { transform: translateY(-4px); }
-  .circle-card-emoji { font-size: 2rem; margin-bottom: 1rem; }
-  .circle-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
-  .circle-card p { font-size: 0.85rem; opacity: 0.75; line-height: 1.5; }
-  .circle-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; }
-  .circle-members { font-size: 0.8rem; font-weight: 600; opacity: 0.6; }
-  .join-btn {
-    font-size: 0.8rem; font-weight: 700; padding: 0.3rem 0.9rem;
-    border-radius: 50px; border: none; cursor: pointer; transition: opacity 0.2s;
-  }
-  .join-btn:hover { opacity: 0.85; }
-
-  /* ── JOURNAL ── */
-  .journal-bg { background: #FAFAFA; }
-  .journal-demo {
-    max-width: 680px; margin: 3rem auto 0;
-    background: var(--white); border-radius: 24px;
-    border: 1px solid #E5E7EB; overflow: hidden;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.08);
-  }
-  .journal-header {
-    padding: 1.25rem 1.75rem; border-bottom: 1px solid #F3F4F6;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .journal-header-left { display: flex; align-items: center; gap: 10px; }
-  .journal-avatar {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--purple-mid), var(--teal));
-    display: flex; align-items: center; justify-content: center; font-size: 1rem;
-  }
-  .journal-username { font-size: 0.9rem; font-weight: 700; }
-  .journal-privacy { font-size: 0.75rem; color: var(--gray-400); }
-  .journal-lock { font-size: 0.8rem; color: var(--gray-400); }
-  .journal-body { padding: 1.75rem; }
-  .journal-prompt { font-size: 0.8rem; color: var(--purple-mid); font-weight: 600; margin-bottom: 0.75rem; }
-  .journal-text { font-size: 0.95rem; color: var(--gray-600); line-height: 1.8; }
-  .journal-mood { display: flex; gap: 0.5rem; margin-top: 1.25rem; }
-  .mood-chip {
-    padding: 0.3rem 0.75rem; border-radius: 50px; font-size: 0.8rem;
-    border: 1px solid; cursor: pointer;
-  }
-  .journal-footer {
-    padding: 1rem 1.75rem; border-top: 1px solid #F3F4F6;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .journal-actions { display: flex; gap: 0.75rem; }
-  .j-action { font-size: 0.85rem; color: var(--gray-400); cursor: pointer; display: flex; align-items: center; gap: 4px; }
-  .save-entry {
-    background: var(--purple-mid); color: var(--white); border: none;
-    padding: 0.45rem 1.25rem; border-radius: 50px; font-size: 0.85rem;
-    font-weight: 600; cursor: pointer;
-  }
-
-  /* ── CRISIS BANNER ── */
-  .crisis-section {
-    background: linear-gradient(135deg, #1A0A0A, #2D1B1B);
-    padding: 4rem 2rem; text-align: center;
-  }
-  .crisis-inner { max-width: 700px; margin: 0 auto; }
-  .crisis-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(244,63,94,0.15); border: 1px solid rgba(244,63,94,0.3);
-    color: #FCA5A5; padding: 0.4rem 1rem; border-radius: 50px;
-    font-size: 0.8rem; font-weight: 600; margin-bottom: 1.5rem;
-  }
-  .crisis-section h2 { font-size: clamp(1.5rem, 3.5vw, 2.25rem); font-weight: 800; color: var(--white); margin-bottom: 1rem; }
-  .crisis-section p { color: rgba(255,255,255,0.65); line-height: 1.7; margin-bottom: 2rem; }
-  .crisis-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-  .btn-crisis {
-    background: var(--rose); color: var(--white); padding: 0.9rem 2rem;
-    border-radius: 50px; font-size: 1rem; font-weight: 700; border: none;
-    cursor: pointer; text-decoration: none; display: inline-flex;
-    align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(244,63,94,0.4);
-    transition: transform 0.2s;
-  }
-  .btn-crisis:hover { transform: translateY(-2px); }
-  .btn-text-link { color: rgba(255,255,255,0.6); font-size: 0.9rem; text-decoration: underline; cursor: pointer; background: none; border: none; }
-
-  /* ── TESTIMONIALS ── */
-  .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
-  .testimonial-card {
-    background: var(--white); border-radius: 20px; padding: 2rem;
-    border: 1px solid #E5E7EB; box-shadow: 0 2px 16px rgba(0,0,0,0.04);
-  }
-  .testimonial-stars { color: var(--amber); font-size: 1rem; margin-bottom: 1rem; }
-  .testimonial-text { font-size: 0.95rem; color: var(--gray-600); line-height: 1.75; font-style: italic; margin-bottom: 1.25rem; }
-  .testimonial-author { display: flex; align-items: center; gap: 10px; }
-  .testimonial-avatar {
-    width: 40px; height: 40px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
-  }
-  .testimonial-name { font-size: 0.9rem; font-weight: 700; }
-  .testimonial-role { font-size: 0.75rem; color: var(--gray-400); }
-
-  /* ── CTA ── */
-  .cta-section {
-    background: linear-gradient(135deg, var(--purple-deep), #2D1B4E);
-    padding: 6rem 2rem; text-align: center;
-  }
-  .cta-section h2 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; color: var(--white); margin-bottom: 1rem; }
-  .cta-section p { font-size: 1.1rem; color: rgba(255,255,255,0.65); margin-bottom: 2.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
-  .cta-form { display: flex; gap: 0.75rem; justify-content: center; max-width: 420px; margin: 0 auto; flex-wrap: wrap; }
-  .cta-input {
-    flex: 1; min-width: 220px; padding: 0.9rem 1.25rem;
-    border-radius: 50px; border: none; font-size: 0.95rem;
-    outline: none; background: rgba(255,255,255,0.1);
-    color: var(--white); border: 1px solid rgba(255,255,255,0.2);
-  }
-  .cta-input::placeholder { color: rgba(255,255,255,0.4); }
-  .cta-note { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-top: 1rem; }
-
-  /* ── FOOTER ── */
-  footer {
-    background: var(--purple-deep); padding: 3rem 2rem 2rem;
-    color: rgba(255,255,255,0.5);
-  }
-  .footer-inner { max-width: 1100px; margin: 0 auto; }
-  .footer-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; margin-bottom: 2rem; }
-  .footer-brand .nav-logo { margin-bottom: 0.75rem; }
-  .footer-brand p { font-size: 0.85rem; max-width: 240px; line-height: 1.6; }
-  .footer-links h4 { font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 1rem; letter-spacing: 0.5px; text-transform: uppercase; }
-  .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
-  .footer-links ul li a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
-  .footer-links ul li a:hover { color: rgba(255,255,255,0.9); }
-  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-  .footer-bottom p { font-size: 0.8rem; }
-  .crisis-line { font-size: 0.85rem; background: rgba(244,63,94,0.15); border: 1px solid rgba(244,63,94,0.25); color: #FCA5A5; padding: 0.4rem 1rem; border-radius: 50px; }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    .hug-inner { grid-template-columns: 1fr; gap: 2rem; }
-    .nav-links { display: none; }
-  }
-</style>
-</head>
-<body>
-
-<!-- NAV -->
-<nav>
-  <a class="nav-logo" href="#">
-    <div class="nav-logo-icon">💙</div>
-    <span class="nav-logo-text">Haven</span>
-  </a>
-  <div class="nav-links">
-    <a href="#features">Features</a>
-    <a href="#circles">Circles</a>
-    <a href="#journal">Journal</a>
-    <a href="#crisis">Crisis Help</a>
-  </div>
-  <a href="#join" class="nav-cta">Join Haven</a>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-badge">💙 Peer Support Platform</div>
-  <h1>You Are <span>Not Alone.</span><br>We Are Here.</h1>
-  <p>Haven is a safe, anonymous community where real people support each other through mental health, recovery, grief, and everything life throws at you.</p>
-  <div class="hero-btns">
-    <a href="#join" class="btn-primary">✨ Join the Community</a>
-    <a href="#features" class="btn-secondary">Learn More →</a>
-  </div>
-  <div class="hero-stats">
-    <div class="hero-stat">
-      <div class="hero-stat-num">12,400+</div>
-      <div class="hero-stat-label">Members supported</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">98,000+</div>
-      <div class="hero-stat-label">Hugs sent</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">340+</div>
-      <div class="hero-stat-label">Support circles</div>
-    </div>
-  </div>
-</section>
-
-<!-- TRUST BAR -->
-<div class="trust-bar">
-  <p>TRUSTED BY PEER SUPPORT ORGANIZATIONS ACROSS THE US</p>
-  <div class="trust-logos">
-    <span class="trust-logo">NAMI</span>
-    <span class="trust-logo">SAMHSA</span>
-    <span class="trust-logo">DBSA</span>
-    <span class="trust-logo">MENTAL HEALTH AMERICA</span>
-    <span class="trust-logo">988 PARTNER</span>
-  </div>
-</div>
-
-<!-- HOW IT WORKS -->
-<section class="how-bg">
-  <div class="container text-center">
-    <span class="section-label">How It Works</span>
-    <h2 class="section-title">Real support in 3 simple steps</h2>
-    <p class="section-sub">Haven is built for the moments when you need someone who truly understands — not advice, just presence.</p>
-    <div class="steps-grid">
-      <div class="step-card">
-        <div class="step-num">1</div>
-        <h3>Create your space</h3>
-        <p>Set up an anonymous profile. Choose what you share — Haven never requires your real name.</p>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="HavenForward: connection, choice, and peer support. Learn about our invitation-only pilot and explore support resources."
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"
+    />
+    <title>You Are Not Alone | HavenForward</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script src="assets/site.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="HavenForward home"
+          ><span class="brand-mark" aria-hidden="true">h<span>f</span></span
+          ><span>Haven<span class="brand-light">Forward</span></span></a
+        >
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="primary-nav"
+          hidden
+        >
+          Menu
+        </button>
+        <nav id="primary-nav" aria-label="Main navigation">
+          <a href="index.html#about">Our purpose</a
+          ><a href="index.html#circles">Circles</a
+          ><a href="resources.html">Resources</a
+          ><a href="index.html#membership" class="nav-invite"
+            >The invitation-only pilot <span aria-hidden="true">↗</span></a
+          >
+        </nav>
       </div>
-      <div class="step-card">
-        <div class="step-num">2</div>
-        <h3>Find your circle</h3>
-        <p>Join peer circles for your specific journey — recovery, grief, anxiety, trauma, and more.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num">3</div>
-        <h3>Give and receive support</h3>
-        <p>Share your story, send a Hug, listen without judgment. Peer support changes lives.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num">4</div>
-        <h3>Crisis safety net</h3>
-        <p>If someone needs immediate help, our 988 integration and peer responders are always on.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section id="features">
-  <div class="container">
-    <div class="text-center">
-      <span class="section-label">Features</span>
-      <h2 class="section-title">Everything you need to feel less alone</h2>
-      <p class="section-sub">Haven combines the warmth of peer support with tools that protect your privacy and well-being.</p>
-    </div>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#EDE9FE">🤗</div>
-        <h3>The Hug Button</h3>
-        <p>Send a virtual hug to anyone in the community. One tap shows someone you see them — no words needed.</p>
-        <span class="tag" style="background:#EDE9FE;color:#7C3AED">Community Favorite</span>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#CCFBF1">⭕</div>
-        <h3>Support Circles</h3>
-        <p>Moderated peer groups for specific journeys — recovery, anxiety, grief, PTSD, parenting, and more.</p>
-        <span class="tag" style="background:#CCFBF1;color:#0D9488">340+ Circles</span>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#FEF3C7">📔</div>
-        <h3>Private Journal</h3>
-        <p>Write freely with AI-guided prompts. Totally private, encrypted, and only visible to you.</p>
-        <span class="tag" style="background:#FEF3C7;color:#D97706">Private & Encrypted</span>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#FFE4E6">🛡️</div>
-        <h3>Crisis Connect</h3>
-        <p>Real-time connection to 988 Lifeline and trained peer responders when things feel overwhelming.</p>
-        <span class="tag" style="background:#FFE4E6;color:#E11D48">24/7 Available</span>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#F0FDF4">🎯</div>
-        <h3>Recovery Milestones</h3>
-        <p>Track your journey, celebrate days sober, and share milestones with people who understand what they mean.</p>
-        <span class="tag" style="background:#F0FDF4;color:#16A34A">Track Progress</span>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#EEF2FF">🔒</div>
-        <h3>Anonymous by Design</h3>
-        <p>No real name. No photo required. No ads, no data selling. Haven exists only to help you heal.</p>
-        <span class="tag" style="background:#EEF2FF;color:#4F46E5">Privacy First</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- HUG DEMO -->
-<section class="hug-section" id="hug">
-  <div class="hug-inner">
-    <div class="hug-text">
-      <span class="section-label">The Hug Button</span>
-      <h2 class="section-title">Sometimes all someone needs is to know you see them</h2>
-      <p class="section-sub">One tap. No words required. The Hug Button has been sent over 98,000 times — each one a reminder that someone, somewhere, cares.</p>
-    </div>
-    <div class="hug-demo">
-      <p style="color:rgba(255,255,255,0.6);font-size:0.85rem;margin-bottom:1.5rem">Tap to send a hug to the community</p>
-      <button class="hug-btn" onclick="sendHug()" id="hugBtn">🤗</button>
-      <div class="hug-count" id="hugCount">98,247</div>
-      <div class="hug-label">hugs sent today</div>
-      <div class="hug-names" id="hugNames">
-        <span class="hug-name">Starlight_M</span>
-        <span class="hug-name">Recovering__J</span>
-        <span class="hug-name">BlueSky_Hope</span>
-        <span class="hug-name">NotAlone_T</span>
-        <span class="hug-name">SunriseAgain</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CIRCLES -->
-<section id="circles">
-  <div class="container">
-    <div class="text-center">
-      <span class="section-label">Support Circles</span>
-      <h2 class="section-title">Find people who get it</h2>
-      <p class="section-sub">Every circle is peer-led and moderated. You'll never be judged — only heard.</p>
-    </div>
-    <div class="circles-grid">
-      <div class="circle-card" style="background:#EDE9FE;color:#4C1D95">
-        <div class="circle-card-emoji">🌱</div>
-        <h3>Early Recovery</h3>
-        <p>The first 90 days are hardest. Walk them with people who've been there.</p>
-        <div class="circle-meta">
-          <span class="circle-members">2,140 members</span>
-          <button class="join-btn" style="background:#7C3AED;color:white">Join</button>
-        </div>
-      </div>
-      <div class="circle-card" style="background:#CCFBF1;color:#134E4A">
-        <div class="circle-card-emoji">💚</div>
-        <h3>Grief & Loss</h3>
-        <p>No timeline. No pressure to "move on." Just compassionate company through the hard days.</p>
-        <div class="circle-meta">
-          <span class="circle-members">1,893 members</span>
-          <button class="join-btn" style="background:#14B8A6;color:white">Join</button>
-        </div>
-      </div>
-      <div class="circle-card" style="background:#FEF3C7;color:#78350F">
-        <div class="circle-card-emoji">🌞</div>
-        <h3>Anxiety & Panic</h3>
-        <p>Tools, stories, and steady voices for when your nervous system needs help settling.</p>
-        <div class="circle-meta">
-          <span class="circle-members">3,421 members</span>
-          <button class="join-btn" style="background:#F59E0B;color:white">Join</button>
-        </div>
-      </div>
-      <div class="circle-card" style="background:#FFE4E6;color:#881337">
-        <div class="circle-card-emoji">🦋</div>
-        <h3>Trauma Survivors</h3>
-        <p>Trauma-informed peer support. You are not your trauma. You are your survival.</p>
-        <div class="circle-meta">
-          <span class="circle-members">1,567 members</span>
-          <button class="join-btn" style="background:#F43F5E;color:white">Join</button>
-        </div>
-      </div>
-      <div class="circle-card" style="background:#EEF2FF;color:#1E1B4B">
-        <div class="circle-card-emoji">🏠</div>
-        <h3>Re-Entry & Second Chances</h3>
-        <p>For those returning home after incarceration. Your story doesn't end there.</p>
-        <div class="circle-meta">
-          <span class="circle-members">984 members</span>
-          <button class="join-btn" style="background:#4F46E5;color:white">Join</button>
-        </div>
-      </div>
-      <div class="circle-card" style="background:#F0FDF4;color:#14532D">
-        <div class="circle-card-emoji">👨‍👩‍👧</div>
-        <h3>Family & Parenting</h3>
-        <p>Supporting someone you love with mental health challenges. You need support too.</p>
-        <div class="circle-meta">
-          <span class="circle-members">2,208 members</span>
-          <button class="join-btn" style="background:#16A34A;color:white">Join</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- JOURNAL -->
-<section class="journal-bg" id="journal">
-  <div class="container text-center">
-    <span class="section-label">Private Journal</span>
-    <h2 class="section-title">Write without fear</h2>
-    <p class="section-sub">Your journal is yours alone. Encrypted, private, and guided by prompts that help you process what you're carrying.</p>
-    <div class="journal-demo">
-      <div class="journal-header">
-        <div class="journal-header-left">
-          <div class="journal-avatar">🌙</div>
-          <div>
-            <div class="journal-username">Starlight_M</div>
-            <div class="journal-privacy">Private entry</div>
+    </header>
+    <main id="main" tabindex="-1">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow light">
+              <span class="status-dot" aria-hidden="true"></span> A
+              peer-centered community, taking shape
+            </p>
+            <h1>
+              You Are<br />
+              <span>Not Alone.</span>
+            </h1>
+            <p class="hero-subtitle">
+              A community built on connection, choice, support, and the belief
+              that everyone deserves an opportunity to move forward.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-teal" href="#membership"
+                >Explore the pilot <span aria-hidden="true">↗</span></a
+              ><a class="button button-light-outline" href="resources.html"
+                >Find support resources</a
+              >
+            </div>
+            <p class="hero-note">Invitation-only. Your pace. Your choice.</p>
+          </div>
+          <div class="connection-art" aria-hidden="true">
+            <span class="orbit orbit-one"></span
+            ><span class="orbit orbit-two"></span>
+            <div class="art-center">
+              <span class="art-icon">✳</span>
+              <p>
+                A little connection.<br />
+                A way forward.
+              </p>
+            </div>
+            <span class="art-chip chip-one">You belong</span
+            ><span class="art-chip chip-two">Room to grow</span
+            ><span class="art-chip chip-three">One step at a time</span>
           </div>
         </div>
-        <span class="journal-lock">🔒</span>
-      </div>
-      <div class="journal-body">
-        <div class="journal-prompt">💜 Today's prompt: What is one thing you're carrying that you haven't said out loud yet?</div>
-        <div class="journal-text">
-          "I've been pretending I'm okay for so long that sometimes I forget I don't have to. Today was hard. I cried in the car for 20 minutes before I could go into the grocery store. But I went in. That feels like enough for today. Some days enough is just surviving, and I'm learning that's okay..."
+        <div class="container hero-bottom">
+          <span>Peer voice, peer choice</span><span>Privacy by default</span
+          ><span>Human connection</span>
         </div>
-        <div class="journal-mood">
-          <span class="mood-chip" style="background:#EDE9FE;color:#7C3AED;border-color:#C4B5FD">😔 Heavy</span>
-          <span class="mood-chip" style="background:#F0FDF4;color:#16A34A;border-color:#86EFAC">💪 Resilient</span>
-          <span class="mood-chip" style="background:#FEF3C7;color:#D97706;border-color:#FCD34D">🙏 Grateful</span>
-        </div>
-      </div>
-      <div class="journal-footer">
-        <div class="journal-actions">
-          <span class="j-action">🤗 12 hugs</span>
-          <span class="j-action">💬 Share to circle</span>
-        </div>
-        <button class="save-entry">Save Entry</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CRISIS -->
-<section class="crisis-section" id="crisis">
-  <div class="crisis-inner">
-    <div class="crisis-badge">🆘 Crisis Support</div>
-    <h2>If you're in crisis, you don't have to face it alone</h2>
-    <p>Haven connects you directly to the 988 Suicide & Crisis Lifeline and trained peer responders — real people, available right now.</p>
-    <div class="crisis-btns">
-      <a href="tel:988" class="btn-crisis">📞 Call or Text 988</a>
-      <button class="btn-text-link">Chat with a peer responder →</button>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section>
-  <div class="container">
-    <div class="text-center">
-      <span class="section-label">Community Stories</span>
-      <h2 class="section-title">Real people, real healing</h2>
-      <p class="section-sub">These are real experiences from Haven members. Names changed to protect privacy.</p>
-    </div>
-    <div class="testimonials-grid">
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">"I found Haven at 2am when I couldn't stop crying and didn't want to wake anyone up. Someone in the Grief circle responded in minutes. I wasn't alone anymore."</p>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar" style="background:#EDE9FE">🌙</div>
+      </section>
+      <section id="about" class="section">
+        <div class="container about-grid">
           <div>
-            <div class="testimonial-name">BlueSky_Hope</div>
-            <div class="testimonial-role">Grief & Loss Circle</div>
+            <p class="eyebrow">Our purpose</p>
+            <h2>
+              A place to connect.<br />
+              Space to be yourself.
+            </h2>
+          </div>
+          <div class="about-copy">
+            <p class="lead">
+              Moving forward looks different for everyone. You don’t have to
+              have it all figured out to seek connection.
+            </p>
+            <p>
+              HavenForward is developing a moderated peer-support community for
+              recovery, personal growth, education, resources, and meaningful
+              social connection. Lived experience matters here. Participation is
+              voluntary, and sharing is always a choice.
+            </p>
+            <p>
+              Peer support is about listening and mutual respect. It does not
+              replace professional care, treatment, or emergency services.
+            </p>
+            <a class="text-link" href="guidelines.html"
+              >Our approach to community &amp; safety
+              <span aria-hidden="true">→</span></a
+            >
           </div>
         </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">"Day 90 clean. I wouldn't have made it without this community. The Hug Button sounds simple but it kept me going on days I had nothing left."</p>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar" style="background:#CCFBF1">🌱</div>
-          <div>
-            <div class="testimonial-name">Recovering__J</div>
-            <div class="testimonial-role">Early Recovery Circle</div>
+      </section>
+      <section id="circles" class="section section-soft">
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Community circles</p>
+              <h2>
+                Different journeys.<br />
+                Shared connection.
+              </h2>
+            </div>
+            <p>
+              These are proposed spaces for the pilot. Conversations are not
+              open on this public website. Future access will require an
+              invitation and verified membership.
+            </p>
+          </div>
+          <div class="circles-grid">
+            <article class="circle-card">
+              <span class="card-number" aria-hidden="true">01</span>
+              <h3>Recovery &amp; Healing</h3>
+              <p>
+                A space for different recovery journeys, shared experience, and
+                support at your own pace.
+              </p>
+              <span class="preview-label">Pilot preview</span>
+            </article>
+            <article class="circle-card">
+              <span class="card-number" aria-hidden="true">02</span>
+              <h3>Choices &amp; Change</h3>
+              <p>
+                Explore decisions and new directions without pressure to follow
+                someone else’s path.
+              </p>
+              <span class="preview-label">Pilot preview</span>
+            </article>
+            <article class="circle-card">
+              <span class="card-number" aria-hidden="true">03</span>
+              <h3>Mental Wellness</h3>
+              <p>
+                Make room for everyday well-being, difficult days, and the
+                practices that help.
+              </p>
+              <span class="preview-label">Pilot preview</span>
+            </article>
+            <article class="circle-card">
+              <span class="card-number" aria-hidden="true">04</span>
+              <h3>Veterans Connection</h3>
+              <p>
+                Connection through lived experience, service, transitions, and
+                life beyond the uniform.
+              </p>
+              <span class="preview-label">Pilot preview</span>
+            </article>
+            <article class="circle-card">
+              <span class="card-number" aria-hidden="true">05</span>
+              <h3>Family &amp; Relationships</h3>
+              <p>
+                Reflect on relationships, boundaries, caregiving, and the people
+                who matter to you.
+              </p>
+              <span class="preview-label">Pilot preview</span>
+            </article>
+            <article class="circle-card">
+              <span class="card-number" aria-hidden="true">06</span>
+              <h3>Reentry &amp; New Beginnings</h3>
+              <p>
+                Support for returning to community, rebuilding connections, and
+                finding your next step.
+              </p>
+              <span class="preview-label">Pilot preview</span>
+            </article>
+            <article class="circle-card">
+              <span class="card-number" aria-hidden="true">07</span>
+              <h3>Purpose &amp; Personal Growth</h3>
+              <p>
+                Explore learning, creativity, meaningful goals, and your own
+                definition of moving forward.
+              </p>
+              <span class="preview-label">Pilot preview</span>
+            </article>
+            <article class="circle-card circle-callout">
+              <p class="eyebrow">Your experience matters</p>
+              <h3>There’s no single way forward.</h3>
+              <p>
+                The pilot’s spaces will grow through peer feedback and human
+                moderation.
+              </p>
+              <a href="guidelines.html" class="text-link"
+                >Read our principles <span aria-hidden="true">→</span></a
+              >
+            </article>
           </div>
         </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">"Coming home after 4 years, I thought nobody would understand. The Re-Entry circle showed me people who did. Haven gave me back my dignity."</p>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar" style="background:#EEF2FF">🏠</div>
+      </section>
+      <section class="section">
+        <div class="container principles-grid">
           <div>
-            <div class="testimonial-name">FreshStart_D</div>
-            <div class="testimonial-role">Re-Entry & Second Chances</div>
+            <p class="eyebrow">Built with care</p>
+            <h2>Support without pressure.</h2>
+            <p>We’re starting small so the community can grow thoughtfully.</p>
+          </div>
+          <article>
+            <span class="principle-icon" aria-hidden="true">01</span>
+            <h3>You choose what to share</h3>
+            <p>
+              Members will use a chosen name. Personal stories should never be a
+              requirement for belonging.
+            </p>
+          </article>
+          <article>
+            <span class="principle-icon" aria-hidden="true">02</span>
+            <h3>People guide the community</h3>
+            <p>
+              Human review, understandable guidelines, and a way to raise
+              concerns are requirements for the pilot.
+            </p>
+          </article>
+          <article>
+            <span class="principle-icon" aria-hidden="true">03</span>
+            <h3>Small gestures matter</h3>
+            <p>
+              Hug reactions are planned for the community. They are not active
+              here, and we do not display invented engagement counts.
+            </p>
+          </article>
+        </div>
+      </section>
+      <section id="membership" class="section membership-section">
+        <div class="container membership-grid">
+          <div>
+            <p class="eyebrow light">The invitation-only pilot</p>
+            <h2>
+              A thoughtful beginning.<br />
+              Built around people.
+            </h2>
+            <p>
+              Member enrollment is not open yet. The pilot will begin with
+              invitations after privacy, access controls, and moderation
+              readiness are reviewed.
+            </p>
+            <p>
+              There is no public account registration or email-interest
+              collection on this site today. An interest request will not
+              automatically grant community membership when that service becomes
+              available.
+            </p>
+            <a class="button button-teal" href="privacy.html"
+              >Understand privacy &amp; participation
+              <span aria-hidden="true">→</span></a
+            >
+          </div>
+          <div class="membership-steps">
+            <div>
+              <span>1</span>
+              <div>
+                <h3>A personal invitation</h3>
+                <p>
+                  Future invitations will be limited, expiring, and single-use.
+                </p>
+              </div>
+            </div>
+            <div>
+              <span>2</span>
+              <div>
+                <h3>Informed participation</h3>
+                <p>
+                  Read the guidelines and privacy information, then decide
+                  whether to join.
+                </p>
+              </div>
+            </div>
+            <div>
+              <span>3</span>
+              <div>
+                <h3>Connection at your pace</h3>
+                <p>
+                  Choose your spaces and what you share. Participation is
+                  voluntary.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
+      <section class="section">
+        <div class="container resource-banner">
+          <div>
+            <p class="eyebrow">A practical starting point</p>
+            <h2>Resources for your next step.</h2>
+            <p>
+              Explore housing, recovery, employment, education, transportation,
+              community services, and veteran resources. Eligibility and
+              availability must be confirmed with each provider.
+            </p>
+          </div>
+          <a class="button button-purple" href="resources.html"
+            >Explore the directory <span aria-hidden="true">→</span></a
+          >
+        </div>
+      </section>
+    </main>
+    <section class="crisis-strip" aria-labelledby="crisis-title">
+      <div class="container crisis-inner">
+        <div>
+          <p class="eyebrow">Support beyond HavenForward</p>
+          <h2 id="crisis-title">Need support right now?</h2>
+          <p>
+            In the US, call or text 988 for the Suicide &amp; Crisis Lifeline.
+            If there is immediate danger, contact your local emergency services.
+            Outside the US, use local crisis resources.
+          </p>
+          <p>
+            HavenForward is not an emergency service and does not monitor this
+            website for crises.
+          </p>
+        </div>
+        <div class="crisis-actions">
+          <a href="tel:988" class="button button-dark">Call 988</a
+          ><a href="sms:988" class="button button-outline">Text 988</a
+          ><a href="https://988lifeline.org/"
+            >Visit the 988 Lifeline website <span aria-hidden="true">↗</span></a
+          >
+        </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA / JOIN -->
-<section class="cta-section" id="join">
-  <h2>Your haven starts today</h2>
-  <p>Join 12,400+ people who chose not to carry it alone. Free, anonymous, and always here.</p>
-  <div class="cta-form">
-    <input type="email" class="cta-input" placeholder="Enter your email address">
-    <button class="btn-primary">Join Free →</button>
-  </div>
-  <p class="cta-note">No credit card. No real name required. Unsubscribe anytime.</p>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <a class="nav-logo" href="#">
-          <div class="nav-logo-icon">💙</div>
-          <span class="nav-logo-text">Haven</span>
-        </a>
-        <p>A peer support community built on the belief that no one should go through hard times alone.</p>
+    </section>
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-top">
+          <a class="brand" href="index.html"
+            ><span class="brand-mark" aria-hidden="true">h<span>f</span></span
+            ><span>Haven<span class="brand-light">Forward</span></span></a
+          >
+          <p>Connection. Choice. A way forward.</p>
+          <nav aria-label="Footer navigation">
+            <a href="privacy.html">Privacy</a
+            ><a href="guidelines.html">Community &amp; safety</a
+            ><a href="resources.html">Resources</a>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <p>© 2026 HavenForward. You Are Not Alone.</p>
+          <a href="https://github.com/80Kane/haven/issues"
+            >Website feedback <span aria-hidden="true">↗</span></a
+          >
+        </div>
+        <p class="small">
+          Website feedback on GitHub is public. Please do not share personal
+          information, private stories, or crisis requests there.
+        </p>
       </div>
-      <div class="footer-links">
-        <h4>Platform</h4>
-        <ul>
-          <li><a href="#">Circles</a></li>
-          <li><a href="#">Journal</a></li>
-          <li><a href="#">Hug Button</a></li>
-          <li><a href="#">Milestones</a></li>
-        </ul>
-      </div>
-      <div class="footer-links">
-        <h4>Support</h4>
-        <ul>
-          <li><a href="#">Crisis Help</a></li>
-          <li><a href="#">Peer Responders</a></li>
-          <li><a href="#">Safety Center</a></li>
-          <li><a href="#">988 Lifeline</a></li>
-        </ul>
-      </div>
-      <div class="footer-links">
-        <h4>Company</h4>
-        <ul>
-          <li><a href="#">About Haven</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Service</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2026 Haven Forward. Built with 💙 for the community.</p>
-      <span class="crisis-line">Crisis? Call or Text 988</span>
-    </div>
-  </div>
-</footer>
-
-<script>
-  let hugCount = 98247;
-  const names = ['Starlight_M','Recovering__J','BlueSky_Hope','NotAlone_T','SunriseAgain','Hope_Lives','Brave_Today','TomorrowWins','StillHere_K','NewChapter'];
-
-  function sendHug() {
-    hugCount++;
-    document.getElementById('hugCount').textContent = hugCount.toLocaleString();
-    const btn = document.getElementById('hugBtn');
-    btn.style.transform = 'scale(1.2)';
-    setTimeout(() => btn.style.transform = 'scale(1)', 200);
-
-    // Add random name
-    const name = names[Math.floor(Math.random() * names.length)];
-    const span = document.createElement('span');
-    span.className = 'hug-name';
-    span.textContent = name;
-    span.style.opacity = '0';
-    span.style.transition = 'opacity 0.4s';
-    const container = document.getElementById('hugNames');
-    if (container.children.length > 7) container.removeChild(container.firstChild);
-    container.appendChild(span);
-    setTimeout(() => span.style.opacity = '1', 50);
-  }
-
-  // Smooth scroll for nav links
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) { e.preventDefault(); target.scrollIntoView({behavior:'smooth'}); }
-    });
-  });
-</script>
-</body>
+    </footer>
+  </body>
 </html>
