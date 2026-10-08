@@ -13,11 +13,13 @@
     "test:e2e": "playwright test",
     "check": "npm run format:check && npm test && npm run build && npm run test:e2e",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test:backend": "node --test tests/backend/*.test.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.64.0",
+    "pg": "8.23.1",
     "prettier": "3.9.9"
   }
 }

@@ -1,5 +1,10 @@
 # HavenForward public website
 
+The public-interactions backend is under development on a separate branch and
+defaults to disabled. See [staging setup](docs/public-backend-staging.md) for the
+reviewed schema, permissions, real-PostgreSQL tests, preview bindings, and release
+gates. This does not activate signup, hugs, or member accounts on the live site.
+
 A static public landing page for the invitation-only peer-support pilot. Member
 enrollment, email-interest collection, and persistent Hug reactions are not
 active. No member or email data is collected by application code. The public
