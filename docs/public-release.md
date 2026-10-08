@@ -25,11 +25,16 @@ Production-domain HTTP access and DNS resolution were initially blocked from thi
 machine. These are verification/access limitations, not proof that the domain is
 broken. Only a production request and deployed-revision check establishes release.
 
-GitHub Pages does not offer arbitrary response-header configuration here. The
-site uses external first-party assets, no inline event handlers, a restrictive
-meta CSP, and a referrer policy. Meta CSP cannot set frame-ancestors or replace
-host response headers/HSTS. HTTPS enforcement and hosting headers require an
-authorized configuration path; do not weaken TLS verification to test the site.
+The feature-branch checks also expose an existing Cloudflare Pages integration
+and successful preview deployment at `feat-public-landing-release.haven-77v.pages.dev`.
+This does not prove which provider currently serves the custom domain. A direct
+preview request and DNS-over-HTTPS request were blocked by proxy policy.
+
+Cloudflare Pages supports the included `_headers` rules for CSP (including
+frame-ancestors), no-referrer, MIME protection, framing denial, and restricted
+browser capabilities. GitHub Pages ignores that file and cannot configure those
+headers here. The first-party assets and meta CSP remain a fallback. HSTS is not
+added before domain HTTPS is verified. Do not weaken TLS verification for tests.
 
 Figma pilot: file `UEV0kB2dXWVNsiilzH8IBz`; supplied URL was blocked by proxy policy.
 This release follows the requested brand palette, not a claimed inspected Figma

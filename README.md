@@ -33,7 +33,9 @@ has confirmed eligibility or availability. Do not infer partnership from a link.
 Observed GitHub Pages configuration: legacy publishing from `main`, repository
 root, custom domain `havenforward.com`. Preserve `CNAME`. Merging a public-site PR
 into main can deploy production; do so only after the release review and tests.
-Development/staging branches are not configured as production sources.
+The observed GitHub Pages production source is main. A connected Cloudflare Pages integration also creates branch previews; its production branch and custom-domain binding must be verified separately.
+
+Cloudflare response-header rules are in `_headers`; GitHub Pages ignores them.
 
 The CI workflow validates and builds an allowlisted `dist/` artifact without
 secrets. It does not change DNS or enable private services. Pages currently
