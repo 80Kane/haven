@@ -10,21 +10,24 @@ GitHub Pages provider API reports a successful existing build of baseline commit
 HTTPS enforcement is false; the API returns no certificate metadata. Do not
 infer a missing or invalid live certificate solely from a null metadata field.
 
-Public URL: https://havenforward.com. This machine initially received a proxy
-403 for that URL and could not resolve domain addresses. DNS health and branch
-protection APIs return insufficient integration permissions. Production browser
-smoke tests, DNS correctness, TLS certificate validity, and host headers are
-therefore unverified. Required domain additions are saved as an environment
-configuration draft, not assumed applied to the running machine.
+Public URL: https://havenforward.com. A verified HTTPS request now succeeds and
+returns the old title, `Haven – You Are Not Alone`. Public DNS returns Cloudflare
+addresses `104.21.17.14` and `172.67.218.242`. Cloudflare is the public edge; DNS
+alone does not identify its origin. DNS-health and branch-protection API access
+remain limited by integration permissions.
 
-The feature branch also triggered a successful Cloudflare Pages preview.
-Both GitHub CI runs passed for initial release commit `e365ac8`; Cloudflare's
-check reported a successful deployment of that same revision. The stable preview
-is `https://feat-public-landing-release.haven-77v.pages.dev/`. Direct requests to
-the preview and DNS-over-HTTPS were blocked by proxy policy, so a successful
-provider check is not claimed as a completed staging browser smoke test.
-Cloudflare's presence means GitHub Pages settings alone cannot establish the
-production domain's actual serving provider. This must be verified before release.
+The Cloudflare preview at
+`https://feat-public-landing-release.haven-77v.pages.dev/` serves the new site.
+All 14 browser tests passed against the actual deployed preview: 0 failures/skips.
+CSP, no-referrer, and nosniff headers are present. Private/backend routes return
+404 without member data. Initial remote tests failed because the managed
+Chromium trust store lacked the current environment proxy CA; registering the
+provided CA and using the supported proxy route resolved the tooling failure.
+TLS verification remained enabled throughout successful validation.
+
+Both GitHub CI checks and the Cloudflare deployment check passed for `1181954`.
+Production release remains pending owner review/approval; a successful preview
+is not a production deployment. Future commits must pass the same checks.
 
 ## Release candidate checks
 
@@ -53,7 +56,7 @@ static release, not future member-service authentication or database permissions
 - Pilot invite/Auth/RLS/moderation/removal tests: not implemented by this public
   release. Private services remain closed.
 - Figma fidelity: unverified; file URL is known but access is blocked.
-- Production deployment/smoke: pending reviewed PR release and domain access.
+- Production deployment/smoke: pending reviewed PR release; domain access is now working.
 
 Do not call this candidate deployed or the member pilot ready based on local
 tests. Record the actual merged commit, Pages build result, HTTPS request, and

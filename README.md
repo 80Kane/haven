@@ -47,3 +47,14 @@ For a staging content preview use the isolated local build or a separately
 authorized static host. A CI artifact is not proof of a running staging service.
 See [release documentation](docs/public-release.md) for acceptance, hosting
 limitations, deployment evidence, and rollback.
+
+## Deployed-preview checks through a managed proxy
+
+For remote smoke tests, set `TEST_BASE_URL` to the preview or approved production
+URL. Where the environment requires a proxy, opt in with `TEST_USE_ENV_PROXY=1`
+and set `NODE_EXTRA_CA_CERTS` to its trusted system CA bundle. Chromium must trust
+the environment-provided proxy CA through its documented Linux NSS user store.
+Some managed environments regenerate that store per command; register the
+provided certificate and run tests in the same authorized command session.
+Never disable TLS verification. Proxy configuration/credentials are read from
+runtime environment only and must not be logged or committed.

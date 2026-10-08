@@ -27,8 +27,10 @@ broken. Only a production request and deployed-revision check establishes releas
 
 The feature-branch checks also expose an existing Cloudflare Pages integration
 and successful preview deployment at `feat-public-landing-release.haven-77v.pages.dev`.
-This does not prove which provider currently serves the custom domain. A direct
-preview request and DNS-over-HTTPS request were blocked by proxy policy.
+Public DNS now resolves through Cloudflare and verified HTTPS requests succeed.
+The public edge is Cloudflare, while origin configuration must be distinguished
+from the separately configured GitHub Pages source. All 14 browser tests pass
+against the actual deployed preview; production still serves the old site.
 
 Cloudflare Pages supports the included `_headers` rules for CSP (including
 frame-ancestors), no-referrer, MIME protection, framing denial, and restricted
