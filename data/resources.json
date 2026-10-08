@@ -1,0 +1,72 @@
+[
+  {
+    "id": "housing",
+    "category": "Housing",
+    "name": "HUD rental assistance",
+    "description": "A starting point for US rental-assistance information and local housing contacts.",
+    "url": "https://www.hud.gov/topics/rental_assistance",
+    "eligibility": "Programs and eligibility vary by location; confirm with the listed agency.",
+    "region": "United States",
+    "lastVerified": null
+  },
+  {
+    "id": "recovery",
+    "category": "Recovery support",
+    "name": "FindTreatment.gov",
+    "description": "SAMHSA\u2019s directory of treatment providers for substance use and mental health.",
+    "url": "https://findtreatment.gov/",
+    "eligibility": "Ask providers about costs, insurance, accessibility, and appointment availability.",
+    "region": "United States",
+    "lastVerified": null
+  },
+  {
+    "id": "employment",
+    "category": "Employment",
+    "name": "CareerOneStop",
+    "description": "Explore career tools, training information, and American Job Center contacts.",
+    "url": "https://www.careeronestop.org/",
+    "eligibility": "Services and eligibility vary; contact your local center.",
+    "region": "United States",
+    "lastVerified": null
+  },
+  {
+    "id": "education",
+    "category": "Education",
+    "name": "Federal Student Aid",
+    "description": "Information about financial aid for college and career-school education.",
+    "url": "https://studentaid.gov/",
+    "eligibility": "Federal aid has specific eligibility requirements; review the provider\u2019s guidance.",
+    "region": "United States",
+    "lastVerified": null
+  },
+  {
+    "id": "transportation",
+    "category": "Transportation",
+    "name": "US disability transportation guidance",
+    "description": "Find information about accessible public transportation and paratransit.",
+    "url": "https://www.usa.gov/disability-transit",
+    "eligibility": "Local services and paratransit eligibility vary; confirm with the transit operator.",
+    "region": "United States",
+    "lastVerified": null
+  },
+  {
+    "id": "services",
+    "category": "Community services",
+    "name": "211 community connections",
+    "description": "Find a local 211 service for housing, food, transportation, and other community needs.",
+    "url": "https://www.211.org/",
+    "eligibility": "Coverage, hours, and referral services vary by local 211 organization.",
+    "region": "United States",
+    "lastVerified": null
+  },
+  {
+    "id": "veterans",
+    "category": "Veterans resources",
+    "name": "US Department of Veterans Affairs",
+    "description": "Learn about veteran benefits, health services, and support resources.",
+    "url": "https://www.va.gov/",
+    "eligibility": "Eligibility depends on the benefit or service; confirm directly with VA.",
+    "region": "United States",
+    "lastVerified": null
+  }
+]
