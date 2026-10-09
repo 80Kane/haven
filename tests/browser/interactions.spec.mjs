@@ -275,3 +275,32 @@ test("staging forms have labels, keyboard access, automated AA checks and mobile
     ).toBe(true);
   }
 });
+
+test("503 displays only fixed support codes and hides arbitrary provider text", async ({
+  page,
+}) => {
+  let code = "database_haven_send_hug_http_403";
+  await setup(page, (_, request) =>
+    request.method() === "GET"
+      ? { body: { total: 0 } }
+      : { status: 503, body: { error: "private provider body", code } },
+  );
+  for (const value of [
+    "database_haven_send_hug_http_403",
+    "verification_request",
+    "secret@example.test private-key",
+  ]) {
+    code = value;
+    await prepare(page, "hugs");
+    await page.locator("#hugs-submit").click();
+    await expect(page.locator("#hugs-status")).toContainText(
+      `Support code: ${value.includes("private-key") ? "HTTP 503" : value}.`,
+    );
+    await expect(page.locator("#hugs-status")).not.toContainText(
+      "private provider body",
+    );
+    await expect(page.locator("#hugs-status")).not.toContainText(
+      "secret@example.test",
+    );
+  }
+});

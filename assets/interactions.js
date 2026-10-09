@@ -31,7 +31,22 @@ if (root) {
         throw new Error("Too many attempts. Please try again in an hour.");
       if (response.status === 400)
         throw new Error("Check your details and complete a new verification.");
-      throw new Error("The service is unavailable. Please try again later.");
+      const error = new Error(
+        "The service is unavailable. Please try again later.",
+      );
+      if (response.status === 503) {
+        let code;
+        try {
+          code = (await response.json()).code;
+        } catch {
+          // Some hosting failures have no JSON body.
+        }
+        const safeCode =
+          /^(?:trusted_network_missing|verification_request|verification_http|verification_response|network_hash|confirmation_tokens|request_processing|database_haven_(?:hug_count|send_hug|request_interest|confirm_interest|unsubscribe_interest|cancel_pending_interest)_(?:request|response|http_[1-5][0-9]{2}))$/;
+        error.supportCode =
+          typeof code === "string" && safeCode.test(code) ? code : "HTTP 503";
+      }
+      throw error;
     }
     if (!response.headers.get("Content-Type")?.includes("application/json"))
       throw new Error("Your preview session may have expired. Sign in again.");
@@ -139,6 +154,8 @@ if (root) {
       } catch {
         state.status.textContent =
           "Verification could not load. Choose Prepare verification to retry, or try again later.";
+        if (error.supportCode)
+          state.status.textContent += ` Support code: ${error.supportCode}.`;
       } finally {
         state.busy = false;
         update(state);
@@ -191,6 +208,8 @@ if (root) {
                 ].includes(error.message)
               ? error.message
               : "The service returned an unexpected result. Please try again later.";
+        if (error.supportCode)
+          state.status.textContent += ` Support code: ${error.supportCode}.`;
       } finally {
         state.busy = false;
         reset(state);
