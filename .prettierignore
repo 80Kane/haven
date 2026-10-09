@@ -3,3 +3,7 @@ dist/
 test-results/
 playwright-report/
 package-lock.json
+member-app/.next/
+member-app/next-env.d.ts
+member-app/*.tsbuildinfo
+member-app/package-lock.json
