@@ -57,8 +57,8 @@ checks include WCAG 2.2 AA tags; they are not a complete accessibility review.
 No test mail has been sent by these suites. The owner showed a live preview
 `GET /api/public/hugs` response of `{"total":0}` before the UI change, confirming
 the edge-to-development-database count read. This does not validate mutations,
-email delivery or the new UI. Cloud proxy restrictions currently prevent this
-agent from independently browsing the live preview.
+email delivery or the new UI. An unauthenticated request from this agent now redirects to Cloudflare Access.
+Authenticated live mutations still require the owner’s browser session.
 
 Before release, use the actual preview and complete:
 
