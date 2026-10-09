@@ -29,7 +29,7 @@ export function stagingDocument() {
     <header class="site-header">
       <div class="header-inner">
         <a class="brand" href="/">HavenForward</a
-        ><span class="preview-label">Staging only</span>
+        ><span class="staging-badge">Staging only</span>
       </div>
     </header>
     <main

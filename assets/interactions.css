@@ -1,3 +1,11 @@
+.staging-badge {
+  color: #5b21b6;
+  background: #ede9fe;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
 .interaction-page {
   padding-top: 48px;
   padding-bottom: 48px;
