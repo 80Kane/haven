@@ -50,7 +50,7 @@ this draft into production. See [backend setup](public-backend-staging.md).
 
 ## Verification evidence and remaining live tests
 
-Local checks: nine Node/static route tests, 25 browser tests, and 20 backend
+Local checks: nine Node/static route tests, 25 browser tests, and 21 backend
 tests using real localhost PostgreSQL. Browser CAPTCHA/API responses and backend
 Resend/Turnstile are explicit fakes, never production bypasses. Automated axe
 checks include WCAG 2.2 AA tags; they are not a complete accessibility review.
@@ -113,3 +113,48 @@ when present, one recognized error from Cloudflare’s documented allowlist.
 Unknown error text and response fields are discarded. The owner’s live
 `verification_http` failure confirms the request stops at Siteverify, before the
 Hug RPC; its precise HTTP status and reason remain pending a fresh attempt.
+
+## Existing-widget Spin integration
+
+Follow Cloudflare’s existing-widget flow at
+https://developers.cloudflare.com/turnstile/spin/prompt.md. The hosted prompt was
+read from the official cloudflare/cloudflare-docs public/turnstile/spin/prompt.md
+mirror when the documentation host was inaccessible in this environment.
+
+Existing widget: `0x4AAAAAAFRxDw6rDpsxwBGl`. Preserve it and its clearance setting.
+Frontend surfaces map `hugs` → POST /api/public/hugs and `interest` →
+POST /api/public/interest. The existing Pages Function calls Siteverify using
+URL-encoded form data, a ten-second timeout and a trusted edge network address.
+It rejects empty/oversized tokens, requires boolean success exactly true, and
+checks the action and exact hostname derived from APP_ORIGIN before the existing
+handler runs. Each surface owns its widget and clears/removes it after submission;
+a new preparation creates a fresh token. No verification runs in the browser.
+
+Secret destination: Cloudflare account `85755e3970a9d60445f76d889af78ec1`, Pages
+project `haven`, environment `preview`, binding `TURNSTILE_SECRET_KEY`. Do not
+rename this existing binding to the prompt’s generic TURNSTILE_SECRET example or
+write to production. Required widget hostname:
+`feat-public-interactions-bac.haven-77v.pages.dev`; deployment validation never
+allows localhost for this hosted preview.
+
+The current agent environment has no Cloudflare auth or installed Wrangler.
+Spin requires an approved canonical absolute Wrangler executable outside the
+project, version 4.109 or later, exact account and destination, and a reviewed
+write manifest before a secret-bearing getter or write. Do not invoke npx or a
+project-local executable for that recovery. Secret binding names alone do not
+validate values. Cloudflare reported invalid-input-secret for the current preview;
+recovery and live verification remain incomplete.
+
+For automatic recovery, validate widget sitekey/domains and preserve clearance,
+retrieve the secret without printing/exporting/persisting it, validate it with
+Siteverify’s dummy probe expecting invalid-input-response, then write via the
+platform secret manager’s standard-input sink for the exact preview destination.
+Use the official flow’s log-sanitization guards. Never store credentials in Git,
+chat or temporary files. If the approved tooling is unavailable, use the host’s
+normal secret-management flow before redeploying the latest feature preview.
+
+After recovery, a fresh real CAPTCHA must permit one Hug. Replaying that same
+answer must fail; requesting a new answer may return the unchanged daily-limit
+count. These are different checks. Repeat action-scoped verification for the
+controlled email test without changing its consent/delivery behavior. Automated
+provider fixtures do not establish live provider readiness.

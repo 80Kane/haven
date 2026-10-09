@@ -218,6 +218,7 @@ export async function handlePublicApi(request, env, dependencies = {}) {
       );
     if (
       typeof body.turnstileToken !== "string" ||
+      body.turnstileToken.length === 0 ||
       body.turnstileToken.length > 2048
     )
       return json(400, { error: "Complete the verification challenge." });
@@ -226,8 +227,8 @@ export async function handlePublicApi(request, env, dependencies = {}) {
       "https://challenges.cloudflare.com/turnstile/v0/siteverify",
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
           secret: env.TURNSTILE_SECRET_KEY,
           response: body.turnstileToken,
           remoteip: ip,
@@ -260,7 +261,7 @@ export async function handlePublicApi(request, env, dependencies = {}) {
     failureCode = "verification_response";
     const verdict = await verify.json();
     if (
-      !verdict.success ||
+      verdict.success !== true ||
       verdict.hostname !== url.hostname ||
       verdict.action !== path
     )

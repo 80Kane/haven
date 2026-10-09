@@ -104,7 +104,9 @@ async function service(name, parameters = {}) {
   }
 }
 async function fetchMock(url, options) {
-  const body = JSON.parse(options.body);
+  const body = url.includes("siteverify")
+    ? Object.fromEntries(new URLSearchParams(options.body))
+    : JSON.parse(options.body);
   if (url.includes("siteverify"))
     return Response.json({
       success: !captchaFailure,
@@ -513,4 +515,58 @@ test("missing trusted edge metadata fails closed even when diagnostics fail", as
     code: "trusted_network_missing",
   });
   assert.equal(fetched, false);
+});
+
+test("canonical Turnstile verification rejects empty tokens and nonboolean success", async () => {
+  let fetched = false;
+  const empty = await handlePublicApi(
+    req("hugs", { turnstileToken: "" }),
+    env,
+    {
+      trustedIp: () => "192.0.2.10",
+      fetch: async () => {
+        fetched = true;
+        throw new Error("must not fetch");
+      },
+    },
+  );
+  assert.equal(empty.status, 400);
+  assert.equal(fetched, false);
+  for (const success of ["true", 1, {}, true]) {
+    const result = await handlePublicApi(
+      req("hugs", { turnstileToken: "hugs" }),
+      env,
+      {
+        trustedIp: () => "192.0.2.10",
+        fetch: async (url, options) => {
+          if (!url.includes("siteverify")) return fetchMock(url, options);
+          assert.equal(
+            options.headers["Content-Type"],
+            "application/x-www-form-urlencoded",
+          );
+          assert.equal(options.body.get("secret"), env.TURNSTILE_SECRET_KEY);
+          assert.equal(options.body.get("response"), "hugs");
+          return Response.json({
+            success,
+            hostname: "stage.example",
+            action: "hugs",
+          });
+        },
+      },
+    );
+    assert.equal(result.status, success === true ? 200 : 400);
+  }
+  for (const hostname of ["localhost", "attacker.example"]) {
+    const result = await handlePublicApi(
+      req("hugs", { turnstileToken: "fresh" }),
+      env,
+      {
+        trustedIp: () => "192.0.2.11",
+        fetch: async () =>
+          Response.json({ success: true, hostname, action: "hugs" }),
+      },
+    );
+    assert.equal(result.status, 400);
+  }
+  assert.equal((await service("haven_hug_count")).total, 1);
 });
