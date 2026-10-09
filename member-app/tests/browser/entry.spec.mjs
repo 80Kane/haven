@@ -121,7 +121,7 @@ test("small screen has no horizontal overflow and auth responses are private and
   await page.setViewportSize({ width: 320, height: 720 });
   const response = await page.goto("/login");
   expect(response.headers()["cache-control"]).toContain("no-store");
-  expect(response.headers()["referrer-policy"]).toBe("no-referrer");
+  expect(response.headers()["referrer-policy"]).toBe("same-origin");
   expect(response.headers()["content-security-policy"]).toContain(
     "frame-ancestors 'none'",
   );

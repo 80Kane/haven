@@ -35,13 +35,14 @@ for next dev on http://127.0.0.1:4180, with the non-Secure development cookie na
 Form POSTs require the exact configured request/Origin origin, a bounded streamed
 URL-encoded body, supported fields and no duplicate fields. Raw invitation codes
 are accepted only in POST bodies and hashed before database calls. Codes never
-appear in generated URLs. GET cannot sign in, redeem or sign out. Error messages
+appear in generated URLs. Same-origin referrers preserve native POST Origin
+validation and send no referrer to external destinations. Null origins remain denied. GET cannot sign in, redeem or sign out. Error messages
 are neutral and redirects go only to fixed local routes. Passwords are not echoed
 in responses. Disable body logging, session replay and sensitive telemetry at the
 host; this application does not configure external logging infrastructure.
 
 All pages are dynamically rendered. Responses are private/no-store with
-no-referrer, framing restrictions and a per-request script nonce. Do not override
+same-origin referrers, framing restrictions and a per-request script nonce. Do not override
 these with CDN caching. Production CSP has no unsafe-inline or unsafe-eval scripts;
 development permits unsafe-eval for the framework's development runtime. There
 are no trackers, external fonts, personal journals, posts or messages.
