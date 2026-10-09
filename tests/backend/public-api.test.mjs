@@ -41,11 +41,13 @@ const signatures = {
 let mail, mailFailure, captchaFailure;
 before(async () => {
   await admin.connect();
+  await admin.query("SELECT pg_advisory_lock(72134682)");
   for (const role of ["anon", "authenticated", "service_role"]) {
     await admin.query(
       `DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='${role}') THEN CREATE ROLE ${role}; END IF; END $$`,
     );
   }
+  await admin.query("SELECT pg_advisory_unlock(72134682)");
   if (
     !(
       await admin.query(
