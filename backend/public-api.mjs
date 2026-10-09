@@ -164,6 +164,8 @@ export async function handlePublicApi(request, env, dependencies = {}) {
       failureCode = `database_${name}_http_${response.status}`;
       throw new Error("backend unavailable");
     }
+    // This SQL RPC returns void; a successful empty response is not a failure.
+    if (name === "haven_cancel_pending_interest") return;
     failureCode = `database_${name}_response`;
     return response.json();
   }
