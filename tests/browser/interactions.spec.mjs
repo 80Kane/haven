@@ -203,6 +203,8 @@ test("unavailable or malformed API leaves both forms closed", async ({
 test("failed CAPTCHA script load leaves submission disabled and can be retried", async ({
   page,
 }) => {
+  const pageErrors = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
   await setup(page, () => ({ body: { total: 0 } }));
   await page.route("https://challenges.cloudflare.com/**", (route) =>
     route.abort(),
@@ -221,6 +223,7 @@ test("failed CAPTCHA script load leaves submission disabled and can be retried",
   );
   await prepare(page, "hugs");
   await expect(page.locator("#hugs-submit")).toBeEnabled();
+  expect(pageErrors).toEqual([]);
 });
 test("without JavaScript no forms can submit and support links remain available", async ({
   browser,
