@@ -154,8 +154,6 @@ if (root) {
       } catch {
         state.status.textContent =
           "Verification could not load. Choose Prepare verification to retry, or try again later.";
-        if (error.supportCode)
-          state.status.textContent += ` Support code: ${error.supportCode}.`;
       } finally {
         state.busy = false;
         update(state);
