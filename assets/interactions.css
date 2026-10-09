@@ -1,0 +1,115 @@
+.interaction-page {
+  padding-top: 48px;
+  padding-bottom: 48px;
+  max-width: 1100px;
+}
+.interaction-page h1 {
+  font-size: clamp(2rem, 6vw, 3.6rem);
+  line-height: 1.15;
+}
+.interaction-intro {
+  max-width: 70ch;
+  margin-top: 20px;
+}
+.staging-notice {
+  background: #ede9fe;
+  color: #1e1b2e;
+  padding: 20px;
+  border-left: 4px solid #7c3aed;
+  margin: 24px 0;
+}
+.interaction-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+.interaction-card {
+  border: 1px solid #d8d2e7;
+  border-radius: 20px;
+  padding: 28px;
+  min-width: 0;
+}
+.interaction-card h2,
+.interaction-privacy h2 {
+  font-size: 1.7rem;
+}
+.interaction-card p,
+.interaction-privacy p {
+  margin-top: 16px;
+}
+.hug-total #hug-count {
+  font-size: 2.7rem;
+  color: #5b21b6;
+  font-weight: 700;
+}
+.interaction-card fieldset {
+  border: 0;
+  padding: 0;
+  margin: 20px 0 0;
+  min-width: 0;
+}
+.interaction-card legend {
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+.interaction-card .button {
+  white-space: normal;
+  max-width: 100%;
+  margin-top: 16px;
+}
+.interaction-card .button:disabled {
+  opacity: 1;
+  background: #e9e6ef;
+  border: 1px solid #71667e;
+  color: #51455e;
+  cursor: not-allowed;
+  transform: none;
+}
+.interaction-card input[type="email"] {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  min-height: 48px;
+  border: 1px solid #71667e;
+  border-radius: 8px;
+  font: inherit;
+  margin-top: 8px;
+}
+.interaction-card label {
+  font-weight: 600;
+}
+.consent-label {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 24px;
+  padding: 8px 0;
+}
+.consent-label input {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin-top: 3px;
+  accent-color: #7c3aed;
+}
+.challenge {
+  min-width: 0;
+  margin-top: 16px;
+}
+.interaction-status {
+  min-height: 3em;
+  font-weight: 600;
+}
+.interaction-privacy {
+  max-width: 80ch;
+  margin-top: 40px;
+}
+@media (max-width: 750px) {
+  .interaction-grid {
+    grid-template-columns: 1fr;
+  }
+  .interaction-card {
+    padding: 20px;
+  }
+}
