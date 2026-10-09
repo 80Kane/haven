@@ -104,7 +104,13 @@ function confirmationPage(action, value) {
       : "Unsubscribe from email updates";
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} | HavenForward</title></head><body><main><h1>${title}</h1><p>This concerns email updates only, not membership in the private community.</p><form method="post" action="/api/public/${action}"><input type="hidden" name="token" value="${escapeHtml(value)}"><button type="submit">${title}</button></form></main></body></html>`;
   return new Response(html, {
-    headers: { ...safeHeaders, "Content-Type": "text/html; charset=utf-8" },
+    headers: {
+      ...safeHeaders,
+      // no-referrer makes native form POSTs send Origin: null in Chromium.
+      // Keep the real origin for validation without exposing the token URL.
+      "Referrer-Policy": "strict-origin",
+      "Content-Type": "text/html; charset=utf-8",
+    },
   });
 }
 export async function handlePublicApi(request, env, dependencies = {}) {
