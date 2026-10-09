@@ -1,5 +1,12 @@
 # Public landing-page release
 
+> Historical static-release scope below. As of October 9, public-interaction
+> backend code and fixes #14-#16 are merged into main through PR #13. Guided
+> staging checks are recorded in [the dated verification record](staging-verification-2026-10-09.md).
+> Production interactions remain disabled according to owner-confirmed settings;
+> activation requirements and the next member-foundation work package are in that
+> record. Historical statements below are not a current deployment status report.
+
 ## Scope and acceptance
 
 This focused release replaces unverified statistics, testimonials, affiliations,
