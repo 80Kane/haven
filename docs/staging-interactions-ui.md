@@ -50,7 +50,7 @@ this draft into production. See [backend setup](public-backend-staging.md).
 
 ## Verification evidence and remaining live tests
 
-Local checks: nine Node/static route tests, 24 browser tests, and 18 backend
+Local checks: nine Node/static route tests, 24 browser tests, and 20 backend
 tests using real localhost PostgreSQL. Browser CAPTCHA/API responses and backend
 Resend/Turnstile are explicit fakes, never production bypasses. Automated axe
 checks include WCAG 2.2 AA tags; they are not a complete accessibility review.
@@ -94,3 +94,14 @@ confirmation/unsubscribe endpoints and credentials while test signups exist.
 Unsubscribe/delete test records before decommissioning the development services.
 Never copy a downloaded Wrangler configuration into the repository or deploy
 from the temporary inspection directory. Review production release separately.
+
+## Diagnosing a failed preview submission
+
+A working count establishes database reads only. If a submission returns 503,
+inspect the POST response in browser developer tools, Network → Response.
+The fixed `code` identifies missing trusted edge metadata, verification transport
+or decoding, network hashing, or a specific database RPC request/HTTP/decoding
+failure. The same code appears in Pages Function logs. Do not share request
+payloads, CAPTCHA answers, credentials or provider response bodies. These codes
+never include provider text or user data. They do not relax verification or
+network limits. Delivery failures keep the existing neutral email acknowledgement.

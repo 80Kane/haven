@@ -412,3 +412,87 @@ test("streamed oversized body is cancelled without database writes", async () =>
     0,
   );
 });
+
+test("submission diagnostics distinguish failures without disclosing provider data", async () => {
+  const privateMessage =
+    "secret-key person@example.test 192.0.2.10 captcha-answer";
+  const cases = [
+    [
+      "verification_request",
+      async () => {
+        throw new Error(privateMessage);
+      },
+    ],
+    [
+      "verification_http",
+      async () => new Response(privateMessage, { status: 503 }),
+    ],
+    ["verification_response", async () => new Response(privateMessage)],
+    [
+      "database_haven_send_hug_http_403",
+      async (url, options) =>
+        url.includes("siteverify")
+          ? fetchMock(url, options)
+          : new Response(privateMessage, { status: 403 }),
+    ],
+    [
+      "database_haven_send_hug_request",
+      async (url, options) => {
+        if (url.includes("siteverify")) return fetchMock(url, options);
+        throw new Error(privateMessage);
+      },
+    ],
+    [
+      "database_haven_send_hug_response",
+      async (url, options) =>
+        url.includes("siteverify")
+          ? fetchMock(url, options)
+          : new Response(privateMessage),
+    ],
+  ];
+  for (const [code, fetch] of cases) {
+    const logs = [];
+    const result = await handlePublicApi(
+      req("hugs", { turnstileToken: "hugs" }),
+      env,
+      {
+        trustedIp: () => "192.0.2.10",
+        fetch,
+        reportFailure: (value) => logs.push(value),
+      },
+    );
+    assert.equal(result.status, 503);
+    assert.deepEqual(await result.json(), {
+      error:
+        code === "verification_http"
+          ? "Verification is unavailable."
+          : "Service temporarily unavailable.",
+      code,
+    });
+    assert.deepEqual(logs, [code]);
+    assert.equal(
+      await service("haven_hug_count").then((value) => value.total),
+      0,
+    );
+  }
+});
+test("missing trusted edge metadata fails closed even when diagnostics fail", async () => {
+  const request = req("hugs", { turnstileToken: "hugs" });
+  request.headers.set("CF-Connecting-IP", "192.0.2.10");
+  let fetched = false;
+  const result = await handlePublicApi(request, env, {
+    fetch: async () => {
+      fetched = true;
+      throw new Error("must not fetch");
+    },
+    reportFailure: () => {
+      throw new Error("diagnostics unavailable");
+    },
+  });
+  assert.equal(result.status, 503);
+  assert.deepEqual(await result.json(), {
+    error: "Abuse protection is unavailable.",
+    code: "trusted_network_missing",
+  });
+  assert.equal(fetched, false);
+});

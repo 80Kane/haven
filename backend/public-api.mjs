@@ -132,7 +132,19 @@ export async function handlePublicApi(request, env, dependencies = {}) {
   if (url.origin !== env.APP_ORIGIN)
     return json(403, { error: "Origin not allowed" });
   const fetcher = dependencies.fetch || fetch;
+  // Codes describe fixed operations only: never log provider bodies, exceptions,
+  // request parameters, addresses, IPs, keys or challenge answers.
+  let failureCode = "request_processing";
+  function failure(code, message = "Service temporarily unavailable.") {
+    try {
+      dependencies.reportFailure?.(code);
+    } catch {
+      // Diagnostic sinks must not change the response or trigger a retry.
+    }
+    return json(503, { error: message, code });
+  }
   async function rpc(name, parameters = {}) {
+    failureCode = `database_${name}_request`;
     const response = await fetcher(`${env.SUPABASE_URL}/rest/v1/rpc/${name}`, {
       method: "POST",
       headers: {
@@ -142,7 +154,11 @@ export async function handlePublicApi(request, env, dependencies = {}) {
       body: JSON.stringify(parameters),
       signal: AbortSignal.timeout(10000),
     });
-    if (!response.ok) throw new Error("backend unavailable");
+    if (!response.ok) {
+      failureCode = `database_${name}_http_${response.status}`;
+      throw new Error("backend unavailable");
+    }
+    failureCode = `database_${name}_response`;
     return response.json();
   }
   try {
@@ -195,12 +211,17 @@ export async function handlePublicApi(request, env, dependencies = {}) {
       : request.cf
         ? request.headers.get("CF-Connecting-IP")
         : null;
-    if (!ip) return json(503, { error: "Abuse protection is unavailable." });
+    if (!ip)
+      return failure(
+        "trusted_network_missing",
+        "Abuse protection is unavailable.",
+      );
     if (
       typeof body.turnstileToken !== "string" ||
       body.turnstileToken.length > 2048
     )
       return json(400, { error: "Complete the verification challenge." });
+    failureCode = "verification_request";
     const verify = await fetcher(
       "https://challenges.cloudflare.com/turnstile/v0/siteverify",
       {
@@ -214,7 +235,9 @@ export async function handlePublicApi(request, env, dependencies = {}) {
         signal: AbortSignal.timeout(10000),
       },
     );
-    if (!verify.ok) return json(503, { error: "Verification is unavailable." });
+    if (!verify.ok)
+      return failure("verification_http", "Verification is unavailable.");
+    failureCode = "verification_response";
     const verdict = await verify.json();
     if (
       !verdict.success ||
@@ -222,6 +245,7 @@ export async function handlePublicApi(request, env, dependencies = {}) {
       verdict.action !== path
     )
       return json(400, { error: "Verification failed." });
+    failureCode = "network_hash";
     const actor = await actorHash(
       env.ACTOR_HASH_SECRET,
       ip,
@@ -243,6 +267,7 @@ export async function handlePublicApi(request, env, dependencies = {}) {
       /[\r\n<>]/.test(email)
     )
       return json(400, { error: "Enter a valid email address." });
+    failureCode = "confirmation_tokens";
     const confirmation = token();
     const unsubscribe = token();
     const confirmationHash = await hash(confirmation);
@@ -300,6 +325,6 @@ export async function handlePublicApi(request, env, dependencies = {}) {
         "If eligible, we will attempt to send a confirmation email. If none arrives, try again later. This does not grant community membership.",
     });
   } catch {
-    return json(503, { error: "Service temporarily unavailable." });
+    return failure(failureCode);
   }
 }
