@@ -1,5 +1,13 @@
 # Public interactions: development/staging backend
 
+October 9 update: owner-guided staging delivery, confirmation/replay,
+unsubscribe/removal, failed-send cleanup/retry, and Hug persistence/duplicate
+checks passed within the scope recorded in
+[the dated verification record](staging-verification-2026-10-09.md).
+The setup instructions below remain reference procedures, not instructions to
+reapply an existing migration. Production activation and private-member gates
+remain unresolved; see the dated record for the current work list.
+
 This change adds a server-only backend foundation. It does not open member
 registration or activate production forms. The user confirmed that Supabase
 project `jveofsddjgoqknpquxpx` is new development with no live member data.

@@ -1,5 +1,11 @@
 # Deployment verification — public release candidate
 
+> Historical October 8 snapshot. For October 9 public-interaction staging results,
+> current repository revisions and remaining verification requirements, see
+> [the dated staging record](staging-verification-2026-10-09.md).
+> The hosting observations below have not been revalidated as current production
+> deployment evidence.
+
 Date: October 8, 2026. Scope: static public site only.
 
 ## Current production evidence
