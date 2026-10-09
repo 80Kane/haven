@@ -59,8 +59,17 @@ alter table haven_members.redemption_attempts enable row level security;
 revoke all on all tables in schema haven_members from public,anon,authenticated,service_role;
 revoke all on all sequences in schema haven_members from public,anon,authenticated,service_role;
 grant select on haven_members.members to authenticated;
+create function haven_members.can_read_self() returns boolean
+language sql stable security definer set search_path = '' as $$
+  select exists(select 1 from haven_members.configuration where singleton and enabled)
+    and exists(select 1 from auth.users where id=auth.uid() and email_confirmed_at is not null
+      and email is not null and is_anonymous is not true
+      and (banned_until is null or banned_until <= now()))
+$$;
+revoke all on function haven_members.can_read_self() from public,anon,authenticated,service_role;
+grant execute on function haven_members.can_read_self() to authenticated;
 create policy own_active_member on haven_members.members for select to authenticated
-  using (id = (select auth.uid()) and status = 'active');
+  using (id = (select auth.uid()) and status = 'active' and (select haven_members.can_read_self()));
 -- No client table writes or audit/invitation enumeration. All RPCs use caller JWT.
 
 create function haven_members.require_verified_user() returns uuid

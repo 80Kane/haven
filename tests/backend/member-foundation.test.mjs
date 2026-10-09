@@ -158,6 +158,10 @@ test("migration starts disabled; no caller including staff can bypass database s
   await denied(issue());
   await denied(rpc("haven_member_self"));
   await denied(redeem());
+  assert.equal(
+    (await asActor(A, "aal2", "select * from haven_members.members")).rowCount,
+    0,
+  );
 });
 test("issuance requires active verified administrator and aal2, including direct RPC calls", async () => {
   await denied(issue(TOKEN, "person@example.test", A, "aal1"));
