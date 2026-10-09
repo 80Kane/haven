@@ -12,7 +12,7 @@ export async function proxy(request: NextRequest) {
   headers.set("content-security-policy", csp);
   headers.set("x-nonce", nonce);
   let response = NextResponse.next({ request: { headers } });
-  if (config && request.nextUrl.origin !== config.origin)
+  if (config && new URL(request.url).origin !== config.origin)
     response = new NextResponse("Not found", { status: 404 });
   else if (config && ["GET", "HEAD"].includes(request.method)) {
     try {

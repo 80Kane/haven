@@ -14,6 +14,8 @@ export default defineConfig({
     cwd: "member-app",
     url: "http://127.0.0.1:4180/login",
     reuseExistingServer: false,
+    stdout: "pipe",
+    stderr: "pipe",
     env: {
       NEXT_TELEMETRY_DISABLED: "1",
       MEMBER_UI_ENABLED: "true",
