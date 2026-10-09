@@ -424,8 +424,27 @@ test("submission diagnostics distinguish failures without disclosing provider da
       },
     ],
     [
-      "verification_http",
+      "verification_http_503",
       async () => new Response(privateMessage, { status: 503 }),
+    ],
+    [
+      "verification_http_400_invalid_input_secret",
+      async () =>
+        Response.json(
+          {
+            "error-codes": ["invalid-input-secret", privateMessage],
+            debug: privateMessage,
+          },
+          { status: 400 },
+        ),
+    ],
+    [
+      "verification_http_403",
+      async () =>
+        Response.json(
+          { "error-codes": [privateMessage], debug: privateMessage },
+          { status: 403 },
+        ),
     ],
     ["verification_response", async () => new Response(privateMessage)],
     [
@@ -463,10 +482,9 @@ test("submission diagnostics distinguish failures without disclosing provider da
     );
     assert.equal(result.status, 503);
     assert.deepEqual(await result.json(), {
-      error:
-        code === "verification_http"
-          ? "Verification is unavailable."
-          : "Service temporarily unavailable.",
+      error: code.startsWith("verification_http")
+        ? "Verification is unavailable."
+        : "Service temporarily unavailable.",
       code,
     });
     assert.deepEqual(logs, [code]);

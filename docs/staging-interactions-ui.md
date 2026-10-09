@@ -107,3 +107,9 @@ failure. The same code appears in Pages Function logs. Do not share request
 payloads, CAPTCHA answers, credentials or provider response bodies. These codes
 never include provider text or user data. They do not relax verification or
 network limits. Delivery failures keep the existing neutral email acknowledgement.
+
+Turnstile non-success HTTP responses now include their numeric HTTP status and,
+when present, one recognized error from Cloudflare’s documented allowlist.
+Unknown error text and response fields are discarded. The owner’s live
+`verification_http` failure confirms the request stops at Siteverify, before the
+Hug RPC; its precise HTTP status and reason remain pending a fresh attempt.

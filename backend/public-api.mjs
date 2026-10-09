@@ -235,8 +235,28 @@ export async function handlePublicApi(request, env, dependencies = {}) {
         signal: AbortSignal.timeout(10000),
       },
     );
-    if (!verify.ok)
-      return failure("verification_http", "Verification is unavailable.");
+    if (!verify.ok) {
+      const knownErrors = new Set([
+        "missing-input-secret",
+        "invalid-input-secret",
+        "missing-input-response",
+        "invalid-input-response",
+        "bad-request",
+        "timeout-or-duplicate",
+        "internal-error",
+      ]);
+      let reason;
+      try {
+        const rejected = await verify.json();
+        reason = Array.isArray(rejected["error-codes"])
+          ? rejected["error-codes"].find((code) => knownErrors.has(code))
+          : undefined;
+      } catch {
+        // HTML or unknown provider text must never enter diagnostics.
+      }
+      const code = `verification_http_${verify.status}${reason ? "_" + reason.replaceAll("-", "_") : ""}`;
+      return failure(code, "Verification is unavailable.");
+    }
     failureCode = "verification_response";
     const verdict = await verify.json();
     if (

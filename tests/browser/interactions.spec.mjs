@@ -288,6 +288,7 @@ test("503 displays only fixed support codes and hides arbitrary provider text", 
   for (const value of [
     "database_haven_send_hug_http_403",
     "verification_request",
+    "verification_http_400_invalid_input_secret",
     "secret@example.test private-key",
   ]) {
     code = value;

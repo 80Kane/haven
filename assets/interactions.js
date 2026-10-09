@@ -42,7 +42,7 @@ if (root) {
           // Some hosting failures have no JSON body.
         }
         const safeCode =
-          /^(?:trusted_network_missing|verification_request|verification_http|verification_response|network_hash|confirmation_tokens|request_processing|database_haven_(?:hug_count|send_hug|request_interest|confirm_interest|unsubscribe_interest|cancel_pending_interest)_(?:request|response|http_[1-5][0-9]{2}))$/;
+          /^(?:trusted_network_missing|verification_request|verification_http(?:_[1-5][0-9]{2}(?:_(?:missing_input_secret|invalid_input_secret|missing_input_response|invalid_input_response|bad_request|timeout_or_duplicate|internal_error))?)?|verification_response|network_hash|confirmation_tokens|request_processing|database_haven_(?:hug_count|send_hug|request_interest|confirm_interest|unsubscribe_interest|cancel_pending_interest)_(?:request|response|http_[1-5][0-9]{2}))$/;
         error.supportCode =
           typeof code === "string" && safeCode.test(code) ? code : "HTTP 503";
       }
