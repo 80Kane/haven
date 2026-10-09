@@ -138,8 +138,15 @@ test("private and backend paths return no service or member data", async ({
   ]) {
     const response = await request.get(path);
     expect(response.status()).toBe(404);
-    expect(await response.text()).toContain(
-      "invitation-only community is not open",
-    );
+    if (
+      path.startsWith("/api/") &&
+      response.headers()["content-type"]?.includes("application/json")
+    ) {
+      expect(await response.json()).toEqual({ error: "Not found" });
+    } else {
+      expect(await response.text()).toContain(
+        "invitation-only community is not open",
+      );
+    }
   }
 });

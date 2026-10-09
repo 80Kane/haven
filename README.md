@@ -1,5 +1,10 @@
 # HavenForward public website
 
+The public-interactions backend is under development on a separate branch and
+defaults to disabled. See [staging setup](docs/public-backend-staging.md) for the
+reviewed schema, permissions, real-PostgreSQL tests, preview bindings, and release
+gates. This does not activate signup, hugs, or member accounts on the live site.
+
 A static public landing page for the invitation-only peer-support pilot. Member
 enrollment, email-interest collection, and persistent Hug reactions are not
 active. No member or email data is collected by application code. The public
@@ -58,3 +63,10 @@ Some managed environments regenerate that store per command; register the
 provided certificate and run tests in the same authorized command session.
 Never disable TLS verification. Proxy configuration/credentials are read from
 runtime environment only and must not be logged or committed.
+
+## Staging interaction UI
+
+The backend feature branch also includes an origin-restricted preview page for
+testing Hugs and consented email updates. See
+[preview interaction checks](docs/staging-interactions-ui.md). It does not activate
+controls on the public landing page; real provider verification is still required.
