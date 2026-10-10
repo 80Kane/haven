@@ -37,6 +37,15 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run check
       - run: npm run test:backend
+      - run: npm ci --ignore-scripts
+        working-directory: member-app
+      - run: npm audit --audit-level=high
+        working-directory: member-app
+      - run: npm run typecheck && npm test && npm run build
+        working-directory: member-app
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+      - run: npx playwright test --config member-playwright.config.mjs
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: public-site

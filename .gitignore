@@ -5,3 +5,8 @@ playwright-report/
 .env
 .env.*
 !.env.example
+
+# Separate dynamic member app; never publish its build with the public site.
+member-app/.next/
+member-app/next-env.d.ts
+member-app/*.tsbuildinfo
