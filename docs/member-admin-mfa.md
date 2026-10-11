@@ -27,7 +27,11 @@ forged POST requests cannot enroll, verify, issue or revoke. Results are private
 uncached server-rendered pages. Authenticator setup keys and raw invitation codes
 are returned only in their POST result body, never redirects, URLs, cookies,
 browser storage, or RPC parameters. Dynamic HTML text is escaped and QR SVG is
-encoded into a passive image data URL. No browser SDK, third-party resources,
+encoded into a passive image data URL. A missing, unexpected or oversized QR
+image falls back to the provider-issued manual setup key; it does not grant access
+without authenticator verification. SVG presentation is bounded at 1 MB.
+Enrollment failures log only fixed stage codes, never provider payloads, keys,
+factor IDs or exception text. No browser SDK, third-party resources,
 service key or new dependency is introduced. Authenticator factors, invitation
 IDs and codes are sensitive: disable request/response body capture, session replay
 and screenshot/trace collection in the host and test environment.
@@ -96,3 +100,20 @@ References:
 - https://supabase.com/docs/guides/auth/auth-mfa/totp
 - https://supabase.com/docs/guides/auth/server-side/creating-a-client
 - https://supabase.com/docs/guides/auth/rate-limits
+
+## Live enrollment troubleshooting
+
+On October 10, the operator observed Supabase POST /factors returning 200 with
+factor_in_progress while the app displayed setup unavailable. This establishes
+that the provider created an unfinished factor, but does not establish which
+application validation or rendering step failed. The former 100 KB QR cutoff
+and exact prefix requirement could reject successful responses. The manual-key
+fallback removes QR presentation as a prerequisite, and fixed stage logging
+identifies future failures without exposing enrollment secrets.
+
+After this change is deployed, return to /admin/mfa and use Restart authenticator
+setup to replace only the caller's unfinished TOTP factor. Do not reload the failed
+POST or delete a verified factor. If unavailable persists, inspect Vercel logs for
+Member MFA enrollment: followed by list_factors, remove_pending, provider_enroll,
+invalid_result or render_result. qr_fallback is a presentation warning rather than
+an enrollment failure. Live retesting remains necessary.
