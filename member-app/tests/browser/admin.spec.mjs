@@ -148,3 +148,25 @@ test("foreign factor cannot be verified and SQL can deny a previously authorized
   await expect(page).toHaveURL(/notice=failed/);
   await expect(page.locator("code")).toHaveCount(0);
 });
+
+test("missing provider QR still allows private manual enrollment and MFA verification", async ({
+  page,
+}) => {
+  await login(page, "admin-manual");
+  await page.goto("/admin");
+  await page.getByRole("button", { name: "Set up authenticator" }).click();
+  await expect(page.getByRole("status")).toContainText(
+    "QR image is unavailable",
+  );
+  await expect(page.getByText("FIXTURE-SECRET", { exact: true })).toBeVisible();
+  await expect(page.locator("img")).toHaveCount(0);
+  expect(page.url()).not.toContain("FIXTURE");
+  expect(
+    (
+      await new AxeBuilder({ page })
+        .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+        .analyze()
+    ).violations,
+  ).toEqual([]);
+  await verify(page);
+});

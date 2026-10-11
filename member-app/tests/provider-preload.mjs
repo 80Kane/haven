@@ -3,26 +3,32 @@
 const originalFetch = globalThis.fetch;
 const enrolled = new Set(["00000000-0000-4000-8000-000000000001"]);
 const users = new Map(
-  ["active", "pending", "suspended", "admin", "admin-new", "admin-denied"].map(
-    (name, i) => {
-      const id = `00000000-0000-4000-8000-${String(i + 1).padStart(12, "0")}`;
-      return [
+  [
+    "active",
+    "pending",
+    "suspended",
+    "admin",
+    "admin-new",
+    "admin-denied",
+    "admin-manual",
+  ].map((name, i) => {
+    const id = `00000000-0000-4000-8000-${String(i + 1).padStart(12, "0")}`;
+    return [
+      id,
+      {
         id,
-        {
-          id,
-          aud: "authenticated",
-          role: "authenticated",
-          email: `${name}@example.test`,
-          email_confirmed_at: "2026-01-01T00:00:00Z",
-          created_at: "2026-01-01T00:00:00Z",
-          app_metadata: {},
-          user_metadata: {},
-          identities: [],
-          is_anonymous: false,
-        },
-      ];
-    },
-  ),
+        aud: "authenticated",
+        role: "authenticated",
+        email: `${name}@example.test`,
+        email_confirmed_at: "2026-01-01T00:00:00Z",
+        created_at: "2026-01-01T00:00:00Z",
+        app_metadata: {},
+        user_metadata: {},
+        identities: [],
+        is_anonymous: false,
+      },
+    ];
+  }),
 );
 const factorId = "11111111-1111-4111-8111-111111111111";
 const factors = new Map();
@@ -42,7 +48,10 @@ for (const user of users.values())
     ]);
   }
 for (const user of users.values())
-  if (user.email === "admin-new@example.test") enrolled.add(user.id);
+  if (
+    ["admin-new@example.test", "admin-manual@example.test"].includes(user.email)
+  )
+    enrolled.add(user.id);
 function jwt(id, aal = "aal1") {
   return [
     Buffer.from(JSON.stringify({ alg: "HS256", typ: "JWT" })).toString(
@@ -135,7 +144,9 @@ globalThis.fetch = async (input, init = {}) => {
       totp: {
         secret: "FIXTURE-SECRET",
         qr_code:
-          '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><rect width="240" height="240" fill="black"/></svg>',
+          users.get(id)?.email === "admin-manual@example.test"
+            ? ""
+            : '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><rect width="240" height="240" fill="black"/></svg>',
         uri: "otpauth://fixture",
       },
     });
