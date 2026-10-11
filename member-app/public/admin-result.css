@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+  padding: 2rem;
+  background: #f5f4ec;
+  color: #203c35;
+  font:
+    1.1rem/1.6 system-ui,
+    sans-serif;
+}
+main {
+  max-width: 48rem;
+  margin: 2rem auto;
+  background: white;
+  padding: 2rem;
+  border: 1px solid #cbd9d2;
+  border-radius: 1.5rem;
+}
+a {
+  color: #254f45;
+}
+label,
+input,
+button {
+  display: block;
+}
+input,
+button {
+  box-sizing: border-box;
+  width: 100%;
+  font: inherit;
+  padding: 0.8rem;
+  margin: 0.6rem 0 1.2rem;
+}
+button {
+  background: #285548;
+  color: white;
+  border: 0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+code {
+  overflow-wrap: anywhere;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+dt {
+  font-weight: bold;
+}
+dd {
+  margin: 0 0 1rem;
+}
+*:focus-visible {
+  outline: 3px solid #965d09;
+  outline-offset: 3px;
+}
+@media (max-width: 480px) {
+  body {
+    padding: 0.8rem;
+  }
+  main {
+    padding: 1rem;
+  }
+}

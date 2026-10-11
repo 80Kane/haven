@@ -174,3 +174,10 @@ footer {
     flex-direction: column;
   }
 }
+
+select {
+  width: 100%;
+  padding: 0.8rem;
+  font: inherit;
+  margin-bottom: 1rem;
+}

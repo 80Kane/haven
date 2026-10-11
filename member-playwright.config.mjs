@@ -19,6 +19,7 @@ export default defineConfig({
     env: {
       NEXT_TELEMETRY_DISABLED: "1",
       MEMBER_UI_ENABLED: "true",
+      MEMBER_ADMIN_UI_ENABLED: "true",
       MEMBER_APP_ENVIRONMENT: "staging",
       MEMBER_UI_ORIGIN: "http://127.0.0.1:4180",
       SUPABASE_URL: "https://fixture.supabase.co",

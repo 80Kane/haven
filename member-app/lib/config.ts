@@ -48,3 +48,9 @@ export function appConfig(
     return null;
   }
 }
+
+export function adminAppConfig(
+  env: Record<string, string | undefined> = process.env,
+) {
+  return env.MEMBER_ADMIN_UI_ENABLED === "true" ? appConfig(env) : null;
+}
