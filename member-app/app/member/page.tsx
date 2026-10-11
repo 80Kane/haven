@@ -26,6 +26,12 @@ export default async function MemberPage() {
           The community is being prepared. Circles, posts, journals, and
           messages are not available here yet.
         </p>
+        {result.member.role === "admin" &&
+          process.env.MEMBER_ADMIN_UI_ENABLED === "true" && (
+            <p>
+              <a href="/admin">Administrator tools</a>
+            </p>
+          )}
         <SignOut />
       </section>
       <section className="note">

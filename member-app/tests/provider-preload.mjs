@@ -3,26 +3,47 @@
 const originalFetch = globalThis.fetch;
 const enrolled = new Set(["00000000-0000-4000-8000-000000000001"]);
 const users = new Map(
-  ["active", "pending", "suspended"].map((name, i) => {
-    const id = `00000000-0000-4000-8000-${String(i + 1).padStart(12, "0")}`;
-    return [
-      id,
-      {
+  ["active", "pending", "suspended", "admin", "admin-new", "admin-denied"].map(
+    (name, i) => {
+      const id = `00000000-0000-4000-8000-${String(i + 1).padStart(12, "0")}`;
+      return [
         id,
-        aud: "authenticated",
-        role: "authenticated",
-        email: `${name}@example.test`,
-        email_confirmed_at: "2026-01-01T00:00:00Z",
-        created_at: "2026-01-01T00:00:00Z",
-        app_metadata: {},
-        user_metadata: {},
-        identities: [],
-        is_anonymous: false,
-      },
-    ];
-  }),
+        {
+          id,
+          aud: "authenticated",
+          role: "authenticated",
+          email: `${name}@example.test`,
+          email_confirmed_at: "2026-01-01T00:00:00Z",
+          created_at: "2026-01-01T00:00:00Z",
+          app_metadata: {},
+          user_metadata: {},
+          identities: [],
+          is_anonymous: false,
+        },
+      ];
+    },
+  ),
 );
-function jwt(id) {
+const factorId = "11111111-1111-4111-8111-111111111111";
+const factors = new Map();
+for (const user of users.values())
+  if (
+    user.email === "admin@example.test" ||
+    user.email === "admin-denied@example.test"
+  ) {
+    enrolled.add(user.id);
+    factors.set(user.id, [
+      {
+        id: factorId,
+        factor_type: "totp",
+        status: "verified",
+        friendly_name: "Fixture authenticator",
+      },
+    ]);
+  }
+for (const user of users.values())
+  if (user.email === "admin-new@example.test") enrolled.add(user.id);
+function jwt(id, aal = "aal1") {
   return [
     Buffer.from(JSON.stringify({ alg: "HS256", typ: "JWT" })).toString(
       "base64url",
@@ -30,6 +51,7 @@ function jwt(id) {
     Buffer.from(
       JSON.stringify({
         sub: id,
+        aal,
         exp: Math.floor(Date.now() / 1000) + 3600,
         aud: "authenticated",
         role: "authenticated",
@@ -46,16 +68,18 @@ globalThis.fetch = async (input, init = {}) => {
     return originalFetch(input, init);
   const headers = new Headers(init.headers);
   const body = init.body ? JSON.parse(String(init.body)) : {};
-  let id;
+  let id, aal;
   try {
-    id = JSON.parse(
+    const claims = JSON.parse(
       Buffer.from(
         (headers.get("authorization") || "")
           .replace(/^Bearer /, "")
           .split(".")[1],
         "base64url",
       ).toString(),
-    ).sub;
+    );
+    id = claims.sub;
+    aal = claims.aal;
   } catch {}
   if (url.pathname === "/auth/v1/token") {
     const user =
@@ -80,7 +104,7 @@ globalThis.fetch = async (input, init = {}) => {
   }
   if (url.pathname === "/auth/v1/user")
     return users.has(id)
-      ? Response.json(users.get(id))
+      ? Response.json({ ...users.get(id), factors: factors.get(id) || [] })
       : Response.json({ message: "Invalid token" }, { status: 401 });
   if (url.pathname === "/auth/v1/logout")
     return new Response(null, { status: 204 });
@@ -88,7 +112,7 @@ globalThis.fetch = async (input, init = {}) => {
     return enrolled.has(id)
       ? Response.json({
           id,
-          role: "member",
+          role: users.get(id)?.email.startsWith("admin") ? "admin" : "member",
           status: "active",
           consentVersion: "member-v1",
         })
@@ -96,6 +120,81 @@ globalThis.fetch = async (input, init = {}) => {
           { code: "42501", message: "Access denied" },
           { status: 403 },
         );
+  if (url.pathname === "/auth/v1/factors" && init.method === "POST") {
+    factors.set(id, [
+      {
+        id: factorId,
+        factor_type: "totp",
+        status: "unverified",
+        friendly_name: "Fixture authenticator",
+      },
+    ]);
+    return Response.json({
+      id: factorId,
+      type: "totp",
+      totp: {
+        secret: "FIXTURE-SECRET",
+        qr_code:
+          '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><rect width="240" height="240" fill="black"/></svg>',
+        uri: "otpauth://fixture",
+      },
+    });
+  }
+  if (
+    url.pathname === `/auth/v1/factors/${factorId}` &&
+    init.method === "DELETE"
+  ) {
+    factors.set(id, []);
+    return Response.json({ id: factorId });
+  }
+  if (url.pathname === `/auth/v1/factors/${factorId}/challenge`)
+    return Response.json({
+      id: "fixture-challenge",
+      type: "totp",
+      expires_at: Math.floor(Date.now() / 1000) + 300,
+    });
+  if (url.pathname === `/auth/v1/factors/${factorId}/verify`) {
+    if (body.code !== "123456")
+      return Response.json(
+        { message: "Invalid code", code: "mfa_verification_failed" },
+        { status: 422 },
+      );
+    factors.set(
+      id,
+      (factors.get(id) || []).map((f) => ({ ...f, status: "verified" })),
+    );
+    return Response.json({
+      access_token: jwt(id, "aal2"),
+      refresh_token: "fixture-refresh-" + id,
+      expires_in: 3600,
+      token_type: "bearer",
+      user: { ...users.get(id), factors: factors.get(id) },
+    });
+  }
+  if (
+    [
+      "/rest/v1/rpc/haven_issue_member_invitation",
+      "/rest/v1/rpc/haven_revoke_member_invitation",
+    ].includes(url.pathname)
+  ) {
+    if (
+      aal !== "aal2" ||
+      !users.get(id)?.email.startsWith("admin") ||
+      users.get(id)?.email === "admin-denied@example.test"
+    )
+      return Response.json(
+        { code: "42501", message: "Access denied" },
+        { status: 403 },
+      );
+    return Response.json(
+      url.pathname.endsWith("issue_member_invitation")
+        ? {
+            id: "22222222-2222-4222-8222-222222222222",
+            expiresAt: "2026-12-01T00:00:00Z",
+          }
+        : { revoked: true },
+    );
+  }
   if (url.pathname === "/rest/v1/rpc/haven_redeem_member_invitation") {
     // Hash of the one fixture invitation; pending identity only, once.
     const { createHash } = await import("node:crypto");
