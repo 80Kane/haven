@@ -276,3 +276,36 @@ test("private POST result pages escape dynamic text and prohibit caching", async
   assert.equal(response.headers.get("referrer-policy"), "same-origin");
   assert.ok(!(await response.text()).includes(text));
 });
+
+test("real SDK can parse fixture assurance and persist MFA elevation", async () => {
+  await import(new URL("./provider-preload.mjs", import.meta.url).href);
+  const { createClient } = await import("@supabase/supabase-js");
+  const client = createClient(
+    "https://fixture.supabase.co",
+    "sb_publishable_fixture",
+  );
+  try {
+    const login = await client.auth.signInWithPassword({
+      email: "admin@example.test",
+      password: "fixture-password",
+    });
+    assert.equal(login.error, null);
+    assert.equal(
+      (await client.auth.mfa.getAuthenticatorAssuranceLevel()).data
+        ?.currentLevel,
+      "aal1",
+    );
+    const result = await client.auth.mfa.challengeAndVerify({
+      factorId,
+      code: "123456",
+    });
+    assert.equal(result.error, null);
+    assert.equal(
+      (await client.auth.mfa.getAuthenticatorAssuranceLevel()).data
+        ?.currentLevel,
+      "aal2",
+    );
+  } finally {
+    await client.auth.signOut({ scope: "local" });
+  }
+});

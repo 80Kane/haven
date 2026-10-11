@@ -57,7 +57,7 @@ function jwt(id, aal = "aal1") {
         role: "authenticated",
       }),
     ).toString("base64url"),
-    "test-process-only",
+    Buffer.from("test-process-only").toString("base64url"),
   ].join(".");
 }
 globalThis.fetch = async (input, init = {}) => {
