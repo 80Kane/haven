@@ -7,7 +7,9 @@ test("landing page navigation, honest feature status, and no JavaScript errors",
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
-  await expect(page).toHaveTitle("You Are Not Alone | HavenForward");
+  await expect(page).toHaveTitle(
+    "Peer Support for Recovery & Personal Growth | HavenForward",
+  );
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "You Are Not Alone.",
   );
