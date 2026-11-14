@@ -16,6 +16,8 @@ for (const path of [
   "CNAME",
   ".nojekyll",
   "_headers",
+  "robots.txt",
+  "sitemap.xml",
 ]) {
   await cp(`${root}${path}`, `${target}/${path}`, { recursive: true });
 }

@@ -72,3 +72,33 @@ test("production domain remains unchanged", async () => {
     "havenforward.com",
   );
 });
+test("public pages have unique SEO metadata and a crawlable sitemap", async () => {
+  const descriptions = new Set();
+  for (const path of [
+    "index.html",
+    "resources.html",
+    "privacy.html",
+    "guidelines.html",
+  ]) {
+    const html = await readFile(path, "utf8");
+    const description = html.match(/name="description"\s+content="([^"]+)"/)[1];
+    assert.ok(description.length <= 160, `${path}: description too long`);
+    descriptions.add(description);
+    assert.match(
+      html,
+      /<link rel="canonical" href="https:\/\/havenforward\.com\//,
+    );
+    assert.match(html, /property="og:title"/);
+  }
+  assert.equal(descriptions.size, 4);
+  assert.match(
+    await readFile("404.html", "utf8"),
+    /name="robots" content="noindex"/,
+  );
+  const sitemap = await readFile("sitemap.xml", "utf8");
+  assert.equal((sitemap.match(/<loc>/g) || []).length, 4);
+  assert.match(
+    await readFile("robots.txt", "utf8"),
+    /Sitemap: https:\/\/havenforward\.com\/sitemap\.xml/,
+  );
+});
