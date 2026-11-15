@@ -187,7 +187,11 @@ ol {
   font-weight: 700;
 }
 .skip-link:focus {
-  top: 12px;
+  position: relative;
+  display: block;
+  width: fit-content;
+  left: 0;
+  top: 0;
   color: #fff;
 }
 
