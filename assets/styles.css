@@ -463,6 +463,15 @@ ol {
   background: var(--action-hover);
   color: #fff;
 }
+/* Submit buttons on the staging-only interactions page use this legacy name. */
+.button-teal {
+  background: var(--action);
+  color: #fff;
+}
+.button-teal:hover {
+  background: var(--action-hover);
+  color: #fff;
+}
 .button-secondary {
   background: var(--surface);
   color: var(--ink);
