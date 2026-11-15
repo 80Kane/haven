@@ -35,10 +35,12 @@ export default async function RecoveryCirclePage() {
             can be participation too.
           </p>
         </section>
-        <p className="member-notice">
-          <strong>This Circle is a preview.</strong> Conversations and posting
-          aren’t open yet.
-        </p>
+        <div className="member-notice">
+          <p>
+            <strong>This Circle is a preview.</strong> Conversations and posting
+            aren’t open yet.
+          </p>
+        </div>
         <div className="circle-columns">
           <section
             className="panel reflection-panel"
