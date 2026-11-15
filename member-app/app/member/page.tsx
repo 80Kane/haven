@@ -140,8 +140,10 @@ export default async function MemberPage() {
             <p className="eyebrow">Room to grow</p>
             <h2 id="learning-title">Learning, at your pace.</h2>
             <p>
-              Courses, videos, and worksheets are planned. When the library is
-              ready, you’ll find it here.
+              Courses, videos, and worksheets are planned. We’ll share only
+              material we own or have documented permission to publish, with
+              captioned video, audio transcripts, and accessible PDFs. When the
+              library is ready, you’ll find it here.
             </p>
             <span className="planned-label">Library in preparation</span>
           </section>
