@@ -75,7 +75,8 @@ export default async function RecoveryCirclePage() {
           <h2 id="circle-resources">Looking for practical support?</h2>
           <p>
             Our public resource directory offers starting points. Peer
-            connection does not replace professional care or emergency services.
+            connection does not replace professional care or emergency services,
+            and Circle moderation isn’t emergency support.
           </p>
           <a className="button" href="https://havenforward.com/resources">
             Explore support resources <span aria-hidden="true">↗</span>

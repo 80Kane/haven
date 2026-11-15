@@ -153,6 +153,17 @@ test("member dashboard and Circle preview are accessible at phone and desktop si
     const homeResponse = await page.goto("/member");
     expect(homeResponse.headers()["cache-control"]).toContain("no-store");
     await expect(page.locator(".member-circle")).toHaveCount(7);
+    const crisis = page.getByRole("complementary", { name: "Crisis support" });
+    await expect(crisis).toContainText("Emotional distress: call/text 988");
+    await expect(crisis).toContainText(
+      "Immediate danger or medical emergency: call 911",
+    );
+    await expect(crisis.locator('a[href="tel:988"]')).toBeVisible();
+    await expect(crisis.locator('a[href="sms:988"]')).toBeVisible();
+    await expect(crisis.locator('a[href="tel:911"]')).toBeVisible();
+    await expect(
+      crisis.getByRole("link", { name: "Support resources" }),
+    ).toBeVisible();
     await expect(page.getByRole("link", { name: "Your home" })).toHaveAttribute(
       "aria-current",
       "page",

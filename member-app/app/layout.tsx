@@ -34,6 +34,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <a className="skip" href="#main">
           Skip to content
         </a>
+        <aside className="support-strip" aria-label="Crisis support">
+          <p>
+            <strong>Emotional distress:</strong> <a href="tel:988">call</a>/
+            <a href="sms:988">text 988</a>
+          </p>
+          <p>
+            <strong>Immediate danger or medical emergency:</strong>{" "}
+            <a href="tel:911">call 911</a>
+          </p>
+          <a className="support-link" href="https://havenforward.com/resources">
+            Support resources
+          </a>
+        </aside>
         <header>
           <a className="brand" href="/">
             Haven<span>Forward</span>
@@ -45,11 +58,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </main>
         <footer>
           <p>
-            Need support now? In the U.S., call or text{" "}
-            <a href="tel:988">988</a>. In immediate danger, call{" "}
-            <a href="tel:911">911</a>.
+            In the U.S.: <strong>Emotional distress:</strong>{" "}
+            <a href="tel:988">call</a>/<a href="sms:988">text 988</a>.{" "}
+            <strong>Immediate danger or medical emergency:</strong>{" "}
+            <a href="tel:911">call 911</a>.
           </p>
-          <a href="https://havenforward.com/resources.html">
+          <p>
+            HavenForward is peer support. Moderation isn’t emergency support.
+          </p>
+          <a href="https://havenforward.com/resources">
             Public support resources
           </a>
         </footer>
