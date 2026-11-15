@@ -33,6 +33,7 @@ const users = new Map(
 const factorId = "11111111-1111-4111-8111-111111111111";
 const factors = new Map();
 const profiles = new Map();
+const reports = new Map();
 for (const user of users.values())
   if (
     user.email === "admin@example.test" ||
@@ -118,6 +119,111 @@ globalThis.fetch = async (input, init = {}) => {
       : Response.json({ message: "Invalid token" }, { status: 401 });
   if (url.pathname === "/auth/v1/logout")
     return new Response(null, { status: 204 });
+  if (
+    [
+      "haven_submit_report",
+      "haven_my_reports",
+      "haven_report_queue",
+      "haven_report_detail",
+      "haven_review_report",
+    ].some((name) => url.pathname === "/rest/v1/rpc/" + name)
+  ) {
+    if (!enrolled.has(id))
+      return Response.json({ code: "42501" }, { status: 403 });
+    const name = url.pathname.split("/").at(-1);
+    const isAdmin = users.get(id)?.email.startsWith("admin") && aal === "aal2";
+    if (
+      [
+        "haven_report_queue",
+        "haven_report_detail",
+        "haven_review_report",
+      ].includes(name) &&
+      !isAdmin
+    )
+      return Response.json({ code: "42501" }, { status: 403 });
+    if (name === "haven_submit_report") {
+      const old = [...reports.values()].find(
+        (r) => r.owner === id && r.key === body.p_submission_key,
+      );
+      if (old) return Response.json({ id: old.id, status: old.status });
+      const r = {
+        id: crypto.randomUUID(),
+        owner: id,
+        key: body.p_submission_key,
+        category: body.p_category,
+        circle: body.p_circle_slug,
+        details: body.p_details,
+        status: "open",
+        resolution: null,
+        version: 1,
+        createdAt: new Date().toISOString(),
+        events: [
+          {
+            from: null,
+            to: "open",
+            resolution: null,
+            createdAt: new Date().toISOString(),
+          },
+        ],
+      };
+      reports.set(r.id, r);
+      return Response.json({ id: r.id, status: r.status });
+    }
+    const summary = (r) => ({
+      id: r.id,
+      category: r.category,
+      circle: r.circle,
+      status: r.status,
+      resolution: r.resolution,
+      createdAt: r.createdAt,
+    });
+    if (name === "haven_my_reports")
+      return Response.json({
+        memberId: id,
+        reports: [...reports.values()]
+          .filter((r) => r.owner === id)
+          .slice(-10)
+          .reverse()
+          .map(summary),
+      });
+    if (name === "haven_report_queue")
+      return Response.json({
+        reports: [...reports.values()]
+          .filter((r) => r.status !== "closed")
+          .slice(0, 25)
+          .map(summary),
+      });
+    const r = reports.get(body.p_report_id);
+    if (name === "haven_report_detail")
+      return Response.json(
+        r
+          ? {
+              ...summary(r),
+              details: r.details,
+              version: r.version,
+              events: r.events,
+            }
+          : null,
+      );
+    if (!r) return Response.json({ code: "42501" }, { status: 403 });
+    if (r.version !== body.p_version)
+      return Response.json({ code: "P0002" }, { status: 400 });
+    if (!(
+      (r.status === "open" && body.p_status === "in_review") ||
+      (r.status === "in_review" && body.p_status === "closed")
+    ))
+      return Response.json({ code: "22023" }, { status: 400 });
+    r.events.push({
+      from: r.status,
+      to: body.p_status,
+      resolution: body.p_resolution,
+      createdAt: new Date().toISOString(),
+    });
+    r.status = body.p_status;
+    r.resolution = body.p_resolution;
+    r.version++;
+    return Response.json({ updated: true });
+  }
   if (url.pathname === "/rest/v1/rpc/haven_member_self")
     return enrolled.has(id)
       ? Response.json({

@@ -705,3 +705,41 @@ input[readonly] {
     grid-template-columns: 1fr;
   }
 }
+
+/* Private concern intake and administrator review. */
+textarea {
+  width: 100%;
+  max-width: 100%;
+  font: inherit;
+  border: 1px solid #8a8077;
+  border-radius: 8px;
+  padding: 12px;
+  color: var(--ink);
+  background: #fff;
+  resize: vertical;
+}
+.report-history {
+  margin-top: 24px;
+}
+.report-list {
+  padding-left: 20px;
+}
+.report-list li {
+  padding-block: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.report-list h3,
+.report-list h2 {
+  margin-top: 0;
+}
+.report-details {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  padding: 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.report-reference {
+  overflow-wrap: anywhere;
+}

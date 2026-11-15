@@ -28,6 +28,13 @@ export default async function AdminPage({
     <section className="panel">
       <p className="eyebrow">Staging administrator</p>
       <h1>Manage invitations.</h1>
+      {process.env.MEMBER_REPORTING_ENABLED === "true" && (
+        <p>
+          <a className="button" href="/admin/reports">
+            Review member reports
+          </a>
+        </p>
+      )}
       <p>
         Create invitation codes for prepared fictional test accounts. Account
         creation and password recovery are managed separately.

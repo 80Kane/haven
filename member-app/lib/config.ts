@@ -54,3 +54,14 @@ export function adminAppConfig(
 ) {
   return env.MEMBER_ADMIN_UI_ENABLED === "true" ? appConfig(env) : null;
 }
+
+export function reportingAppConfig(
+  env: Record<string, string | undefined> = process.env,
+) {
+  return env.MEMBER_REPORTING_ENABLED === "true" ? appConfig(env) : null;
+}
+export function reportAdminAppConfig(
+  env: Record<string, string | undefined> = process.env,
+) {
+  return env.MEMBER_REPORTING_ENABLED === "true" ? adminAppConfig(env) : null;
+}
