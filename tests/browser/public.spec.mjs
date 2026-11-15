@@ -173,3 +173,86 @@ test("private and backend paths return no service or member data", async ({
     }
   }
 });
+
+for (const width of [320, 390, 1440]) {
+  test(`help band scroll behaviour and sticky menu row at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 800 });
+    for (const path of ["/", "/resources.html", "/404.html"]) {
+      await page.goto(path);
+      const band = page.locator(".help-band");
+      const header = page.locator(".site-header");
+      const atTop = await band.boundingBox();
+      expect(atTop.y).toBe(0);
+      await expect(band).toBeInViewport();
+      await expect(
+        band.getByRole("link", { name: "Call 911", exact: true }),
+      ).toBeVisible();
+      await page.evaluate(() => window.scrollTo(0, 600));
+      await expect
+        .poll(() => page.evaluate(() => window.scrollY))
+        .toBeGreaterThan(500);
+      const headerBox = await header.boundingBox();
+      const bandBox = await band.boundingBox();
+      if (width < 1000) {
+        expect(bandBox.y + bandBox.height).toBeLessThanOrEqual(0);
+        await expect(band).not.toBeInViewport();
+        expect(headerBox.y).toBe(0);
+        expect(headerBox.height).toBeLessThanOrEqual(70);
+      } else {
+        expect(bandBox.y).toBe(0);
+        expect(Math.round(headerBox.y)).toBe(Math.round(bandBox.height));
+      }
+      await expect(page.locator(".brand").first()).toBeInViewport();
+    }
+  });
+}
+
+for (const width of [320, 390]) {
+  test(`sticky row keeps Support and an icon Menu button at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 800 });
+    for (const path of ["/", "/resources.html", "/404.html"]) {
+      await page.goto(path);
+      await page.evaluate(() => window.scrollTo(0, 600));
+      await expect
+        .poll(() => page.evaluate(() => window.scrollY))
+        .toBeGreaterThan(500);
+      const header = page.locator(".site-header");
+      const support = header.getByRole("link", {
+        name: "Support",
+        exact: true,
+      });
+      await expect(support).toBeVisible();
+      await expect(support).toBeInViewport();
+      await expect(support).toHaveAttribute("href", /resources(\.html)?$/);
+      const menu = header.getByRole("button", { name: "Menu", exact: true });
+      await expect(menu).toBeVisible();
+      await expect(menu).toHaveAttribute("aria-expanded", "false");
+      const menuBox = await menu.boundingBox();
+      expect(menuBox.width).toBeGreaterThanOrEqual(44);
+      expect(menuBox.height).toBeGreaterThanOrEqual(44);
+      const supportBox = await support.boundingBox();
+      expect(supportBox.height).toBeGreaterThanOrEqual(44);
+      const headerBox = await header.boundingBox();
+      expect(headerBox.y).toBe(0);
+      expect(headerBox.height).toBeLessThanOrEqual(64);
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= window.innerWidth,
+        ),
+      ).toBe(true);
+      await menu.click();
+      await expect(menu).toHaveAttribute("aria-expanded", "true");
+      await expect(page.locator("#primary-nav")).toBeVisible();
+    }
+  });
+}
+
+test("sticky-row Support link is hidden on desktop", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 800 });
+  await page.goto("/");
+  await expect(page.locator(".header-support")).toBeHidden();
+});

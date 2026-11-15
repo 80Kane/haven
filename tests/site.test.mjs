@@ -120,7 +120,9 @@ test("every public page labels both crisis lines and links to support resources"
       text.includes("Immediate danger or medical emergency: call 911"),
       `${path}: 911 label`,
     );
-    const band = html.match(/<div class="help-band">[\s\S]*?<\/header>/)[0];
+    const band = html.match(
+      /<div class="help-band" role="region" aria-label="Crisis support">[\s\S]*?<header class="site-header">/,
+    )[0];
     for (const href of ["tel:988", "sms:988", "tel:911", "resources.html"])
       assert.ok(band.includes(`href="${href}"`), `${path}: help band ${href}`);
     const crisis = html.match(/<section\s+id="crisis"[\s\S]*?<\/section>/)[0];
