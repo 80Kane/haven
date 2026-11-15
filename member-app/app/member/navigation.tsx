@@ -5,7 +5,7 @@ export function MemberNavigation({
   current,
   member,
 }: {
-  current: "home" | "circle" | "settings";
+  current: "home" | "circle" | "settings" | "resources" | "learning";
   member: Member;
 }) {
   return (
@@ -19,10 +19,10 @@ export function MemberNavigation({
           Your home <span aria-hidden="true">↗</span>
         </a>
         <a
-          href="/member/circles/recovery-healing"
+          href="/member/circles"
           aria-current={current === "circle" ? "page" : undefined}
         >
-          Circle preview <span aria-hidden="true">↗</span>
+          Circles <span aria-hidden="true">↗</span>
         </a>
         <a
           href="/member/settings"
@@ -30,7 +30,18 @@ export function MemberNavigation({
         >
           Profile &amp; privacy
         </a>
-        <a href="https://havenforward.com/resources">Support resources</a>
+        <a
+          href="/member/resources"
+          aria-current={current === "resources" ? "page" : undefined}
+        >
+          Support resources
+        </a>
+        <a
+          href="/member/learning"
+          aria-current={current === "learning" ? "page" : undefined}
+        >
+          Learning
+        </a>
         <a href="https://havenforward.com/guidelines">Community guidelines</a>
         {member.role === "admin" &&
           process.env.MEMBER_ADMIN_UI_ENABLED === "true" && (
