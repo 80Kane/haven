@@ -189,6 +189,18 @@ test("member dashboard and Circle preview are accessible at phone and desktop si
     await expect(
       page.getByRole("link", { name: "Administrator tools" }),
     ).toHaveCount(0);
+    // ↗ marks links that leave the member app; in-app links use →.
+    const arrows = await page.locator("a").evaluateAll((links) =>
+      links
+        .filter((link) => /[↗→]/.test(link.textContent))
+        .map((link) => ({
+          internal: new URL(link.href).origin === location.origin,
+          arrow: link.textContent.includes("↗") ? "↗" : "→",
+        })),
+    );
+    expect(arrows.filter((link) => link.internal).length).toBeGreaterThan(2);
+    for (const link of arrows)
+      expect(link.arrow).toBe(link.internal ? "→" : "↗");
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
@@ -335,7 +347,7 @@ test("all Circle previews, resource hub and Learning page work for active member
       expect(response.headers()["cache-control"]).toContain("no-store");
       await expect(
         page.locator(".member-navigation a[aria-current=page]"),
-      ).toHaveText("Circles ↗");
+      ).toHaveText("Circles →");
       await expect(page.locator("h1")).not.toBeEmpty();
       await expect(page.locator("blockquote")).not.toBeEmpty();
       await page
