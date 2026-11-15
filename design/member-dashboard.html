@@ -25,9 +25,30 @@
     </p>
     <div class="m-help" role="region" aria-label="Crisis support">
       <div class="m-help-inner">
-        <span>Need help now?</span>
-        <a href="tel:988"
-          ><svg
+        <p class="m-help-line">
+          <svg
+            class="icon icon-sm"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M4 5h16v11H9l-5 4z" /></svg
+          ><span
+            ><strong>Emotional distress:</strong> <a href="tel:988">call</a>/<a
+              href="sms:988"
+              >text 988</a
+            ></span
+          >
+        </p>
+        <p class="m-help-line">
+          <svg
             class="icon icon-sm"
             viewBox="0 0 24 24"
             width="24"
@@ -43,29 +64,11 @@
             <path
               d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"
             /></svg
-          >Call 988</a
-        >
-        <a href="sms:988"
-          ><svg
-            class="icon icon-sm"
-            viewBox="0 0 24 24"
-            width="24"
-            height="24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-            focusable="false"
+          ><span
+            ><strong>Immediate danger or medical emergency:</strong>
+            <a href="tel:911">call 911</a></span
           >
-            <path d="M4 5h16v11H9l-5 4z" /></svg
-          >Text 988</a
-        >
-        <a class="m-help-extra" href="tel:911">Emergency: 911</a>
-        <a class="m-help-extra" href="https://havenforward.com/resources"
-          >More support</a
-        >
+        </p>
       </div>
     </div>
     <header class="m-top">
@@ -79,10 +82,34 @@
             ><span class="brand-name">Haven<span>Forward</span></span></a
           ><span class="m-pilot">Private pilot</span>
         </div>
-        <a class="m-me" href="#settings" aria-label="Account settings for Maple"
-          ><span class="m-me-name">Maple</span
-          ><span class="m-av" aria-hidden="true">M</span></a
-        >
+        <div class="m-top-right">
+          <a class="m-support" href="https://havenforward.com/resources"
+            ><svg
+              class="icon icon-sm"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"
+              /></svg
+            >Support</a
+          >
+          <a
+            class="m-me"
+            href="#settings"
+            aria-label="Account settings for Maple"
+            ><span class="m-me-name">Maple</span
+            ><span class="m-av" aria-hidden="true">M</span></a
+          >
+        </div>
       </div>
     </header>
     <div class="m-shell">
@@ -293,7 +320,8 @@
                   <div>
                     <h3>Choose your display name</h3>
                     <p class="m-muted m-small">
-                      You’re “Maple”. Change it any time in settings.
+                      You’re “Maple” <span class="m-handle">@maple_42</span>.
+                      Pseudonyms are welcome; legal names are never required.
                     </p>
                   </div>
                 </li>
@@ -408,14 +436,38 @@
             <section class="m-card" aria-labelledby="activity-title">
               <div class="m-card-head">
                 <h2 id="activity-title">Since you were last here</h2>
-                <a href="#notifications">Notification settings</a>
+                <a href="#notifications"
+                  >Notification settings
+                  <span class="m-muted">(optional)</span></a
+                >
               </div>
+              <p class="m-small m-muted d-private-note">
+                <svg
+                  class="icon icon-inline"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <rect x="5" y="11" width="14" height="10" rx="2" />
+                  <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+                </svg>
+                Only you can see these. Every notification type can be turned
+                off.
+              </p>
               <ul class="m-list d-activity">
                 <li>
                   <span class="m-av av-amber" aria-hidden="true">J</span>
                   <p>
-                    <strong>Juniper</strong> replied to your post “Small wins
-                    this week” in Recovery &amp; Healing.<br /><span
+                    <strong>Juniper</strong>
+                    <span class="m-handle">@juniper_r</span> replied to your
+                    post “Small wins this week” in Recovery &amp; Healing.<br /><span
                       class="m-small m-muted"
                       >2 hours ago</span
                     >
@@ -442,18 +494,56 @@
                       <path d="M9 12l2 2 4-4" /></svg
                   ></span>
                   <p>
-                    <strong>Moderator team</strong> posted the December circle
-                    schedule.<br /><span class="m-small m-muted"
+                    <strong>River</strong>
+                    <span class="m-pill m-pill-staff"
+                      ><svg
+                        class="icon icon-sm"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <path
+                          d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"
+                        />
+                        <path d="M9 12l2 2 4-4" /></svg
+                      >Staff</span
+                    >
+                    posted the December circle schedule.<br /><span
+                      class="m-small m-muted"
                       >Yesterday</span
                     >
                   </p>
                 </li>
                 <li>
-                  <span class="m-av av-sky" aria-hidden="true">O</span>
+                  <span class="m-av av-terra" aria-hidden="true"
+                    ><svg
+                      class="icon icon-sm"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <path
+                        d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"
+                      /></svg
+                  ></span>
                   <p>
-                    <strong>Oak</strong> sent a hug on your post.<br /><span
-                      class="m-small m-muted"
-                      >Yesterday · hugs are private to you</span
+                    Someone sent you a hug on your post “Small wins this
+                    week”.<br /><span class="m-small m-muted"
+                      >Yesterday · private to you · no public counts</span
                     >
                   </p>
                 </li>
@@ -465,12 +555,58 @@
             <section class="m-card d-support" aria-labelledby="support-title">
               <h2 id="support-title">If today is hard</h2>
               <p>
-                HavenForward is peer support, not an emergency service, and
-                moderators can’t respond around the clock.
+                HavenForward is peer support, not an emergency service.
+                Moderation isn’t emergency support, and moderators aren’t on
+                duty around the clock.
               </p>
-              <p>
-                Call or text <a href="tel:988">988</a> any time. In immediate
-                danger, call <a href="tel:911">911</a>.
+              <ul class="m-list d-support-list">
+                <li>
+                  <strong>Emotional distress:</strong>
+                  <a href="tel:988">call</a>/<a href="sms:988">text 988</a>
+                </li>
+                <li>
+                  <strong>Immediate danger or medical emergency:</strong>
+                  <a href="tel:911">call 911</a>
+                </li>
+              </ul>
+            </section>
+
+            <section class="m-card" id="settings" aria-labelledby="you-title">
+              <div class="m-card-head">
+                <h2 id="you-title">How you appear</h2>
+                <a href="#settings-page">Settings</a>
+              </div>
+              <dl class="d-you">
+                <div>
+                  <dt>Display name</dt>
+                  <dd>
+                    Maple <a class="m-small" href="#rename">Change</a
+                    ><br /><span class="m-small m-muted"
+                      >You can change this again in 30 days
+                      <span class="m-pill m-pill-ex">example value</span></span
+                    >
+                  </dd>
+                </div>
+                <div>
+                  <dt>Handle</dt>
+                  <dd>
+                    <span class="m-handle">@maple_42</span><br /><span
+                      class="m-small m-muted"
+                      >Unique to your account, so no one can pose as you.</span
+                    >
+                  </dd>
+                </div>
+                <div>
+                  <dt>Member directory</dt>
+                  <dd>
+                    Not listed <span class="m-muted m-small">(default)</span>
+                    <a class="m-small" href="#list-me">List me</a>
+                  </dd>
+                </div>
+              </dl>
+              <p class="m-small m-muted">
+                Pseudonyms are welcome and legal names are never required. Names
+                like “Staff” or “Moderator” are reserved.
               </p>
             </section>
 
@@ -479,6 +615,11 @@
                 <h2 id="learn-title">Learning library</h2>
                 <a href="#library">Browse</a>
               </div>
+              <p class="m-small m-muted d-review-note">
+                Mockup note: draft items are shown for Tim’s review only.
+                Members see nothing until rights and content review are
+                complete.
+              </p>
               <div class="d-learn">
                 <div class="d-learn-item">
                   <span class="d-thumb"
@@ -500,8 +641,13 @@
                       <path d="M8 7h7" /></svg
                   ></span>
                   <div>
-                    <h3>[Course placeholder] Building steady routines</h3>
-                    <p class="m-small m-muted">Course · lesson 2 of 5</p>
+                    <h3>[Placeholder] Building steady routines</h3>
+                    <p class="m-small m-muted">
+                      HavenForward-owned course · lesson 2 of 5
+                    </p>
+                    <p class="d-badges">
+                      <span class="m-pill">Captioned video</span>
+                    </p>
                     <div
                       class="d-progress"
                       role="img"
@@ -529,9 +675,30 @@
                       <path d="M7 5v14l11-7z" /></svg
                   ></span>
                   <div>
-                    <h3>[Placeholder] Authorized K.E.Y.S. video</h3>
+                    <h3>[Placeholder] K.E.Y.S. session</h3>
+                    <p class="d-badges">
+                      <span class="m-pill m-pill-draft"
+                        ><svg
+                          class="icon icon-sm"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          height="24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                          focusable="false"
+                        >
+                          <rect x="5" y="11" width="14" height="10" rx="2" />
+                          <path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg
+                        >Private draft · rights and content review pending</span
+                      ><span class="m-pill">Captioned video</span>
+                    </p>
                     <p class="m-small m-muted">
-                      Video · partner material appears here once licensed
+                      K.E.Y.S. organizational permission is confirmed
+                      separately.
                     </p>
                   </div>
                 </div>
@@ -556,7 +723,10 @@
                   <div>
                     <h3>[Placeholder] Weekly reflection worksheet</h3>
                     <p class="m-small m-muted">
-                      Worksheet · private, never shared
+                      HavenForward-owned · your answers stay private
+                    </p>
+                    <p class="d-badges">
+                      <span class="m-pill">Accessible PDF</span>
                     </p>
                   </div>
                 </div>

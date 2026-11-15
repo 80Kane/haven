@@ -1062,3 +1062,212 @@
     display: none;
   }
 }
+
+/* ---------- v2: Tim's decisions (2026-11-14) ---------- */
+/* Emergency bar: two labelled lines on phone, one row on desktop */
+.m-help-inner {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 6px 16px;
+}
+.m-help-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+.m-help-line .icon {
+  margin-top: 2px;
+  color: var(--glow);
+}
+.m-help a {
+  min-height: 24px;
+  display: inline;
+}
+.m-help strong {
+  color: #fff;
+  font-weight: 700;
+}
+@media (min-width: 760px) {
+  .m-help-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px 28px;
+    min-height: 44px;
+  }
+  .m-help-line {
+    font-size: 0.92rem;
+  }
+}
+.m-top-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.m-support {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--action);
+  font-weight: 700;
+  text-decoration: none;
+  background: var(--surface);
+}
+.m-support:hover {
+  border-color: var(--action);
+}
+
+/* Handles, staff, badges */
+.m-handle {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+.m-pill-staff {
+  background: var(--action);
+  color: #fff;
+}
+.m-pill-ex {
+  background: #fff4d6;
+  color: #5a3d00;
+  font-size: 0.72rem;
+}
+.m-pill-draft {
+  background: #fbe9e0;
+  color: #7a3318;
+}
+.d-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 2px;
+}
+.d-review-note {
+  border-left: 3px solid #e8cf8f;
+  padding-left: 10px;
+}
+.d-private-note {
+  margin: -6px 0 12px;
+}
+.d-support-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+.d-support-list strong {
+  color: #fff;
+}
+.d-you {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 12px;
+}
+.d-you dt {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.d-you dd {
+  margin: 2px 0 0;
+}
+
+/* Posts */
+.c-act {
+  text-decoration: none;
+}
+.c-act-static {
+  cursor: default;
+  color: var(--muted);
+  border-style: dashed;
+}
+.c-act-static:hover {
+  border-color: var(--line);
+  color: var(--muted);
+}
+.c-hugnote {
+  margin: 6px 0 0;
+}
+.c-offnote {
+  margin: 8px 0 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: #e6efe9;
+  color: var(--action-hover);
+}
+
+/* Moderators + directory */
+.c-subh {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  margin: 14px 0 4px;
+}
+.c-duty {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  margin: 0;
+}
+.c-duty .c-dot {
+  margin-top: 7px;
+}
+.c-duty-on {
+  background: #e6efe9;
+  color: var(--action-hover);
+}
+.c-duty-off {
+  background: var(--sand);
+  color: var(--ink);
+}
+.c-dot-off {
+  background: transparent;
+  border: 2px solid var(--muted);
+}
+.c-state-label {
+  margin: 14px 0 6px;
+  font-weight: 700;
+}
+.c-not-emergency {
+  margin: 12px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.c-dir-state {
+  margin: 0 0 4px;
+}
+.c-dir-btn {
+  margin: 8px 0 4px;
+}
+@media (max-width: 759px) {
+  .m-top-inner {
+    gap: 8px;
+    padding-inline: 12px;
+  }
+  .m-top .brand-mark {
+    width: 32px;
+    height: 36px;
+  }
+  .m-top .brand-name {
+    font-size: 1.2rem;
+  }
+  .m-support {
+    padding: 0 10px;
+  }
+  .m-me {
+    padding: 4px;
+  }
+}
+.c-optwrap > summary .m-muted {
+  font-weight: 400;
+}

@@ -25,9 +25,30 @@
     </p>
     <div class="m-help" role="region" aria-label="Crisis support">
       <div class="m-help-inner">
-        <span>Need help now?</span>
-        <a href="tel:988"
-          ><svg
+        <p class="m-help-line">
+          <svg
+            class="icon icon-sm"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M4 5h16v11H9l-5 4z" /></svg
+          ><span
+            ><strong>Emotional distress:</strong> <a href="tel:988">call</a>/<a
+              href="sms:988"
+              >text 988</a
+            ></span
+          >
+        </p>
+        <p class="m-help-line">
+          <svg
             class="icon icon-sm"
             viewBox="0 0 24 24"
             width="24"
@@ -43,29 +64,11 @@
             <path
               d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"
             /></svg
-          >Call 988</a
-        >
-        <a href="sms:988"
-          ><svg
-            class="icon icon-sm"
-            viewBox="0 0 24 24"
-            width="24"
-            height="24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-            focusable="false"
+          ><span
+            ><strong>Immediate danger or medical emergency:</strong>
+            <a href="tel:911">call 911</a></span
           >
-            <path d="M4 5h16v11H9l-5 4z" /></svg
-          >Text 988</a
-        >
-        <a class="m-help-extra" href="tel:911">Emergency: 911</a>
-        <a class="m-help-extra" href="https://havenforward.com/resources"
-          >More support</a
-        >
+        </p>
       </div>
     </div>
     <header class="m-top">
@@ -79,10 +82,34 @@
             ><span class="brand-name">Haven<span>Forward</span></span></a
           ><span class="m-pilot">Private pilot</span>
         </div>
-        <a class="m-me" href="#settings" aria-label="Account settings for Maple"
-          ><span class="m-me-name">Maple</span
-          ><span class="m-av" aria-hidden="true">M</span></a
-        >
+        <div class="m-top-right">
+          <a class="m-support" href="https://havenforward.com/resources"
+            ><svg
+              class="icon icon-sm"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"
+              /></svg
+            >Support</a
+          >
+          <a
+            class="m-me"
+            href="#settings"
+            aria-label="Account settings for Maple"
+            ><span class="m-me-name">Maple</span
+            ><span class="m-av" aria-hidden="true">M</span></a
+          >
+        </div>
       </div>
     </header>
     <div class="m-shell">
@@ -350,7 +377,7 @@
               <textarea
                 class="c-textarea"
                 id="post-body"
-                placeholder="Posting as Maple. Share as much or as little as you like."
+                placeholder="Posting as Maple (@maple_42). Share as much or as little as you like."
               ></textarea>
               <details class="c-optwrap">
                 <summary>
@@ -372,14 +399,9 @@
                   >
                   <label class="c-opt"
                     ><input type="checkbox" checked /><span
-                      ><strong>Allow replies</strong>Turn off if you just want
-                      to be heard.</span
-                    ></label
-                  >
-                  <label class="c-opt"
-                    ><input type="checkbox" /><span
-                      ><strong>Hide hug count</strong>Only you see who sent
-                      hugs.</span
+                      ><strong>Allow replies</strong>Your choice. Turn off if
+                      you just want to be heard. Reporting and moderator review
+                      stay on either way.</span
                     ></label
                   >
                 </div>
@@ -431,9 +453,27 @@
                     <path d="M9 12l2 2 4-4" /></svg
                 ></span>
                 <div class="c-post-who">
-                  <strong>River</strong
-                  ><span class="m-pill m-pill-mod">Moderator</span><br /><span
-                    class="m-small m-muted"
+                  <strong>River</strong> <span class="m-handle">@river</span>
+                  <span class="m-pill m-pill-staff"
+                    ><svg
+                      class="icon icon-sm"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <path
+                        d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"
+                      />
+                      <path d="M9 12l2 2 4-4" /></svg
+                    >Staff · Moderator</span
+                  ><br /><span class="m-small m-muted"
                     >Pinned · 3 days ago</span
                   >
                 </div>
@@ -462,8 +502,7 @@
                     <path
                       d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"
                     /></svg
-                  >Hug<span class="sr-only">,</span>
-                  <span class="m-muted">12</span>
+                  >Send a hug
                 </button>
                 <button class="c-act" type="button">
                   <svg
@@ -484,6 +523,24 @@
                   >Reply<span class="sr-only">,</span>
                   <span class="m-muted">9</span>
                 </button>
+                <a class="c-act" href="#report"
+                  ><svg
+                    class="icon icon-sm"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path d="M5 21V4" />
+                    <path d="M5 4h11l-2 4 2 4H5" /></svg
+                  >Report</a
+                >
               </div>
             </article>
 
@@ -491,7 +548,9 @@
               <div class="c-post-head">
                 <span class="m-av m-av-lg av-amber" aria-hidden="true">J</span>
                 <div class="c-post-who">
-                  <strong>Juniper</strong><br /><span class="m-small m-muted"
+                  <strong>Juniper</strong>
+                  <span class="m-handle">@juniper_r</span><br /><span
+                    class="m-small m-muted"
                     >2 hours ago</span
                   >
                 </div>
@@ -613,8 +672,7 @@
                     <path
                       d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"
                     /></svg
-                  >Hug<span class="sr-only">,</span>
-                  <span class="m-muted">7</span>
+                  >Hug sent
                 </button>
                 <button class="c-act" type="button">
                   <svg
@@ -635,12 +693,34 @@
                   >Reply<span class="sr-only">,</span>
                   <span class="m-muted">2</span>
                 </button>
+                <a class="c-act" href="#report"
+                  ><svg
+                    class="icon icon-sm"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path d="M5 21V4" />
+                    <path d="M5 4h11l-2 4 2 4H5" /></svg
+                  >Report</a
+                >
               </div>
+              <p class="m-small m-muted c-hugnote">
+                Hugs tell only the author. There are no public counts.
+              </p>
               <div class="c-replies" aria-label="Replies">
                 <div class="c-reply">
                   <span class="m-av" aria-hidden="true">M</span>
                   <div>
                     <strong>Maple</strong>
+                    <span class="m-handle">@maple_42</span>
                     <span class="m-small m-muted">· 1 hour ago</span>
                     <p>
                       Cooked dinner twice instead of ordering in. Felt good.
@@ -651,6 +731,7 @@
                   <span class="m-av av-sky" aria-hidden="true">O</span>
                   <div>
                     <strong>Oak</strong>
+                    <span class="m-handle">@oak_and_ash</span>
                     <span class="m-small m-muted">· 40 min ago</span>
                     <p>
                       Four out of seven is real progress. Thanks for starting
@@ -665,7 +746,9 @@
               <div class="c-post-head">
                 <span class="m-av m-av-lg av-plum" aria-hidden="true">W</span>
                 <div class="c-post-who">
-                  <strong>Wren</strong><br /><span class="m-small m-muted"
+                  <strong>Wren</strong>
+                  <span class="m-handle">@wren.writes</span><br /><span
+                    class="m-small m-muted"
                     >Yesterday · replies off</span
                   >
                 </div>
@@ -805,11 +888,10 @@
                     <path
                       d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"
                     /></svg
-                  >Hug<span class="sr-only">,</span>
-                  <span class="m-muted">15</span>
+                  >Send a hug
                 </button>
-                <button class="c-act" type="button">
-                  <svg
+                <span class="c-act c-act-static"
+                  ><svg
                     class="icon icon-sm"
                     viewBox="0 0 24 24"
                     width="24"
@@ -824,10 +906,48 @@
                   >
                     <path d="M9 14 4 9l5-5" />
                     <path d="M4 9h10a6 6 0 0 1 6 6v4" /></svg
-                  >Reply<span class="sr-only">,</span>
-                  <span class="m-muted">off</span>
-                </button>
+                  >Replies off by author</span
+                >
+                <a class="c-act" href="#report"
+                  ><svg
+                    class="icon icon-sm"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path d="M5 21V4" />
+                    <path d="M5 4h11l-2 4 2 4H5" /></svg
+                  >Report</a
+                >
               </div>
+
+              <p class="m-small c-offnote">
+                <svg
+                  class="icon icon-inline"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z" />
+                  <path d="M9 12l2 2 4-4" />
+                </svg>
+                Wren turned replies off. Reporting and moderator review stay
+                available.
+              </p>
             </article>
 
             <div class="c-removed" role="note">
@@ -859,27 +979,72 @@
             <details class="m-card c-panel" open>
               <summary><h2>Moderators</h2></summary>
               <div class="c-panel-body">
+                <p class="c-duty c-duty-on">
+                  <span class="c-dot" aria-hidden="true"></span
+                  ><span
+                    ><strong>On duty now:</strong> River
+                    <span class="m-pill m-pill-staff">Staff</span><br /><span
+                      class="m-small"
+                      >Until 5 pm today</span
+                    ></span
+                  >
+                </p>
+                <h3 class="c-subh">
+                  Published coverage hours
+                  <span class="m-pill m-pill-ex">sample hours</span>
+                </h3>
                 <ul class="m-list c-mods">
                   <li>
                     <span class="m-av" aria-hidden="true">R</span
                     ><span
-                      ><strong>River</strong><br /><span class="m-small m-muted"
-                        ><span class="c-dot" aria-hidden="true"></span>
-                        Available until 9 pm</span
+                      ><strong>River</strong>
+                      <span class="m-pill m-pill-staff">Staff</span><br /><span
+                        class="m-small m-muted"
+                        >Mon–Fri, 9 am–5 pm CT</span
                       ></span
                     >
                   </li>
                   <li>
                     <span class="m-av av-navy" aria-hidden="true">S</span
                     ><span
-                      ><strong>Sage</strong><br /><span class="m-small m-muted"
-                        >Back tomorrow</span
+                      ><strong>Sage</strong>
+                      <span class="m-pill m-pill-staff">Staff</span><br /><span
+                        class="m-small m-muted"
+                        >Mon–Thu, 6 pm–10 pm CT</span
                       ></span
                     >
                   </li>
                 </ul>
                 <p class="m-small m-muted">
-                  Moderators are volunteers, not crisis responders.
+                  Staff names are chosen by moderators. Only staff accounts
+                  carry the Staff badge.
+                </p>
+                <p class="c-state-label m-small">Off-hours state (example):</p>
+                <p class="c-duty c-duty-off">
+                  <span class="c-dot c-dot-off" aria-hidden="true"></span
+                  ><span
+                    >No moderator on duty right now · Next coverage 6 pm</span
+                  >
+                </p>
+                <p class="c-not-emergency m-small">
+                  <svg
+                    class="icon icon-inline"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z" />
+                    <path d="M9 12l2 2 4-4" />
+                  </svg>
+                  Moderation isn’t emergency support.
+                  <a href="#c-support">See support options</a>
                 </p>
               </div>
             </details>
@@ -887,41 +1052,63 @@
             <details class="m-card c-panel" id="members">
               <summary><h2>Members</h2></summary>
               <div class="c-panel-body">
-                <ul class="m-list c-members" aria-label="Visible members">
+                <p class="c-dir-state">
+                  <strong>You’re not listed</strong>
+                  <span class="m-muted m-small">(default)</span>
+                </p>
+                <p class="m-small m-muted">
+                  The directory is opt-in. Unlisted members can still read, post
+                  and reply. If you join, you can leave it any time from here or
+                  in settings.
+                </p>
+                <button class="m-btn m-btn-quiet c-dir-btn" type="button">
+                  List me in the directory
+                </button>
+                <h3 class="c-subh">Chose to be listed (4)</h3>
+                <ul
+                  class="m-list c-members"
+                  aria-label="Members who chose to be listed"
+                >
                   <li>
-                    <span class="m-av av-amber" role="img" aria-label="Juniper"
+                    <span
+                      class="m-av av-amber"
+                      role="img"
+                      aria-label="Juniper @juniper_r"
                       >J</span
                     >
                   </li>
                   <li>
-                    <span class="m-av av-sky" role="img" aria-label="Oak"
+                    <span
+                      class="m-av av-sky"
+                      role="img"
+                      aria-label="Oak @oak_and_ash"
                       >O</span
                     >
                   </li>
                   <li>
-                    <span class="m-av av-plum" role="img" aria-label="Wren"
-                      >W</span
-                    >
-                  </li>
-                  <li>
-                    <span class="m-av av-rose" role="img" aria-label="Ash"
+                    <span
+                      class="m-av av-rose"
+                      role="img"
+                      aria-label="Ash @ash_rises"
                       >A</span
                     >
                   </li>
                   <li>
-                    <span class="m-av av-terra" role="img" aria-label="Fern"
+                    <span
+                      class="m-av av-terra"
+                      role="img"
+                      aria-label="Fern @fern_k"
                       >F</span
                     >
                   </li>
-                  <li>
-                    <span class="m-av" role="img" aria-label="Maple (you)"
-                      >M</span
-                    >
-                  </li>
                 </ul>
-                <p class="m-small m-muted">
-                  Showing members who chose to be listed. Others can read and
-                  post without appearing here.
+                <p class="c-state-label m-small">
+                  Listed state (example):
+                  <span class="m-muted"
+                    >“You’re listed as Maple @maple_42”</span
+                  >
+                  with a <strong>Leave the directory</strong> button in the same
+                  place.
                 </p>
               </div>
             </details>
@@ -949,8 +1136,11 @@
                       <rect x="17" y="14" width="4" height="6" rx="1.5" /></svg
                   ></span>
                   <div>
-                    <h3>[Placeholder] Audio: grounding practice</h3>
-                    <p class="m-small m-muted">Audio · 8 min</p>
+                    <h3>[Placeholder] Grounding practice</h3>
+                    <p class="d-badges">
+                      <span class="m-pill">Audio + transcript</span>
+                    </p>
+                    <p class="m-small m-muted">HavenForward-owned · 8 min</p>
                   </div>
                 </div>
                 <div class="d-learn-item">
@@ -973,8 +1163,31 @@
                       <path d="M8 7h7" /></svg
                   ></span>
                   <div>
-                    <h3>[Placeholder] Authorized CEO Hockley lesson</h3>
-                    <p class="m-small m-muted">Shown only once licensed</p>
+                    <h3>[Placeholder] CEO Hockley lesson</h3>
+                    <p class="d-badges">
+                      <span class="m-pill m-pill-draft"
+                        ><svg
+                          class="icon icon-sm"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          height="24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                          focusable="false"
+                        >
+                          <rect x="5" y="11" width="14" height="10" rx="2" />
+                          <path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg
+                        >Private draft · rights and content review pending</span
+                      ><span class="m-pill">Captioned video</span>
+                    </p>
+                    <p class="m-small m-muted">
+                      CEO Hockley’s permission is confirmed separately. Shown
+                      for review only.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -982,10 +1195,17 @@
 
             <section class="m-card d-support" aria-labelledby="c-support">
               <h2 id="c-support">Need support right now?</h2>
-              <p>
-                Call or text <a href="tel:988">988</a>. In immediate danger,
-                call <a href="tel:911">911</a>.
-              </p>
+              <ul class="m-list d-support-list">
+                <li>
+                  <strong>Emotional distress:</strong>
+                  <a href="tel:988">call</a>/<a href="sms:988">text 988</a>
+                </li>
+                <li>
+                  <strong>Immediate danger or medical emergency:</strong>
+                  <a href="tel:911">call 911</a>
+                </li>
+              </ul>
+              <p>Moderation isn’t emergency support.</p>
             </section>
           </aside>
         </div>
