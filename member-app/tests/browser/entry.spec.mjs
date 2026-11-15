@@ -9,8 +9,10 @@ async function login(page, name) {
 test("anonymous private entry redirects to accessible sign-in without browser tokens", async ({
   page,
 }) => {
-  await page.goto("/member");
-  await expect(page).toHaveURL(/\/login$/);
+  for (const route of ["/member", "/member/circles/recovery-healing"]) {
+    await page.goto(route);
+    await expect(page).toHaveURL(/\/login$/);
+  }
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "Your next step starts here.",
   );
@@ -55,8 +57,10 @@ test("active member enters private page, refresh persists, and logout blocks ent
   expect(result.violations).toEqual([]);
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
   await expect(page).toHaveURL(/notice=signed-out/);
-  await page.goto("/member");
-  await expect(page).toHaveURL(/\/login$/);
+  for (const route of ["/member", "/member/circles/recovery-healing"]) {
+    await page.goto(route);
+    await expect(page).toHaveURL(/\/login$/);
+  }
 });
 test("invalid credentials stay neutral and cross-origin POSTs and scanner GETs cannot mutate", async ({
   page,
@@ -83,6 +87,8 @@ test("suspended identity cannot enter private screen or reactivate using an invi
 }) => {
   await login(page, "suspended");
   await expect(page).toHaveURL(/\/invitation$/);
+  await page.goto("/member/circles/recovery-healing");
+  await expect(page).toHaveURL(/\/invitation$/);
   await page.getByLabel("Invitation code").fill("a".repeat(64));
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Accept invitation" }).click();
@@ -96,6 +102,8 @@ test("pending account requires consent and a matching invitation before private 
   page,
 }) => {
   await login(page, "pending");
+  await expect(page).toHaveURL(/\/invitation$/);
+  await page.goto("/member/circles/recovery-healing");
   await expect(page).toHaveURL(/\/invitation$/);
   await page.getByLabel("Invitation code").fill("b".repeat(64));
   await page.getByRole("checkbox").check();
@@ -134,4 +142,78 @@ test("small screen has no horizontal overflow and auth responses are private and
   await expect(
     page.getByRole("link", { name: "Skip to content" }),
   ).toBeFocused();
+});
+
+test("member dashboard and Circle preview are accessible at phone and desktop sizes without a composer", async ({
+  page,
+}, testInfo) => {
+  await login(page, "active");
+  for (const width of [320, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    const homeResponse = await page.goto("/member");
+    expect(homeResponse.headers()["cache-control"]).toContain("no-store");
+    await expect(page.locator(".member-circle")).toHaveCount(7);
+    const crisis = page.getByRole("complementary", { name: "Crisis support" });
+    await expect(crisis).toContainText("Emotional distress: call/text 988");
+    await expect(crisis).toContainText(
+      "Immediate danger or medical emergency: call 911",
+    );
+    await expect(crisis.locator('a[href="tel:988"]')).toBeVisible();
+    await expect(crisis.locator('a[href="sms:988"]')).toBeVisible();
+    await expect(crisis.locator('a[href="tel:911"]')).toBeVisible();
+    await expect(
+      crisis.getByRole("link", { name: "Support resources" }),
+    ).toBeVisible();
+    await expect(page.getByRole("link", { name: "Your home" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    await expect(
+      page.getByRole("link", { name: "Administrator tools" }),
+    ).toHaveCount(0);
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    await page.screenshot({
+      path: testInfo.outputPath(`member-home-${width}.png`),
+      fullPage: true,
+    });
+    await page
+      .getByRole("link", { name: "Explore the Circle preview" })
+      .click();
+    await expect(page).toHaveURL(/\/member\/circles\/recovery-healing$/);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Recovery & Healing",
+    );
+    await expect(
+      page.getByText("Conversations and posting aren’t open yet.", {
+        exact: false,
+      }),
+    ).toBeVisible();
+    await expect(page.getByRole("textbox")).toHaveCount(0);
+    await expect(page.locator("form")).toHaveCount(1);
+    await expect(page.locator("form")).toHaveAttribute(
+      "action",
+      "/auth/logout",
+    );
+    const result = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+      .analyze();
+    expect(result.violations).toEqual([]);
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    await page.screenshot({
+      path: testInfo.outputPath(`recovery-circle-${width}.png`),
+      fullPage: true,
+    });
+    await page
+      .getByRole("link", { name: "Back to your home", exact: false })
+      .click();
+    await expect(page).toHaveURL(/\/member$/);
+  }
 });
