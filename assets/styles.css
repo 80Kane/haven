@@ -1319,3 +1319,127 @@ ol {
 .menu-toggle[hidden] {
   display: none;
 }
+
+/* ---------- Questions & answers ---------- */
+.faq-toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.faq-toc a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 700;
+}
+.faq-toc a:hover {
+  border-color: var(--action);
+  color: var(--action);
+}
+.faq {
+  padding-block: 24px 64px;
+}
+.faq-group {
+  padding-top: 28px;
+  scroll-margin-top: 140px;
+}
+.faq-group h2 {
+  font-size: clamp(1.4rem, 4.2vw, 1.85rem);
+  margin-bottom: 12px;
+}
+.faq-item {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  margin-bottom: 10px;
+}
+.faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  min-height: 48px;
+  padding: 14px 18px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary::after {
+  content: "+";
+  flex: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--action);
+}
+.faq-item[open] summary::after {
+  content: "\2212";
+}
+.faq-item summary:hover {
+  background: var(--canvas);
+}
+.faq-answer {
+  padding: 0 18px 14px;
+}
+.faq-answer p {
+  margin: 0 0 10px;
+}
+
+/* ---------- Support lines (resources) ---------- */
+.support-lines {
+  padding-block: 36px 8px;
+  scroll-margin-top: 140px;
+}
+.support-lines h2 {
+  font-size: clamp(1.5rem, 4.4vw, 2rem);
+}
+.lines-grid {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: grid;
+  gap: 14px;
+}
+@media (min-width: 760px) {
+  .lines-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.line-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 18px 20px;
+}
+.line-card h3 {
+  font-size: 1.2rem;
+  margin: 0 0 6px;
+}
+.line-card p {
+  margin: 0 0 10px;
+}
+.line-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+.line-actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 700;
+  color: var(--action);
+}
