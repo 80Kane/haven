@@ -29,6 +29,7 @@ for (const path of [
   "/resources.html",
   "/privacy.html",
   "/guidelines.html",
+  "/faq.html",
   "/404.html",
 ]) {
   test(`WCAG automated checks: ${path}`, async ({ page }) => {
@@ -48,6 +49,7 @@ for (const width of [320, 390, 768, 1440]) {
       "/resources.html",
       "/privacy.html",
       "/guidelines.html",
+      "/faq.html",
     ]) {
       await page.goto(path);
       expect(

@@ -6,6 +6,7 @@ const pages = [
   "resources.html",
   "privacy.html",
   "guidelines.html",
+  "faq.html",
   "404.html",
 ];
 test("public pages use local scripts and a restrictive CSP without inline handlers", async () => {
@@ -79,6 +80,7 @@ test("public pages have unique SEO metadata and a crawlable sitemap", async () =
     "resources.html",
     "privacy.html",
     "guidelines.html",
+    "faq.html",
   ]) {
     const html = await readFile(path, "utf8");
     const description = html.match(/name="description"\s+content="([^"]+)"/)[1];
@@ -90,13 +92,13 @@ test("public pages have unique SEO metadata and a crawlable sitemap", async () =
     );
     assert.match(html, /property="og:title"/);
   }
-  assert.equal(descriptions.size, 4);
+  assert.equal(descriptions.size, 5);
   assert.match(
     await readFile("404.html", "utf8"),
     /name="robots" content="noindex"/,
   );
   const sitemap = await readFile("sitemap.xml", "utf8");
-  assert.equal((sitemap.match(/<loc>/g) || []).length, 4);
+  assert.equal((sitemap.match(/<loc>/g) || []).length, 5);
   assert.match(
     await readFile("robots.txt", "utf8"),
     /Sitemap: https:\/\/havenforward\.com\/sitemap\.xml/,
