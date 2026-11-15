@@ -18,7 +18,7 @@ export function validProfileInput(handle: string, name: string) {
     [...name].length >= 2 &&
     [...name].length <= 40 &&
     name === name.trim() &&
-    !/\p{C}/u.test(name) &&
+    /^[\p{L}\p{M}\p{N} .'-]+$/u.test(name) &&
     !reservedName.test(name)
   );
 }

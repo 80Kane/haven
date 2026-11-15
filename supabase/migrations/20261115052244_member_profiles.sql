@@ -55,9 +55,9 @@ begin
     or p_handle ~ '^(admin|administrator|moderator|staff|havenforward|support)(_|$)'
     or p_display_name is null or char_length(p_display_name) not between 2 and 40
     or p_display_name <> btrim(p_display_name)
-    or p_display_name ~ '[[:cntrl:]]'
+    or p_display_name !~ '^[[:alnum:] .''-]+$'
     or p_display_name ~ U&'[\200B-\200F\202A-\202E\2060-\206F]'
-    or p_display_name ~* '\m(admin|administrator|moderator|staff|havenforward)\M'
+    or p_display_name ~* '(^|[^a-z0-9_])(admin|administrator|moderator|staff|havenforward)([^a-z0-9_]|$)'
     or p_directory_listed is null or p_hug_notifications is null then
       raise invalid_parameter_value using message='Invalid request';
   end if;

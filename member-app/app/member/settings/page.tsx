@@ -86,8 +86,9 @@ export default async function SettingsPage({
               aria-describedby="name-help"
             />
             <p id="name-help" className="small field-help">
-              Use 2–40 characters. Display names may be shared by different
-              members; handles identify accounts.
+              Use 2–40 letters, numbers, spaces, apostrophes, periods, or
+              hyphens. Display names may be shared by different members; handles
+              identify accounts.
               {renameLocked && profile ? (
                 <>
                   {" "}
