@@ -43,9 +43,11 @@ if (filters) {
     const query = search.value.trim().toLocaleLowerCase();
     let count = 0;
     for (const card of cards) {
+      const searchableText =
+        `${card.dataset.search} ${card.textContent}`.toLocaleLowerCase();
       const visible =
         (!category.value || card.dataset.category === category.value) &&
-        card.dataset.search.includes(query);
+        searchableText.includes(query);
       card.hidden = !visible;
       if (visible) count++;
     }

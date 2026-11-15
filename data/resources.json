@@ -6,6 +6,7 @@
     "description": "A starting point for US rental-assistance information and local housing contacts.",
     "url": "https://www.hud.gov/topics/rental_assistance",
     "eligibility": "Programs and eligibility vary by location; confirm with the listed agency.",
+    "contact": "Use HUD's official page for local housing contacts.",
     "region": "United States",
     "lastVerified": null
   },
@@ -16,6 +17,7 @@
     "description": "SAMHSA\u2019s directory of treatment providers for substance use and mental health.",
     "url": "https://findtreatment.gov/",
     "eligibility": "Ask providers about costs, insurance, accessibility, and appointment availability.",
+    "contact": "Search the directory, then contact a listed provider to confirm details.",
     "region": "United States",
     "lastVerified": null
   },
@@ -26,6 +28,7 @@
     "description": "Explore career tools, training information, and American Job Center contacts.",
     "url": "https://www.careeronestop.org/",
     "eligibility": "Services and eligibility vary; contact your local center.",
+    "contact": "Use CareerOneStop to locate an American Job Center.",
     "region": "United States",
     "lastVerified": null
   },
@@ -36,6 +39,7 @@
     "description": "Information about financial aid for college and career-school education.",
     "url": "https://studentaid.gov/",
     "eligibility": "Federal aid has specific eligibility requirements; review the provider\u2019s guidance.",
+    "contact": "Use Federal Student Aid's official site for information and help.",
     "region": "United States",
     "lastVerified": null
   },
@@ -46,6 +50,7 @@
     "description": "Find information about accessible public transportation and paratransit.",
     "url": "https://www.usa.gov/disability-transit",
     "eligibility": "Local services and paratransit eligibility vary; confirm with the transit operator.",
+    "contact": "Use USA.gov's guidance to find local transit contacts.",
     "region": "United States",
     "lastVerified": null
   },
@@ -56,6 +61,7 @@
     "description": "Find a local 211 service for housing, food, transportation, and other community needs.",
     "url": "https://www.211.org/",
     "eligibility": "Coverage, hours, and referral services vary by local 211 organization.",
+    "contact": "Use 211.org to find a local 211 organization.",
     "region": "United States",
     "lastVerified": null
   },
@@ -66,6 +72,7 @@
     "description": "Learn about veteran benefits, health services, and support resources.",
     "url": "https://www.va.gov/",
     "eligibility": "Eligibility depends on the benefit or service; confirm directly with VA.",
+    "contact": "Use VA.gov to find benefit and service contact options.",
     "region": "United States",
     "lastVerified": null
   }
