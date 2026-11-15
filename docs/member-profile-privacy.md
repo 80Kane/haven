@@ -30,7 +30,7 @@ event table.
 
 1. Run the full CI workflow, including the real PostgreSQL profile tests and
    browser save/reload/privacy-withdrawal checks.
-2. Review and apply `20261115052244_member_profiles.sql` only to the isolated
+2. Review and apply `20261115053225_member_profiles.sql` only to the isolated
    member staging database before deploying the UI. This additive migration
    leaves existing profiles unset and does not change Auth configuration.
 3. Recheck database advisors and own/cross-account access. Keep haven_members

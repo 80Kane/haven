@@ -75,7 +75,7 @@ before(async () => {
   );
   await pool.query(
     await readFile(
-      "supabase/migrations/20261115052244_member_profiles.sql",
+      "supabase/migrations/20261115053225_member_profiles.sql",
       "utf8",
     ),
   );
