@@ -16,13 +16,13 @@ export function MemberNavigation({
           href="/member"
           aria-current={current === "home" ? "page" : undefined}
         >
-          Your home <span aria-hidden="true">↗</span>
+          Your home <span aria-hidden="true">→</span>
         </a>
         <a
           href="/member/circles"
           aria-current={current === "circle" ? "page" : undefined}
         >
-          Circles <span aria-hidden="true">↗</span>
+          Circles <span aria-hidden="true">→</span>
         </a>
         <a
           href="/member/settings"

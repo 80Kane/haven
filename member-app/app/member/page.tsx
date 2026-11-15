@@ -66,7 +66,7 @@ export default async function MemberPage() {
               Confirm eligibility and availability with each provider.
             </p>
             <a href="/member/resources" className="button">
-              Find support resources <span aria-hidden="true">↗</span>
+              Find support resources <span aria-hidden="true">→</span>
             </a>
           </section>
           <section className="learning-panel" aria-labelledby="learning-title">
