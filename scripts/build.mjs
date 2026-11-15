@@ -11,6 +11,7 @@ for (const path of [
   "privacy.html",
   "guidelines.html",
   "faq.html",
+  "support.html",
   "404.html",
   "assets",
   "data",

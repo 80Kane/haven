@@ -1519,3 +1519,38 @@ ol {
 .crisis-actions .button-911 {
   grid-column: 1 / -1;
 }
+
+/* ---------- Get help now ---------- */
+.support-emergency {
+  padding: 18px 20px;
+  border: 2px solid var(--action);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.support-emergency a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 700;
+}
+.support-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-block: 24px;
+}
+.support-topics a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.support-lines[id] {
+  scroll-margin-top: 240px;
+}
+.support-review {
+  padding-block: 48px;
+}
+.line-card {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
