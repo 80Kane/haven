@@ -49,7 +49,9 @@ export default async function SettingsPage({
           </p>
           {notice && (
             <p className="notice" role="status">
-              {notices[notice] || notices.unavailable}
+              {Object.hasOwn(notices, notice)
+                ? notices[notice]
+                : notices.unavailable}
             </p>
           )}
           <form method="post" action="/member/settings/save">

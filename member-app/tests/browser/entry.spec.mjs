@@ -274,6 +274,10 @@ test("profile privacy settings persist across reload, default off, and reject fo
   });
   expect(injected.status()).toBe(403);
   expect((await request.get("/member/settings/save")).status()).toBe(405);
+  await page.goto("/member/settings?notice=__proto__");
+  await expect(page.getByRole("status")).toContainText(
+    "We couldn't save your settings",
+  );
   for (const width of [320, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     expect(
