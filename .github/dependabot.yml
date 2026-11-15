@@ -33,6 +33,10 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    ignore:
+      # member-app runs on Node >=22 <25; keep @types/node on the matching major
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
 
   # Pinned actions in .github/workflows
   - package-ecosystem: "github-actions"
