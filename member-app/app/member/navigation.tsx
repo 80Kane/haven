@@ -5,7 +5,7 @@ export function MemberNavigation({
   current,
   member,
 }: {
-  current: "home" | "circle" | "settings" | "resources" | "learning";
+  current: "home" | "circle" | "settings" | "resources" | "learning" | "report";
   member: Member;
 }) {
   return (
@@ -43,6 +43,14 @@ export function MemberNavigation({
           Learning
         </a>
         <a href="https://havenforward.com/guidelines">Community guidelines</a>
+        {process.env.MEMBER_REPORTING_ENABLED === "true" && (
+          <a
+            href="/member/report"
+            aria-current={current === "report" ? "page" : undefined}
+          >
+            Report a concern
+          </a>
+        )}
         {member.role === "admin" &&
           process.env.MEMBER_ADMIN_UI_ENABLED === "true" && (
             <a href="/admin">Administrator tools</a>

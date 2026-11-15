@@ -95,6 +95,13 @@ export default async function CirclePage({
             Explore support resources <span aria-hidden="true">→</span>
           </a>
         </section>
+        {process.env.MEMBER_REPORTING_ENABLED === "true" && (
+          <p>
+            <a href={`/member/report?circle=${circle.slug}`}>
+              Report a concern about this Circle
+            </a>
+          </p>
+        )}
         <nav className="related-circles" aria-label="Other Circle previews">
           <h2>Explore another Circle</h2>
           <ul>

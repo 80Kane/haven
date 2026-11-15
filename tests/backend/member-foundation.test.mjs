@@ -19,6 +19,16 @@ const TOKEN = "a".repeat(64);
 const signatures = {
   haven_member_self: [],
   haven_profile_self: [],
+  haven_submit_report: [
+    "p_submission_key",
+    "p_circle_slug",
+    "p_category",
+    "p_details",
+  ],
+  haven_my_reports: [],
+  haven_report_queue: [],
+  haven_report_detail: ["p_report_id"],
+  haven_review_report: ["p_report_id", "p_version", "p_status", "p_resolution"],
   haven_save_profile: [
     "p_handle",
     "p_display_name",
@@ -53,6 +63,11 @@ before(async () => {
   for (const [name, types] of Object.entries({
     haven_member_self: "",
     haven_profile_self: "",
+    haven_submit_report: "uuid,text,text,text",
+    haven_my_reports: "",
+    haven_report_queue: "",
+    haven_report_detail: "uuid",
+    haven_review_report: "uuid,integer,text,text",
     haven_save_profile: "text,text,boolean,boolean",
     haven_issue_member_invitation: "text,text,integer",
     haven_revoke_member_invitation: "uuid",
@@ -79,12 +94,20 @@ before(async () => {
       "utf8",
     ),
   );
+  await pool.query(
+    await readFile(
+      "supabase/migrations/20261115070139_member_reports.sql",
+      "utf8",
+    ),
+  );
 });
 beforeEach(async () => {
   await pool.query(
     "truncate haven_members.audit_events,haven_members.redemption_attempts,haven_members.invitations,haven_members.members,auth.users cascade",
   );
-  await pool.query("update haven_members.configuration set enabled=true");
+  await pool.query(
+    "update haven_members.configuration set enabled=true,reporting_enabled=false",
+  );
   for (const [id, email] of [
     [A, "admin@example.test"],
     [B, "person@example.test"],
@@ -503,7 +526,9 @@ test("profiles require current verified active membership and respect the databa
   await pool.query("update haven_members.configuration set enabled=false");
   await denied(saveProfile());
   await denied(rpc("haven_profile_self"));
-  await pool.query("update haven_members.configuration set enabled=true");
+  await pool.query(
+    "update haven_members.configuration set enabled=true,reporting_enabled=false",
+  );
   await pool.query("update auth.users set is_anonymous=true where id=$1", [A]);
   await denied(saveProfile());
   await pool.query(
@@ -627,4 +652,215 @@ test("profile update limit still allows withdrawing visibility and notification 
     saveProfile(A, "gentle_river", "River", true, true),
     (e) => e.code === "P0003",
   );
+});
+
+async function reportingSetup() {
+  await pool.query(
+    "update haven_members.configuration set reporting_enabled=true",
+  );
+  for (const id of [B, C])
+    await pool.query(
+      "insert into haven_members.members(id,role,consent_version) values($1,'member','member-v1')",
+      [id],
+    );
+}
+function reportArgs(key = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa") {
+  return {
+    p_submission_key: key,
+    p_circle_slug: "recovery-healing",
+    p_category: "privacy",
+    p_details: "Synthetic privacy concern for testing only.",
+  };
+}
+const sendReport = (actor = B, args = reportArgs()) =>
+  rpc("haven_submit_report", args, actor, "aal1");
+const updateReport = (
+  id,
+  version,
+  status,
+  resolution = null,
+  actor = A,
+  aal = "aal2",
+) =>
+  rpc(
+    "haven_review_report",
+    {
+      p_report_id: id,
+      p_version: version,
+      p_status: status,
+      p_resolution: resolution,
+    },
+    actor,
+    aal,
+  );
+
+test("reporting starts closed and requires active verified membership on every call", async () => {
+  await denied(sendReport());
+  await denied(rpc("haven_report_queue"));
+  await reportingSetup();
+  await pool.query(
+    "update haven_members.members set status='suspended' where id=$1",
+    [B],
+  );
+  await denied(sendReport());
+  await pool.query(
+    "update haven_members.members set status='active' where id=$1",
+    [B],
+  );
+  for (const field of [
+    "email_confirmed_at=null",
+    "is_anonymous=true",
+    "banned_until=now()+interval '1 day'",
+  ]) {
+    await pool.query(`update auth.users set ${field} where id=$1`, [B]);
+    await denied(sendReport());
+    await pool.query(
+      "update auth.users set email_confirmed_at=now(),is_anonymous=false,banned_until=null where id=$1",
+      [B],
+    );
+  }
+  await sendReport();
+  await pool.query(
+    "update haven_members.configuration set reporting_enabled=false",
+  );
+  await denied(rpc("haven_my_reports", {}, B));
+  await denied(rpc("haven_report_queue"));
+});
+test("reports are caller-owned, duplicate retries are idempotent, and intake is bounded", async () => {
+  await reportingSetup();
+  const first = await sendReport();
+  const again = await sendReport();
+  assert.equal(again.id, first.id);
+  const mine = await rpc("haven_my_reports", {}, B);
+  assert.equal(mine.memberId, B);
+  assert.equal(mine.reports.length, 1);
+  assert.equal("details" in mine.reports[0], false);
+  assert.equal((await rpc("haven_my_reports", {}, C)).reports.length, 0);
+  await assert.rejects(
+    sendReport(B, {
+      ...reportArgs(),
+      p_details: "Changed concern on the same submission key",
+    }),
+    (e) => e.code === "22023",
+  );
+  for (const change of [
+    { p_details: "short" },
+    { p_details: "a".repeat(1001) },
+    { p_circle_slug: "__proto__" },
+    { p_category: "admin" },
+    { p_details: "invisible text \u202e hidden" },
+  ])
+    await assert.rejects(
+      sendReport(B, { ...reportArgs(crypto.randomUUID()), ...change }),
+      (e) => e.code === "22023",
+    );
+  const results = await Promise.allSettled(
+    Array.from({ length: 8 }, () =>
+      sendReport(B, reportArgs(crypto.randomUUID())),
+    ),
+  );
+  assert.equal(results.filter((r) => r.status === "fulfilled").length, 4);
+  assert.equal(
+    (await pool.query("select count(*)::int as n from haven_members.reports"))
+      .rows[0].n,
+    5,
+  );
+  assert.equal((await sendReport()).id, first.id);
+});
+test("report review requires current administrator and MFA; members and moderators cannot enumerate or read", async () => {
+  await reportingSetup();
+  const r = await sendReport();
+  for (const actor of [B, C]) {
+    await denied(rpc("haven_report_queue", {}, actor));
+    await denied(rpc("haven_report_detail", { p_report_id: r.id }, actor));
+    await denied(updateReport(r.id, 1, "in_review", null, actor));
+  }
+  await pool.query(
+    "update haven_members.members set role='moderator' where id=$1",
+    [C],
+  );
+  await denied(rpc("haven_report_queue", {}, C));
+  await denied(rpc("haven_report_queue", {}, A, "aal1"));
+  await denied(rpc("haven_report_detail", { p_report_id: r.id }, A, "aal1"));
+  await denied(updateReport(r.id, 1, "in_review", null, A, "aal1"));
+  const queue = await rpc("haven_report_queue");
+  assert.equal(queue.reports.length, 1);
+  assert.equal("details" in queue.reports[0], false);
+  assert.equal("reporter_id" in queue.reports[0], false);
+  const detail = await rpc("haven_report_detail", { p_report_id: r.id });
+  assert.equal(detail.details, reportArgs().p_details);
+  assert.equal("reporterId" in detail, false);
+  await pool.query(
+    "update haven_members.members set role='member' where id=$1",
+    [A],
+  );
+  await denied(rpc("haven_report_detail", { p_report_id: r.id }));
+});
+test("report status transitions are audited, stale changes cannot overwrite, and closure preserves evidence", async () => {
+  await reportingSetup();
+  const r = await sendReport();
+  await assert.rejects(
+    updateReport(r.id, 1, "closed", "review_complete"),
+    (e) => e.code === "22023",
+  );
+  const race = await Promise.allSettled([
+    updateReport(r.id, 1, "in_review"),
+    updateReport(r.id, 1, "in_review"),
+  ]);
+  assert.equal(race.filter((r) => r.status === "fulfilled").length, 1);
+  assert.equal(race.find((r) => r.status === "rejected").reason.code, "P0002");
+  await assert.rejects(
+    updateReport(r.id, 2, "closed"),
+    (e) => e.code === "22023",
+  );
+  await updateReport(r.id, 2, "closed", "review_complete");
+  assert.equal((await rpc("haven_report_queue")).reports.length, 0);
+  const detail = await rpc("haven_report_detail", { p_report_id: r.id });
+  assert.equal(detail.version, 3);
+  assert.equal(detail.events.length, 3);
+  assert.equal(detail.details, reportArgs().p_details);
+  assert.equal(detail.status, "closed");
+  const mine = await rpc("haven_my_reports", {}, B);
+  assert.equal(mine.reports[0].resolution, "review_complete");
+  assert.equal("events" in mine.reports[0], false);
+  await assert.rejects(
+    updateReport(r.id, 3, "in_review"),
+    (e) => e.code === "22023",
+  );
+  const audit = await pool.query(
+    "select actor_id,from_status,to_status from haven_members.report_events order by id",
+  );
+  assert.equal(audit.rows[0].actor_id, B);
+  assert.equal(audit.rows[1].actor_id, A);
+});
+test("report tables and audit events have no client access; wrappers stay invokers", async () => {
+  await reportingSetup();
+  const r = await sendReport();
+  for (const actor of [A, B])
+    for (const sql of [
+      "select * from haven_members.reports",
+      "select * from haven_members.report_events",
+      "delete from haven_members.report_events",
+      "update haven_members.reports set status='closed'",
+    ])
+      await denied(asActor(actor, "aal2", sql));
+  for (const role of ["anon", "service_role"])
+    await denied(
+      rpc("haven_report_detail", { p_report_id: r.id }, A, "aal2", role),
+    );
+  const procs = await pool.query(
+    "select prosecdef from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname in ('haven_submit_report','haven_my_reports','haven_report_queue','haven_report_detail','haven_review_report')",
+  );
+  assert.equal(procs.rows.length, 5);
+  assert.ok(procs.rows.every((r) => !r.prosecdef));
+  for (const table of ["reports", "report_events"])
+    assert.equal(
+      (
+        await pool.query(
+          "select relrowsecurity from pg_class where oid=$1::regclass",
+          [`haven_members.${table}`],
+        )
+      ).rows[0].relrowsecurity,
+      true,
+    );
 });

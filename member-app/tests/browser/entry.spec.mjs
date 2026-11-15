@@ -3,6 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 const memberRoutes = [
   "/member",
   "/member/settings",
+  "/member/report",
   "/member/circles",
   "/member/resources",
   "/member/learning",

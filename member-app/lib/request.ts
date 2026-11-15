@@ -3,7 +3,9 @@ export async function readForm(
   request: Request,
   config: AppConfig,
   allowed: string[],
+  maxBytes = 4096,
 ): Promise<URLSearchParams | null> {
+  if (![4096, 16384].includes(maxBytes)) return null;
   const url = new URL(request.url);
   if (
     request.method !== "POST" ||
@@ -13,7 +15,7 @@ export async function readForm(
     !/^application\/x-www-form-urlencoded(?:\s*;|$)/i.test(
       request.headers.get("content-type") || "",
     ) ||
-    Number(request.headers.get("content-length") || 0) > 4096
+    Number(request.headers.get("content-length") || 0) > maxBytes
   )
     return null;
   const reader = request.body?.getReader();
@@ -25,7 +27,7 @@ export async function readForm(
       const { done, value } = await reader.read();
       if (done) break;
       size += value.byteLength;
-      if (size > 4096) {
+      if (size > maxBytes) {
         await reader.cancel();
         return null;
       }
