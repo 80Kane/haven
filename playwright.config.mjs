@@ -18,6 +18,7 @@ const proxy = parsedProxy
     }
   : undefined;
 export default defineConfig({
+  outputDir: "./test-results/public",
   testDir: "./tests/browser",
   fullyParallel: true,
   workers: process.env.CI ? 2 : 3,
