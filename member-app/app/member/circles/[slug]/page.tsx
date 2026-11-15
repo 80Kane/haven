@@ -1,10 +1,16 @@
 import { redirect } from "next/navigation";
 import { appConfig, serverClient } from "../../../../lib/server";
 import { entry } from "../../../../lib/flow";
-import { Closed, Unavailable } from "../../../components";
-import { CircleMark, MemberNavigation } from "../../navigation";
-
-export default async function RecoveryCirclePage() {
+import { Closed, Unavailable } from "../../../../app/components";
+import { MemberNavigation } from "../../../../app/member/navigation";
+import { notFound } from "next/navigation";
+import { findCircle, circles } from "../../../../lib/circles";
+import { CircleMark } from "../../navigation";
+export default async function CirclePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const config = appConfig();
   if (!config) return <Closed />;
   const { client } = await serverClient(config);
@@ -12,28 +18,26 @@ export default async function RecoveryCirclePage() {
   if (result.state === "signed-out") redirect("/login");
   if (result.state === "invitation") redirect("/invitation");
   if (result.state !== "member") return <Unavailable />;
+  const circle = findCircle((await params).slug);
+  if (!circle) notFound();
   return (
     <div className="member-shell">
       <MemberNavigation current="circle" member={result.member} />
       <div className="member-content">
-        <a className="back-link" href="/member">
-          ← Back to your home
+        <a className="back-link" href="/member/circles">
+          ← Back to all Circles
         </a>
         <section
-          className="circle-hero tone-sage"
+          className={`circle-hero tone-${circle.tone}`}
           aria-labelledby="circle-title"
         >
           <span className="circle-mark">
-            <CircleMark kind="leaf" />
+            <CircleMark kind={circle.kind} />
           </span>
           <p className="eyebrow">Circle preview</p>
-          <h1 id="circle-title">Recovery &amp; Healing</h1>
-          <p className="lead">Different journeys. Room for yours.</p>
-          <p>
-            A space being prepared for shared experience, encouragement, and
-            recovery in its many forms. You choose what to share, and listening
-            can be participation too.
-          </p>
+          <h1 id="circle-title">{circle.title}</h1>
+          <p className="lead">{circle.lead}</p>
+          <p>{circle.introduction}</p>
         </section>
         <div className="member-notice">
           <p>
@@ -47,15 +51,24 @@ export default async function RecoveryCirclePage() {
             aria-labelledby="reflection-title"
           >
             <p className="eyebrow">Something to sit with</p>
-            <h2 id="reflection-title">One small step is still a step.</h2>
-            <blockquote>
-              What does moving forward at your own pace look like for you this
-              week?
-            </blockquote>
+            <h2 id="reflection-title">{circle.reflectionTitle}</h2>
+            <blockquote>{circle.prompt}</blockquote>
             <p>
               There’s no answer to submit. Take a moment for yourself, or carry
               the question into a conversation with someone you trust.
             </p>
+            <details className="reflection-details">
+              <summary>A few ways to explore this</summary>
+              <ul className="care-list">
+                {circle.considerations.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+              <p className="small">
+                You can skip any prompt. Nothing you reflect on here is
+                collected or saved by this page.
+              </p>
+            </details>
           </section>
           <section className="panel" aria-labelledby="care-title">
             <p className="eyebrow">How we show up</p>
@@ -74,14 +87,26 @@ export default async function RecoveryCirclePage() {
         <section className="resource-panel" aria-labelledby="circle-resources">
           <h2 id="circle-resources">Looking for practical support?</h2>
           <p>
-            Our public resource directory offers starting points. Peer
+            Explore starting points for support beyond HavenForward. Peer
             connection does not replace professional care or emergency services,
             and Circle moderation isn’t emergency support.
           </p>
-          <a className="button" href="https://havenforward.com/resources">
-            Explore support resources <span aria-hidden="true">↗</span>
+          <a className="button" href="/member/resources">
+            Explore support resources <span aria-hidden="true">→</span>
           </a>
         </section>
+        <nav className="related-circles" aria-label="Other Circle previews">
+          <h2>Explore another Circle</h2>
+          <ul>
+            {circles
+              .filter((item) => item.slug !== circle.slug)
+              .map((item) => (
+                <li key={item.slug}>
+                  <a href={`/member/circles/${item.slug}`}>{item.title}</a>
+                </li>
+              ))}
+          </ul>
+        </nav>
       </div>
     </div>
   );
