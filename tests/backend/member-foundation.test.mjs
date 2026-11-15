@@ -18,6 +18,13 @@ const D = "44444444-4444-4444-8444-444444444444";
 const TOKEN = "a".repeat(64);
 const signatures = {
   haven_member_self: [],
+  haven_profile_self: [],
+  haven_save_profile: [
+    "p_handle",
+    "p_display_name",
+    "p_directory_listed",
+    "p_hug_notifications",
+  ],
   haven_issue_member_invitation: ["p_email", "p_token_hash", "p_expires_hours"],
   haven_revoke_member_invitation: ["p_invitation_id"],
   haven_redeem_member_invitation: ["p_token_hash", "p_consent_version"],
@@ -45,6 +52,8 @@ before(async () => {
   await pool.query("drop schema if exists haven_members cascade");
   for (const [name, types] of Object.entries({
     haven_member_self: "",
+    haven_profile_self: "",
+    haven_save_profile: "text,text,boolean,boolean",
     haven_issue_member_invitation: "text,text,integer",
     haven_revoke_member_invitation: "uuid",
     haven_redeem_member_invitation: "text,text",
@@ -61,6 +70,12 @@ before(async () => {
   await pool.query(
     await readFile(
       "supabase/migrations/202610090002_member_foundation.sql",
+      "utf8",
+    ),
+  );
+  await pool.query(
+    await readFile(
+      "supabase/migrations/20261115053225_member_profiles.sql",
       "utf8",
     ),
   );
@@ -423,5 +438,193 @@ test("invitation expiry and tokens are validated at database boundary and revoca
       )
     ).rowCount,
     1,
+  );
+});
+
+const saveProfile = (
+  actor = A,
+  handle = "gentle_river",
+  name = "River",
+  listed = false,
+  hugs = false,
+) =>
+  rpc(
+    "haven_save_profile",
+    {
+      p_handle: handle,
+      p_display_name: name,
+      p_directory_listed: listed,
+      p_hug_notifications: hugs,
+    },
+    actor,
+    "aal1",
+  );
+const addProfileMember = async (id) =>
+  pool.query(
+    "insert into haven_members.members(id,consent_version) values($1,'member-v1')",
+    [id],
+  );
+
+test("profile defaults stay private and RPCs cannot enumerate another member's profile", async () => {
+  assert.deepEqual(await rpc("haven_profile_self"), {
+    memberId: A,
+    profile: null,
+  });
+  const saved = await saveProfile();
+  assert.equal(saved.profile.directoryListed, false);
+  assert.equal(saved.profile.hugNotifications, false);
+  await addProfileMember(B);
+  assert.deepEqual(await rpc("haven_profile_self", {}, B, "aal1"), {
+    memberId: B,
+    profile: null,
+  });
+  for (const table of ["profiles", "profile_events"]) {
+    await denied(asActor(B, "aal1", `select * from haven_members.${table}`));
+    await denied(
+      asActor(A, "aal2", `update haven_members.${table} set member_id=$1`, [B]),
+    );
+  }
+  for (const name of ["haven_profile_self", "haven_save_profile"]) {
+    assert.equal(
+      (
+        await pool.query(
+          "select prosecdef from pg_proc join pg_namespace n on n.oid=pronamespace where n.nspname='public' and proname=$1",
+          [name],
+        )
+      ).rows[0].prosecdef,
+      false,
+    );
+  }
+});
+test("profiles require current verified active membership and respect the database switch", async () => {
+  await denied(saveProfile(B));
+  await denied(rpc("haven_profile_self", {}, A, "aal1", "anon"));
+  await denied(rpc("haven_profile_self", {}, A, "aal1", "service_role"));
+  await pool.query("update haven_members.configuration set enabled=false");
+  await denied(saveProfile());
+  await denied(rpc("haven_profile_self"));
+  await pool.query("update haven_members.configuration set enabled=true");
+  await pool.query("update auth.users set is_anonymous=true where id=$1", [A]);
+  await denied(saveProfile());
+  await pool.query(
+    "update auth.users set is_anonymous=false,email_confirmed_at=null where id=$1",
+    [A],
+  );
+  await denied(saveProfile());
+});
+test("profile suspension blocks reads and writes, including direct caller RPCs", async () => {
+  await addProfileMember(B);
+  await saveProfile(B, "quiet_path", "Quiet Path");
+  await access(B, "suspended");
+  await denied(rpc("haven_profile_self", {}, B, "aal1"));
+  await denied(saveProfile(B, "quiet_path", "Quiet Path", true));
+});
+test("name cooldown cannot block privacy withdrawals and expired cooldown permits renaming", async () => {
+  await saveProfile(A, "gentle_river", "River", true, true);
+  await assert.rejects(
+    saveProfile(A, "gentle_river", "New Name", false, false),
+    (e) => e.code === "P0002",
+  );
+  const before = (
+    await pool.query(
+      "select name_changed_at from haven_members.profiles where member_id=$1",
+      [A],
+    )
+  ).rows[0].name_changed_at;
+  const saved = await saveProfile(A, "gentle_river", "River", false, false);
+  assert.equal(saved.profile.directoryListed, false);
+  assert.equal(saved.profile.hugNotifications, false);
+  assert.equal(
+    (
+      await pool.query(
+        "select name_changed_at from haven_members.profiles where member_id=$1",
+        [A],
+      )
+    ).rows[0].name_changed_at.toISOString(),
+    before.toISOString(),
+  );
+  await pool.query(
+    "update haven_members.profiles set name_changed_at=now()-interval '8 days' where member_id=$1",
+    [A],
+  );
+  assert.equal(
+    (await saveProfile(A, "gentle_river", "New Name")).profile.displayName,
+    "New Name",
+  );
+  await assert.rejects(
+    saveProfile(A, "gentle_river", "Another Name"),
+    (e) => e.code === "P0002",
+  );
+});
+test("profile handles are unique and stable; reserved staff labels and invalid text are denied", async () => {
+  for (const handle of ["ab", "UPPER", "name@host", "admin", "support_team"]) {
+    await assert.rejects(saveProfile(A, handle), (e) => e.code === "22023");
+  }
+  for (const name of [
+    "x",
+    " River ",
+    "HavenForward Staff",
+    "Moderator",
+    "a".repeat(41),
+    "River\nName",
+    "River\u202eName",
+  ]) {
+    await assert.rejects(
+      saveProfile(A, "gentle_river", name),
+      (e) => e.code === "22023",
+    );
+  }
+  await saveProfile();
+  await assert.rejects(
+    saveProfile(A, "changed_handle"),
+    (e) => e.code === "22023",
+  );
+  await addProfileMember(B);
+  await assert.rejects(saveProfile(B), (e) => e.code === "23505");
+  assert.deepEqual(await rpc("haven_profile_self", {}, B, "aal1"), {
+    memberId: B,
+    profile: null,
+  });
+  assert.equal(
+    (
+      await pool.query(
+        "select count(*)::int as n from haven_members.profile_events where member_id=$1",
+        [B],
+      )
+    ).rows[0].n,
+    0,
+  );
+});
+test("concurrent claims for one handle create one profile and no partial audit writes", async () => {
+  await addProfileMember(B);
+  await addProfileMember(C);
+  const results = await Promise.allSettled([saveProfile(B), saveProfile(C)]);
+  assert.equal(results.filter((r) => r.status === "fulfilled").length, 1);
+  assert.equal(
+    (await pool.query("select count(*)::int as n from haven_members.profiles"))
+      .rows[0].n,
+    1,
+  );
+  assert.equal(
+    (
+      await pool.query(
+        "select count(*)::int as n from haven_members.profile_events",
+      )
+    ).rows[0].n,
+    1,
+  );
+});
+test("profile update limit still allows withdrawing visibility and notification preferences", async () => {
+  await saveProfile(A, "gentle_river", "River", true, true);
+  await pool.query(
+    "insert into haven_members.profile_events(member_id,action) select $1,'preferences_changed' from generate_series(1,30)",
+    [A],
+  );
+  const saved = await saveProfile(A, "gentle_river", "River", false, false);
+  assert.equal(saved.profile.directoryListed, false);
+  assert.equal(saved.profile.hugNotifications, false);
+  await assert.rejects(
+    saveProfile(A, "gentle_river", "River", true, true),
+    (e) => e.code === "P0003",
   );
 });
