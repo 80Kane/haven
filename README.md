@@ -32,6 +32,8 @@ Content lives in the HTML pages; shared styles/scripts are in `assets/`. Resourc
 metadata in `data/resources.json` must be kept consistent with the public resource
 cards. `lastVerified: null` means verification is outstanding, not that a provider
 has confirmed eligibility or availability. Do not infer partnership from a link.
+See [resource directory maintenance](docs/resource-directory-maintenance.md) for
+the restricted editing and correction workflow.
 
 ## Deployment
 

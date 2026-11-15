@@ -44,18 +44,34 @@ test("all internal page, asset and fragment links resolve", async () => {
     }
   }
 });
-test("resource records have unique IDs, secure URLs, eligibility, and honest verification status", async () => {
+test("resource records have unique IDs, secure URLs, contact details, and honest verification status", async () => {
   const resources = JSON.parse(await readFile("data/resources.json", "utf8"));
   assert.equal(resources.length, 7);
   assert.equal(new Set(resources.map((r) => r.id)).size, resources.length);
   const html = await readFile("resources.html", "utf8");
+  const renderedText = html.replace(/\s+/g, " ");
   for (const resource of resources) {
     assert.equal(new URL(resource.url).protocol, "https:");
-    assert.ok(resource.eligibility && resource.region && resource.category);
-    assert.equal(resource.lastVerified, null);
+    assert.ok(
+      resource.eligibility &&
+        resource.contact &&
+        resource.region &&
+        resource.category,
+    );
+    assert.ok(
+      resource.lastVerified === null ||
+        /^\d{4}-\d{2}-\d{2}$/.test(resource.lastVerified),
+    );
     assert.ok(html.includes(resource.url));
+    assert.ok(renderedText.includes(resource.contact));
+    if (resource.lastVerified === null)
+      assert.match(renderedText, /no verification date is recorded/);
+    else assert.ok(renderedText.includes(resource.lastVerified));
   }
   assert.match(html, /not yet independently verified/);
+  assert.match(html, /aria-label="Resource directory"/);
+  assert.match(html, /label for="resource-search"/);
+  assert.match(html, /label for="resource-category"/);
 });
 test("site has no invented engagement counts, endorsements, or activated member services", async () => {
   const html = await readFile("index.html", "utf8");

@@ -102,7 +102,10 @@ test("resource search/category filtering and empty state stay local", async ({
 }) => {
   const requests = [];
   await page.goto("/resources.html");
+  await page.waitForLoadState("networkidle");
   page.on("request", (request) => requests.push(request.url()));
+  await page.getByLabel("Search resources").fill("paratransit");
+  await expect(page.locator(".resource-card:visible")).toHaveCount(1);
   await page.getByLabel("Search resources").fill("housing");
   await expect(page.locator(".resource-card:visible")).toHaveCount(2);
   await page
