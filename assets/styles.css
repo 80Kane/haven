@@ -1556,3 +1556,78 @@ ol {
     top: var(--help-h);
   }
 }
+
+/* ---------- Compact support link in the sticky row ----------
+ * Shown while the menu button is in use (850px and below), after the help
+ * band has scrolled away. Above 850px the full nav, including Resources,
+ * is visible, so the link is hidden there. */
+.header-support {
+  display: none;
+}
+@media (max-width: 850px) {
+  .header-support {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-left: auto;
+    padding: 8px 12px;
+    border: 2px solid var(--action);
+    border-radius: 999px;
+    color: var(--action);
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .header-support:hover {
+    background: var(--sand);
+    color: var(--ink);
+  }
+  .header-support:focus-visible,
+  .menu-toggle:focus-visible {
+    outline: 3px solid var(--action);
+    outline-offset: 2px;
+  }
+  .header-inner {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+}
+/* Icon-only menu button where the label would push the row onto two lines. */
+@media (max-width: 480px) {
+  .header-inner {
+    column-gap: 8px;
+  }
+  .menu-toggle {
+    justify-content: center;
+    min-width: 44px;
+    padding: 0;
+  }
+  .menu-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+@media (max-width: 400px) {
+  .brand {
+    gap: 8px;
+    font-size: 1.08rem;
+  }
+  .brand-mark {
+    width: 34px;
+    height: 38px;
+  }
+}
+/* The "hf" mark is decorative; the wordmark and accessible name remain. */
+@media (max-width: 359px) {
+  .brand-mark {
+    display: none;
+  }
+}
