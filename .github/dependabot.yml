@@ -1,0 +1,51 @@
+version: 2
+updates:
+  # Root package (public site, checks, backend tests)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "America/Chicago"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+    groups:
+      root-minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Member Next.js app
+  - package-ecosystem: "npm"
+    directory: "/member-app"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "America/Chicago"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+    groups:
+      member-app-minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Pinned actions in .github/workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "America/Chicago"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
