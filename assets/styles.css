@@ -1443,3 +1443,79 @@ ol {
   font-weight: 700;
   color: var(--action);
 }
+
+/* ---------- Labelled 988 / 911 lines (every page) ---------- */
+.help-inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 12px;
+  padding-block: 2px;
+}
+.help-inner .help-line {
+  justify-content: flex-start;
+  gap: 0 4px;
+  padding-block: 0;
+  min-height: 44px;
+  line-height: 1.3;
+}
+.help-inner .help-line + .help-line {
+  grid-column: 1 / -1;
+}
+.help-band .help-link {
+  min-height: 44px;
+  padding: 0 4px;
+}
+.help-band .help-more {
+  display: inline-flex;
+  grid-column: 2;
+  grid-row: 1;
+  min-height: 44px;
+  margin: 0;
+  color: var(--deep-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+}
+@media (max-width: 699px) {
+  .help-band {
+    font-size: 0.86rem;
+  }
+  .help-band .icon {
+    display: none;
+  }
+}
+@media (max-width: 359px) {
+  .help-inner {
+    grid-template-columns: 1fr;
+  }
+  .help-band .help-more {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: start;
+  }
+}
+@media (min-width: 1000px) {
+  .help-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    column-gap: 24px;
+  }
+}
+.crisis-lines {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+.crisis-lines a {
+  color: var(--ink);
+  font-weight: 700;
+  display: inline-block;
+  min-height: 24px;
+}
+.crisis-actions .button-911 {
+  grid-column: 1 / -1;
+}

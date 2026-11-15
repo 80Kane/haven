@@ -50,8 +50,23 @@ for (const width of [320, 390, 768, 1440]) {
       "/privacy.html",
       "/guidelines.html",
       "/faq.html",
+      "/404.html",
     ]) {
       await page.goto(path);
+      const band = page.locator(".help-band");
+      await expect(band).toContainText("Emotional distress:");
+      await expect(band).toContainText(
+        "Immediate danger or medical emergency:",
+      );
+      for (const name of ["Call 988", "Text 988", "Call 911"])
+        await expect(
+          band.getByRole("link", { name, exact: true }),
+        ).toBeVisible();
+      for (const link of await band.getByRole("link").all()) {
+        if (!(await link.isVisible())) continue;
+        const box = await link.boundingBox();
+        expect(box.height).toBeGreaterThanOrEqual(44);
+      }
       expect(
         await page.evaluate(
           () => document.documentElement.scrollWidth <= innerWidth,
