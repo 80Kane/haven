@@ -21,79 +21,78 @@
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <header class="site-header">
-      <div class="help-band">
-        <div class="container help-inner">
-          <p class="help-line">
-            <span class="help-label">Emotional distress:</span>
-            <a class="help-link" href="tel:988" aria-label="Call 988"
-              ><svg
-                class="icon icon-sm"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <path
-                  d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"
-                /></svg
-              >call</a
-            >/<a class="help-link" href="sms:988" aria-label="Text 988"
-              ><svg
-                class="icon icon-sm"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <path d="M4 5h16v11H9l-5 4z" /></svg
-              >text 988</a
+    <div class="help-band" role="region" aria-label="Crisis support">
+      <div class="container help-inner">
+        <p class="help-line">
+          <span class="help-label">Emotional distress:</span>
+          <a class="help-link" href="tel:988" aria-label="Call 988"
+            ><svg
+              class="icon icon-sm"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
             >
-          </p>
-          <p class="help-line">
-            <span class="help-label"
-              >Immediate danger or medical emergency:</span
+              <path
+                d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"
+              /></svg
+            >call</a
+          >/<a class="help-link" href="sms:988" aria-label="Text 988"
+            ><svg
+              class="icon icon-sm"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
             >
-            <a class="help-link" href="tel:911" aria-label="Call 911"
-              ><svg
-                class="icon icon-sm"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <path
-                  d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"
-                /></svg
-              >call 911</a
+              <path d="M4 5h16v11H9l-5 4z" /></svg
+            >text 988</a
+          >
+        </p>
+        <p class="help-line">
+          <span class="help-label">Immediate danger or medical emergency:</span>
+          <a class="help-link" href="tel:911" aria-label="Call 911"
+            ><svg
+              class="icon icon-sm"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
             >
-          </p>
-          <a class="help-more" href="support.html">Get help now</a>
-        </div>
+              <path
+                d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"
+              /></svg
+            >call 911</a
+          >
+        </p>
+        <a class="help-more" href="support.html">Get help now</a>
       </div>
+    </div>
+    <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="/index.html" aria-label="HavenForward home"
           ><span class="brand-mark" aria-hidden="true">hf</span
           ><span class="brand-name">Haven<span>Forward</span></span></a
         >
+        <a class="header-support" href="support.html">Support</a>
         <button
           class="menu-toggle"
           type="button"
@@ -101,7 +100,8 @@
           aria-controls="primary-nav"
           hidden
         >
-          <span class="menu-bars" aria-hidden="true"></span>Menu
+          <span class="menu-bars" aria-hidden="true"></span
+          ><span class="menu-label">Menu</span>
         </button>
         <nav id="primary-nav" aria-label="Main navigation">
           <a href="/index.html#about">Our purpose</a

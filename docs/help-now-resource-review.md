@@ -1,6 +1,6 @@
 # Get help now: resource review
 
-Reviewed 2026-11-15 against the provider pages linked from `support.html`.
+Reviewed 2026-11-14 against the provider pages linked from `support.html`.
 This public page extends the support contacts and FAQ merged in PR #35.
 
 ## Editorial decisions

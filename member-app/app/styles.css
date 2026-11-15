@@ -504,6 +504,36 @@ blockquote {
 .member-content .resource-panel h2 {
   margin-top: 0;
 }
+.settings-panel {
+  max-width: 760px;
+}
+.field-help {
+  margin-top: 0;
+}
+.privacy-choices {
+  margin-block: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 0;
+}
+.privacy-choices legend {
+  font-weight: 700;
+  padding-inline: 6px;
+}
+.privacy-choices .check {
+  margin-block: 20px;
+}
+.choice-detail {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+input[readonly] {
+  background: #f2eee7;
+  color: var(--muted);
+}
 .button {
   max-width: 100%;
   overflow-wrap: anywhere;

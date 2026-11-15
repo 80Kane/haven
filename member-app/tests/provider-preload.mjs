@@ -32,6 +32,7 @@ const users = new Map(
 );
 const factorId = "11111111-1111-4111-8111-111111111111";
 const factors = new Map();
+const profiles = new Map();
 for (const user of users.values())
   if (
     user.email === "admin@example.test" ||
@@ -129,6 +130,36 @@ globalThis.fetch = async (input, init = {}) => {
           { code: "42501", message: "Access denied" },
           { status: 403 },
         );
+  if (
+    [
+      "/rest/v1/rpc/haven_profile_self",
+      "/rest/v1/rpc/haven_save_profile",
+    ].includes(url.pathname)
+  ) {
+    if (!enrolled.has(id))
+      return Response.json(
+        { code: "42501", message: "Access denied" },
+        { status: 403 },
+      );
+    if (url.pathname.endsWith("haven_save_profile")) {
+      const previous = profiles.get(id);
+      if (previous && previous.displayName !== body.p_display_name)
+        return Response.json(
+          { code: "P0002", message: "Name change unavailable" },
+          { status: 400 },
+        );
+      profiles.set(id, {
+        handle: body.p_handle,
+        displayName: body.p_display_name,
+        directoryListed: body.p_directory_listed,
+        hugNotifications: body.p_hug_notifications,
+        renameAvailableAt:
+          previous?.renameAvailableAt ||
+          new Date(Date.now() + 7 * 86400000).toISOString(),
+      });
+    }
+    return Response.json({ memberId: id, profile: profiles.get(id) || null });
+  }
   if (url.pathname === "/auth/v1/factors" && init.method === "POST") {
     factors.set(id, [
       {

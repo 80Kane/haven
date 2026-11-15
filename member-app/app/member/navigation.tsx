@@ -5,7 +5,7 @@ export function MemberNavigation({
   current,
   member,
 }: {
-  current: "home" | "circle";
+  current: "home" | "circle" | "settings";
   member: Member;
 }) {
   return (
@@ -23,6 +23,12 @@ export function MemberNavigation({
           aria-current={current === "circle" ? "page" : undefined}
         >
           Circle preview <span aria-hidden="true">↗</span>
+        </a>
+        <a
+          href="/member/settings"
+          aria-current={current === "settings" ? "page" : undefined}
+        >
+          Profile &amp; privacy
         </a>
         <a href="https://havenforward.com/resources">Support resources</a>
         <a href="https://havenforward.com/guidelines">Community guidelines</a>

@@ -9,7 +9,11 @@ async function login(page, name) {
 test("anonymous private entry redirects to accessible sign-in without browser tokens", async ({
   page,
 }) => {
-  for (const route of ["/member", "/member/circles/recovery-healing"]) {
+  for (const route of [
+    "/member",
+    "/member/circles/recovery-healing",
+    "/member/settings",
+  ]) {
     await page.goto(route);
     await expect(page).toHaveURL(/\/login$/);
   }
@@ -57,7 +61,11 @@ test("active member enters private page, refresh persists, and logout blocks ent
   expect(result.violations).toEqual([]);
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
   await expect(page).toHaveURL(/notice=signed-out/);
-  for (const route of ["/member", "/member/circles/recovery-healing"]) {
+  for (const route of [
+    "/member",
+    "/member/circles/recovery-healing",
+    "/member/settings",
+  ]) {
     await page.goto(route);
     await expect(page).toHaveURL(/\/login$/);
   }
@@ -215,5 +223,78 @@ test("member dashboard and Circle preview are accessible at phone and desktop si
       .getByRole("link", { name: "Back to your home", exact: false })
       .click();
     await expect(page).toHaveURL(/\/member$/);
+  }
+});
+
+test("profile privacy settings persist across reload, default off, and reject forged writes", async ({
+  page,
+  request,
+}, testInfo) => {
+  await login(page, "active");
+  await page
+    .getByRole("link", { name: "Profile & privacy", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Profile & privacy" }),
+  ).toBeVisible();
+  await expect(page.getByRole("checkbox").nth(0)).not.toBeChecked();
+  await expect(page.getByRole("checkbox").nth(1)).not.toBeChecked();
+  await page
+    .getByLabel("Your unique handle", { exact: true })
+    .fill("gentle_river");
+  await page.getByLabel("Display name", { exact: true }).fill("River");
+  await page.getByRole("button", { name: "Save profile & privacy" }).click();
+  await expect(page.getByRole("status")).toContainText("have been saved");
+  await expect(
+    page.getByLabel("Your unique handle", { exact: true }),
+  ).toHaveAttribute("readonly", "");
+  await expect(
+    page.getByLabel("Display name", { exact: true }),
+  ).toHaveAttribute("readonly", "");
+  await page.getByRole("checkbox").nth(0).check();
+  await page.getByRole("checkbox").nth(1).check();
+  await page.getByRole("button", { name: "Save profile & privacy" }).click();
+  await page.reload();
+  await expect(page.getByRole("checkbox").nth(0)).toBeChecked();
+  await expect(page.getByRole("checkbox").nth(1)).toBeChecked();
+  await page.getByRole("checkbox").nth(0).uncheck();
+  await page.getByRole("checkbox").nth(1).uncheck();
+  await page.getByRole("button", { name: "Save profile & privacy" }).click();
+  await page.reload();
+  await expect(page.getByRole("checkbox").nth(0)).not.toBeChecked();
+  await expect(page.getByRole("checkbox").nth(1)).not.toBeChecked();
+  const forgery = await request.post("/member/settings/save", {
+    headers: { origin: "https://attacker.example.test" },
+    form: { handle: "gentle_river", displayName: "River" },
+  });
+  expect(forgery.status()).toBe(403);
+  const injected = await page.request.post("/member/settings/save", {
+    headers: { origin: "http://127.0.0.1:4180" },
+    form: { handle: "gentle_river", displayName: "River", memberId: "other" },
+  });
+  expect(injected.status()).toBe(403);
+  expect((await request.get("/member/settings/save")).status()).toBe(405);
+  await page.goto("/member/settings?notice=__proto__");
+  await expect(page.getByRole("status")).toContainText(
+    "We couldn't save your settings",
+  );
+  for (const width of [320, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    expect(
+      (
+        await new AxeBuilder({ page })
+          .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+          .analyze()
+      ).violations,
+    ).toEqual([]);
+    await page.screenshot({
+      path: testInfo.outputPath(`profile-settings-${width}.png`),
+      fullPage: true,
+    });
   }
 });
