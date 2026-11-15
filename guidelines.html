@@ -26,7 +26,15 @@
       content="How HavenForward approaches peer support and safety: voluntary participation, no pressure to share, human moderation, and a way to raise concerns."
     />
     <meta property="og:url" content="https://havenforward.com/guidelines" />
-    <meta name="twitter:card" content="summary" />
+    <meta
+      property="og:image"
+      content="https://havenforward.com/assets/og-image.png"
+    />
+    <meta
+      property="og:image:alt"
+      content="HavenForward — You are not alone. Connection. Choice. A way forward."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
     <link
       rel="preload"
       href="assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2"
@@ -41,6 +49,8 @@
       type="font/woff2"
       crossorigin
     />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
     <link rel="stylesheet" href="assets/styles.css" />
     <script src="assets/site.js" defer></script>
   </head>
@@ -49,9 +59,9 @@
     <header class="site-header">
       <div class="help-band">
         <div class="container help-inner">
-          <p>
-            <span class="help-label">Need help now?</span>
-            <a class="help-link" href="tel:988"
+          <p class="help-line">
+            <span class="help-label">Emotional distress:</span>
+            <a class="help-link" href="tel:988" aria-label="Call 988"
               ><svg
                 class="icon icon-sm"
                 viewBox="0 0 24 24"
@@ -68,10 +78,8 @@
                 <path
                   d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"
                 /></svg
-              >Call 988</a
-            >
-            <span class="help-or" aria-hidden="true">or</span>
-            <a class="help-link" href="sms:988"
+              >call</a
+            >/<a class="help-link" href="sms:988" aria-label="Text 988"
               ><svg
                 class="icon icon-sm"
                 viewBox="0 0 24 24"
@@ -86,10 +94,34 @@
                 focusable="false"
               >
                 <path d="M4 5h16v11H9l-5 4z" /></svg
-              >Text 988</a
+              >text 988</a
             >
-            <a class="help-more" href="#crisis">More support options</a>
           </p>
+          <p class="help-line">
+            <span class="help-label"
+              >Immediate danger or medical emergency:</span
+            >
+            <a class="help-link" href="tel:911" aria-label="Call 911"
+              ><svg
+                class="icon icon-sm"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"
+                /></svg
+              >call 911</a
+            >
+          </p>
+          <a class="help-more" href="resources.html">Support</a>
         </div>
       </div>
       <div class="container header-inner">
@@ -110,7 +142,7 @@
           <a href="index.html#about">Our purpose</a
           ><a href="index.html#circles">Circles</a
           ><a href="guidelines.html" aria-current="page">Guidelines</a
-          ><a href="resources.html">Resources</a
+          ><a href="resources.html">Resources</a><a href="faq.html">FAQ</a
           ><a href="privacy.html">Privacy</a
           ><a href="index.html#pilot">The pilot</a>
         </nav>
@@ -249,10 +281,21 @@
         <div class="crisis-copy">
           <p class="eyebrow">Support beyond HavenForward</p>
           <h2 id="crisis-title">Need support right now?</h2>
+          <ul class="crisis-lines">
+            <li>
+              <strong>Emotional distress:</strong> <a href="tel:988">call</a>/<a
+                href="sms:988"
+                >text 988</a
+              >
+              for the Suicide &amp; Crisis Lifeline (US).
+            </li>
+            <li>
+              <strong>Immediate danger or medical emergency:</strong>
+              <a href="tel:911">call 911</a>.
+            </li>
+          </ul>
           <p>
-            In the US, call or text 988 for the Suicide &amp; Crisis Lifeline.
-            If there is immediate danger, contact your local emergency services.
-            Outside the US, use local crisis resources.
+            Outside the US, use local crisis resources and emergency numbers.
           </p>
           <p class="crisis-note">
             HavenForward is not an emergency service and does not monitor this
@@ -296,6 +339,25 @@
               <path d="M4 5h16v11H9l-5 4z" /></svg
             >Text 988</a
           >
+          <a href="tel:911" class="button button-ink button-911"
+            ><svg
+              class="icon"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M12 3 2 20h20z" />
+              <path d="M12 10v4" />
+              <path d="M12 17h.01" /></svg
+            >Call 911</a
+          >
           <a class="text-link" href="https://988lifeline.org/"
             >Visit the 988 Lifeline website
             <svg
@@ -333,7 +395,8 @@
           <nav aria-label="Footer navigation">
             <a href="privacy.html">Privacy</a
             ><a href="guidelines.html">Community &amp; safety</a
-            ><a href="resources.html">Resources</a>
+            ><a href="resources.html">Resources</a
+            ><a href="faq.html">Questions &amp; answers</a>
           </nav>
         </div>
         <div class="footer-bottom">

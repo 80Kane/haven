@@ -6,6 +6,7 @@ const pages = [
   "resources.html",
   "privacy.html",
   "guidelines.html",
+  "faq.html",
   "404.html",
 ];
 test("public pages use local scripts and a restrictive CSP without inline handlers", async () => {
@@ -79,6 +80,7 @@ test("public pages have unique SEO metadata and a crawlable sitemap", async () =
     "resources.html",
     "privacy.html",
     "guidelines.html",
+    "faq.html",
   ]) {
     const html = await readFile(path, "utf8");
     const description = html.match(/name="description"\s+content="([^"]+)"/)[1];
@@ -90,15 +92,39 @@ test("public pages have unique SEO metadata and a crawlable sitemap", async () =
     );
     assert.match(html, /property="og:title"/);
   }
-  assert.equal(descriptions.size, 4);
+  assert.equal(descriptions.size, 5);
   assert.match(
     await readFile("404.html", "utf8"),
     /name="robots" content="noindex"/,
   );
   const sitemap = await readFile("sitemap.xml", "utf8");
-  assert.equal((sitemap.match(/<loc>/g) || []).length, 4);
+  assert.equal((sitemap.match(/<loc>/g) || []).length, 5);
   assert.match(
     await readFile("robots.txt", "utf8"),
     /Sitemap: https:\/\/havenforward\.com\/sitemap\.xml/,
   );
+});
+
+test("every public page labels both crisis lines and links to support resources", async () => {
+  for (const path of pages) {
+    const html = await readFile(path, "utf8");
+    const text = html
+      .replace(/<svg[\s\S]*?<\/svg>/g, "")
+      .replace(/<[^>]+>/g, "")
+      .replace(/\s+/g, " ");
+    assert.ok(
+      text.includes("Emotional distress: call/text 988"),
+      `${path}: 988 label`,
+    );
+    assert.ok(
+      text.includes("Immediate danger or medical emergency: call 911"),
+      `${path}: 911 label`,
+    );
+    const band = html.match(/<div class="help-band">[\s\S]*?<\/header>/)[0];
+    for (const href of ["tel:988", "sms:988", "tel:911", "resources.html"])
+      assert.ok(band.includes(`href="${href}"`), `${path}: help band ${href}`);
+    const crisis = html.match(/<section\s+id="crisis"[\s\S]*?<\/section>/)[0];
+    for (const href of ["tel:988", "sms:988", "tel:911"])
+      assert.ok(crisis.includes(`href="${href}"`), `${path}: crisis ${href}`);
+  }
 });
