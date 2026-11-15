@@ -111,3 +111,18 @@ References:
 - https://supabase.com/docs/guides/auth/server-side/advanced-guide
 - https://nextjs.org/docs/app/guides/authentication
 - https://nextjs.org/docs/app/guides/content-security-policy
+
+## Member dashboard and Circle preview
+
+Active members can use `/member` as their starting dashboard and open
+`/member/circles/recovery-healing` for a Recovery & Healing Circle preview.
+Both routes verify current identity and active database membership on entry and
+inherit the private, no-store response policy. Signed-out, pending, suspended,
+and unavailable access follows the existing member-entry behavior.
+
+The dashboard lists seven planned Circles and links to public support resources.
+Only Recovery & Healing has a preview page. Its reflection prompt is static:
+there is no composer, posting endpoint, journal, messaging, progress tracking,
+or new database storage. The learning library is labeled in preparation.
+Self-hosted fonts and the warm public-site palette also style the existing
+sign-in, invitation, and administrator screens.
