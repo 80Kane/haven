@@ -43,7 +43,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <strong>Immediate danger or medical emergency:</strong>{" "}
             <a href="tel:911">call 911</a>
           </p>
-          <a className="support-link" href="https://havenforward.com/resources">
+          <a className="support-link" href="https://havenforward.com/support">
             Support resources
           </a>
         </aside>
@@ -66,7 +66,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <p>
             HavenForward is peer support. Moderation isn’t emergency support.
           </p>
-          <a href="https://havenforward.com/resources">
+          <a href="https://havenforward.com/support">
             Public support resources
           </a>
         </footer>

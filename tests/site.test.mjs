@@ -7,6 +7,7 @@ const pages = [
   "privacy.html",
   "guidelines.html",
   "faq.html",
+  "support.html",
   "404.html",
 ];
 test("public pages use local scripts and a restrictive CSP without inline handlers", async () => {
@@ -81,6 +82,7 @@ test("public pages have unique SEO metadata and a crawlable sitemap", async () =
     "privacy.html",
     "guidelines.html",
     "faq.html",
+    "support.html",
   ]) {
     const html = await readFile(path, "utf8");
     const description = html.match(/name="description"\s+content="([^"]+)"/)[1];
@@ -92,13 +94,13 @@ test("public pages have unique SEO metadata and a crawlable sitemap", async () =
     );
     assert.match(html, /property="og:title"/);
   }
-  assert.equal(descriptions.size, 5);
+  assert.equal(descriptions.size, 6);
   assert.match(
     await readFile("404.html", "utf8"),
     /name="robots" content="noindex"/,
   );
   const sitemap = await readFile("sitemap.xml", "utf8");
-  assert.equal((sitemap.match(/<loc>/g) || []).length, 5);
+  assert.equal((sitemap.match(/<loc>/g) || []).length, 6);
   assert.match(
     await readFile("robots.txt", "utf8"),
     /Sitemap: https:\/\/havenforward\.com\/sitemap\.xml/,
@@ -123,7 +125,7 @@ test("every public page labels both crisis lines and links to support resources"
     const band = html.match(
       /<div class="help-band" role="region" aria-label="Crisis support">[\s\S]*?<header class="site-header">/,
     )[0];
-    for (const href of ["tel:988", "sms:988", "tel:911", "resources.html"])
+    for (const href of ["tel:988", "sms:988", "tel:911", "support.html"])
       assert.ok(band.includes(`href="${href}"`), `${path}: help band ${href}`);
     const crisis = html.match(/<section\s+id="crisis"[\s\S]*?<\/section>/)[0];
     for (const href of ["tel:988", "sms:988", "tel:911"])

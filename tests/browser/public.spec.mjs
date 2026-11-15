@@ -30,6 +30,7 @@ for (const path of [
   "/privacy.html",
   "/guidelines.html",
   "/faq.html",
+  "/support.html",
   "/404.html",
 ]) {
   test(`WCAG automated checks: ${path}`, async ({ page }) => {
@@ -50,6 +51,7 @@ for (const width of [320, 390, 768, 1440]) {
       "/privacy.html",
       "/guidelines.html",
       "/faq.html",
+      "/support.html",
       "/404.html",
     ]) {
       await page.goto(path);
@@ -179,7 +181,7 @@ for (const width of [320, 390, 1440]) {
     page,
   }) => {
     await page.setViewportSize({ width, height: 800 });
-    for (const path of ["/", "/resources.html", "/404.html"]) {
+    for (const path of ["/", "/resources.html", "/support.html", "/404.html"]) {
       await page.goto(path);
       const band = page.locator(".help-band");
       const header = page.locator(".site-header");
@@ -214,7 +216,7 @@ for (const width of [320, 390]) {
     page,
   }) => {
     await page.setViewportSize({ width, height: 800 });
-    for (const path of ["/", "/resources.html", "/404.html"]) {
+    for (const path of ["/", "/resources.html", "/support.html", "/404.html"]) {
       await page.goto(path);
       await page.evaluate(() => window.scrollTo(0, 600));
       await expect
@@ -227,7 +229,7 @@ for (const width of [320, 390]) {
       });
       await expect(support).toBeVisible();
       await expect(support).toBeInViewport();
-      await expect(support).toHaveAttribute("href", /resources(\.html)?$/);
+      await expect(support).toHaveAttribute("href", /support(\.html)?$/);
       const menu = header.getByRole("button", { name: "Menu", exact: true });
       await expect(menu).toBeVisible();
       await expect(menu).toHaveAttribute("aria-expanded", "false");
@@ -256,3 +258,35 @@ test("sticky-row Support link is hidden on desktop", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator(".header-support")).toBeHidden();
 });
+
+for (const width of [320, 1440]) {
+  test(`help page contacts and topic navigation at ${width}px`, async ({
+    page,
+  }, testInfo) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/support.html");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "If you need help right now",
+    );
+    await page
+      .getByRole("navigation", { name: "Support topics" })
+      .getByRole("link", { name: "Substance use & overdose" })
+      .click();
+    await expect(page).toHaveURL(/#substance-use$/);
+    await expect(page.locator("#substance-use")).toBeInViewport();
+    await expect(page.locator('main a[href="tel:18002221222"]')).toHaveText(
+      "Call 1-800-222-1222",
+    );
+    await expect(page.locator('main a[href="sms:741741"]')).toContainText(
+      "send HOME",
+    );
+    await expect(page.locator("main")).toContainText(
+      "Some meetings are free and others charge a fee",
+    );
+    await page.goto("/support.html");
+    await page.screenshot({
+      path: testInfo.outputPath(`support-${width}.png`),
+      fullPage: true,
+    });
+  });
+}
