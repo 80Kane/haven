@@ -1,5 +1,6 @@
 import { defineConfig } from "@playwright/test";
 export default defineConfig({
+  outputDir: "./test-results/member",
   testDir: "./member-app/tests/browser",
   workers: 1,
   reporter: [["list"]],

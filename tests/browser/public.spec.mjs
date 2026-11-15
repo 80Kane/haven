@@ -11,7 +11,7 @@ test("landing page navigation, honest feature status, and no JavaScript errors",
     "Peer Support for Recovery & Personal Growth | HavenForward",
   );
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "You Are Not Alone.",
+    "You are not alone.",
   );
   await page.getByRole("link", { name: "Circles", exact: true }).click();
   await expect(page).toHaveURL(/#circles$/);
@@ -41,7 +41,7 @@ for (const path of [
 }
 
 for (const width of [320, 390, 768, 1440]) {
-  test(`layout and navigation at ${width}px`, async ({ page }) => {
+  test(`layout and navigation at ${width}px`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width, height: 900 });
     for (const path of [
       "/",
@@ -57,6 +57,10 @@ for (const width of [320, 390, 768, 1440]) {
       ).toBe(true);
     }
     await page.goto("/");
+    await page.screenshot({
+      path: testInfo.outputPath(`homepage-${width}.png`),
+      fullPage: true,
+    });
     if (width <= 850) {
       const menu = page.getByRole("button", { name: "Menu", exact: true });
       await menu.click();

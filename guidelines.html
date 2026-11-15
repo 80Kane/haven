@@ -12,6 +12,7 @@
       http-equiv="Content-Security-Policy"
       content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"
     />
+    <meta name="theme-color" content="#203B35" />
     <title>Peer Support Community Guidelines &amp; Safety | HavenForward</title>
     <link rel="canonical" href="https://havenforward.com/guidelines" />
     <meta property="og:type" content="website" />
@@ -26,16 +27,75 @@
     />
     <meta property="og:url" content="https://havenforward.com/guidelines" />
     <meta name="twitter:card" content="summary" />
+    <link
+      rel="preload"
+      href="assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="assets/fonts/fraunces-latin-wght-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <link rel="stylesheet" href="assets/styles.css" />
     <script src="assets/site.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
-      <div class="header-inner">
+      <div class="help-band">
+        <div class="container help-inner">
+          <p>
+            <span class="help-label">Need help now?</span>
+            <a class="help-link" href="tel:988"
+              ><svg
+                class="icon icon-sm"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"
+                /></svg
+              >Call 988</a
+            >
+            <span class="help-or" aria-hidden="true">or</span>
+            <a class="help-link" href="sms:988"
+              ><svg
+                class="icon icon-sm"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M4 5h16v11H9l-5 4z" /></svg
+              >Text 988</a
+            >
+            <a class="help-more" href="#crisis">More support options</a>
+          </p>
+        </div>
+      </div>
+      <div class="container header-inner">
         <a class="brand" href="index.html" aria-label="HavenForward home"
-          ><span class="brand-mark" aria-hidden="true">h<span>f</span></span
-          ><span>Haven<span class="brand-light">Forward</span></span></a
+          ><span class="brand-mark" aria-hidden="true">hf</span
+          ><span class="brand-name">Haven<span>Forward</span></span></a
         >
         <button
           class="menu-toggle"
@@ -44,84 +104,149 @@
           aria-controls="primary-nav"
           hidden
         >
-          Menu
+          <span class="menu-bars" aria-hidden="true"></span>Menu
         </button>
         <nav id="primary-nav" aria-label="Main navigation">
           <a href="index.html#about">Our purpose</a
           ><a href="index.html#circles">Circles</a
+          ><a href="guidelines.html" aria-current="page">Guidelines</a
           ><a href="resources.html">Resources</a
-          ><a href="index.html#membership" class="nav-invite"
-            >The invitation-only pilot <span aria-hidden="true">↗</span></a
-          >
+          ><a href="privacy.html">Privacy</a
+          ><a href="index.html#pilot">The pilot</a>
         </nav>
       </div>
     </header>
-    <main id="main" tabindex="-1" class="container policy">
-      <p class="eyebrow">Community &amp; safety</p>
-      <h1>
-        Peer voice.<br />
-        Peer choice.
-      </h1>
-      <p class="lead">
-        These principles guide the invitation-only pilot being developed. Member
-        conversations and moderation tools are not open on this website.
-      </p>
-      <h2>Participation is a choice</h2>
-      <p>
-        You decide whether to participate, what to share, and when to step away.
-        Nobody should pressure someone to disclose a story, diagnosis,
-        treatment, recovery milestone, or personal details.
-      </p>
-      <h2>Listen with respect</h2>
-      <p>
-        Speak from your own experience. Ask before offering advice. Respect
-        different paths, identities, boundaries, and beliefs. Peer support does
-        not replace professional care.
-      </p>
-      <h2>Protect privacy</h2>
-      <p>
-        Do not share another person’s identity, story, screenshots, or contact
-        information without permission. Do not solicit identifying information.
-        Respect that a chosen name does not guarantee anonymity.
-      </p>
-      <h2>Keep the community welcoming</h2>
-      <p>
-        Harassment, threats, discrimination, exploitation, doxxing, scams, and
-        pressure to enter private contact are not acceptable. There will be no
-        unrestricted direct messaging in the initial pilot.
-      </p>
-      <h2>Human moderation and understandable decisions</h2>
-      <p>
-        Before launch, the pilot must have reporting, blocking and muting, a
-        staffed review process, documented escalation, limited-access records,
-        and an appeal path. Safety-critical decisions require human oversight.
-        These tools are not active on the public site.
-      </p>
-      <p>
-        Member notices must explain actions and how to appeal while protecting
-        reporters’ privacy. A private concern-reporting channel and moderator
-        availability must be published before enrollment opens.
-      </p>
-      <h2>When immediate help is needed</h2>
-      <p>
-        HavenForward is not an emergency service. It does not promise continuous
-        monitoring, immediate responses, or emergency dispatch. In the US,
-        <a href="tel:988">call 988</a> or <a href="sms:988">text 988</a>. If
-        there is immediate danger, contact local emergency services. Outside the
-        US, use local crisis resources.
-      </p>
-      <h2>Help shape the public website</h2>
-      <p>
-        <a href="https://github.com/80Kane/haven/issues"
-          >Website feedback on GitHub</a
-        >
-        is public and suitable only for non-sensitive website suggestions. It is
-        not a member reporting or crisis channel.
-      </p>
+    <main id="main" tabindex="-1">
+      <div class="page-intro">
+        <div class="container narrow">
+          <p class="eyebrow">Community &amp; safety</p>
+          <h1>Peer voice.<br />Peer choice.</h1>
+          <p class="lead">
+            These principles guide the invitation-only pilot being developed.
+            Member conversations and moderation tools are not open on this
+            website.
+          </p>
+        </div>
+      </div>
+      <div class="container narrow policy">
+        <section class="policy-block" aria-labelledby="g1">
+          <h2 id="g1">
+            <span class="policy-num" aria-hidden="true">1</span>Participation is
+            a choice
+          </h2>
+          <p>
+            You decide whether to participate, what to share, and when to step
+            away. Nobody should pressure someone to disclose a story, diagnosis,
+            treatment, recovery milestone, or personal details.
+          </p>
+        </section>
+        <section class="policy-block" aria-labelledby="g2">
+          <h2 id="g2">
+            <span class="policy-num" aria-hidden="true">2</span>Listen with
+            respect
+          </h2>
+          <p>
+            Speak from your own experience. Ask before offering advice. Respect
+            different paths, identities, boundaries, and beliefs. Peer support
+            does not replace professional care.
+          </p>
+        </section>
+        <section class="policy-block" aria-labelledby="g3">
+          <h2 id="g3">
+            <span class="policy-num" aria-hidden="true">3</span>Protect privacy
+          </h2>
+          <p>
+            Do not share another person’s identity, story, screenshots, or
+            contact information without permission. Do not solicit identifying
+            information. Respect that a chosen name does not guarantee
+            anonymity.
+          </p>
+        </section>
+        <section class="policy-block" aria-labelledby="g4">
+          <h2 id="g4">
+            <span class="policy-num" aria-hidden="true">4</span>Keep the
+            community welcoming
+          </h2>
+          <p>
+            Harassment, threats, discrimination, exploitation, doxxing, scams,
+            and pressure to enter private contact are not acceptable. There will
+            be no unrestricted direct messaging in the initial pilot.
+          </p>
+        </section>
+        <section class="policy-block" aria-labelledby="g5">
+          <h2 id="g5">
+            <span class="policy-num" aria-hidden="true">5</span>Human moderation
+            and understandable decisions
+          </h2>
+          <p>
+            Before launch, the pilot must have reporting, blocking and muting, a
+            staffed review process, documented escalation, limited-access
+            records, and an appeal path. Safety-critical decisions require human
+            oversight. These tools are not active on the public site.
+          </p>
+          <p>
+            Member notices must explain actions and how to appeal while
+            protecting reporters’ privacy. A private concern-reporting channel
+            and moderator availability must be published before enrollment
+            opens.
+          </p>
+        </section>
+        <section class="policy-block policy-urgent" aria-labelledby="g6">
+          <h2 id="g6">
+            <span class="policy-num" aria-hidden="true">6</span>When immediate
+            help is needed
+          </h2>
+          <p>
+            HavenForward is not an emergency service. It does not promise
+            continuous monitoring, immediate responses, or emergency dispatch.
+            In the US, <a href="tel:988">call 988</a> or
+            <a href="sms:988">text 988</a>. If there is immediate danger,
+            contact local emergency services. Outside the US, use local crisis
+            resources.
+          </p>
+        </section>
+        <section class="policy-block" aria-labelledby="g7">
+          <h2 id="g7">
+            <span class="policy-num" aria-hidden="true">7</span>Help shape the
+            public website
+          </h2>
+          <p>
+            <a href="https://github.com/80Kane/haven/issues"
+              >Website feedback on GitHub</a
+            >
+            is public and suitable only for non-sensitive website suggestions.
+            It is not a member reporting or crisis channel.
+          </p>
+        </section>
+        <p class="next-step">
+          <a class="button button-primary" href="privacy.html"
+            >Read privacy &amp; participation
+            <svg
+              class="icon icon-inline"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" /></svg
+          ></a>
+        </p>
+      </div>
     </main>
-    <section class="crisis-strip" aria-labelledby="crisis-title">
+    <section
+      id="crisis"
+      class="crisis"
+      aria-labelledby="crisis-title"
+      tabindex="-1"
+    >
       <div class="container crisis-inner">
-        <div>
+        <div class="crisis-copy">
           <p class="eyebrow">Support beyond HavenForward</p>
           <h2 id="crisis-title">Need support right now?</h2>
           <p>
@@ -129,28 +254,82 @@
             If there is immediate danger, contact your local emergency services.
             Outside the US, use local crisis resources.
           </p>
-          <p>
+          <p class="crisis-note">
             HavenForward is not an emergency service and does not monitor this
             website for crises.
           </p>
         </div>
         <div class="crisis-actions">
-          <a href="tel:988" class="button button-dark">Call 988</a
-          ><a href="sms:988" class="button button-outline">Text 988</a
-          ><a href="https://988lifeline.org/"
-            >Visit the 988 Lifeline website <span aria-hidden="true">↗</span></a
+          <a href="tel:988" class="button button-ink"
+            ><svg
+              class="icon"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"
+              /></svg
+            >Call 988</a
           >
+          <a href="sms:988" class="button button-outline"
+            ><svg
+              class="icon"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M4 5h16v11H9l-5 4z" /></svg
+            >Text 988</a
+          >
+          <a class="text-link" href="https://988lifeline.org/"
+            >Visit the 988 Lifeline website
+            <svg
+              class="icon icon-inline"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M14 4h6v6" />
+              <path d="M20 4l-9 9" />
+              <path
+                d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"
+              /></svg
+          ></a>
         </div>
       </div>
     </section>
     <footer class="site-footer">
       <div class="container">
         <div class="footer-top">
-          <a class="brand" href="index.html"
-            ><span class="brand-mark" aria-hidden="true">h<span>f</span></span
-            ><span>Haven<span class="brand-light">Forward</span></span></a
-          >
-          <p>Connection. Choice. A way forward.</p>
+          <div>
+            <a class="brand brand-light" href="index.html"
+              ><span class="brand-mark" aria-hidden="true">hf</span
+              ><span class="brand-name">Haven<span>Forward</span></span></a
+            >
+            <p class="footer-tag">Connection. Choice. A way forward.</p>
+          </div>
           <nav aria-label="Footer navigation">
             <a href="privacy.html">Privacy</a
             ><a href="guidelines.html">Community &amp; safety</a
@@ -160,8 +339,26 @@
         <div class="footer-bottom">
           <p>© 2026 HavenForward. You Are Not Alone.</p>
           <a href="https://github.com/80Kane/haven/issues"
-            >Website feedback <span aria-hidden="true">↗</span></a
-          >
+            >Website feedback
+            <svg
+              class="icon icon-inline"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M14 4h6v6" />
+              <path d="M20 4l-9 9" />
+              <path
+                d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"
+              /></svg
+          ></a>
         </div>
         <p class="small">
           Website feedback on GitHub is public. Please do not share personal
